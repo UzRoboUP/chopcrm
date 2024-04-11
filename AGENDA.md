@@ -6,12 +6,12 @@
 
 ## Dockerize app, docker compose for services, configure CI (github)
 
-## Features:
+## Features
 
 - Authentication: access/refresh token, user roles: admin, analitc, user
 - Dashboard, Users, Settings, Analytics, etc
 
-# Agenda (1)
+# step-1
 
 - Setup prettier, vscode default formatter (.vscode/settings.json)
 - Add npm-run-all, project-wide
@@ -22,6 +22,6 @@
 - Add eslint-plugin-react
 - TRPC frontend setup
 
-# Agenda (2)
+# step-2
 
 - Dockerize app
