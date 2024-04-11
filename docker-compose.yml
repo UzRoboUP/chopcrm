@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  web:
+    build: .
+    # the first number is the port on the host machine
+    # the second number is the port inside the container
+    ports:
+      - '3000:3000'
+    volumes:
+      - './:/app'
+      - '/app/node_modules'
+    # environment:
+    # - http://localhost:8000
+    # - https://chop-crm.uz/api
+
+    develop:
+      watch:
+        - path: package.json
+          action: rebuild
+        - path: package-lock.json
+          action: rebuild
+        - path: .
+          target: /app
+          action: sync

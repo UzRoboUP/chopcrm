@@ -1,0 +1,65 @@
+name: Linting/Testing
+on: [push, workflow_dispatch]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Lint code
+        # run: docker lint -t myapp-dev .
+        run: |
+          docker run --rm -v $PWD:/app --name chop-crm-container lint
+        # Replace 'my-linter-image' with the name of your Docker image for linting
+        # Replace 'lint-command' with the actual linting command
+  test:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Test code
+        continue-on-error: true
+        id: run-tests
+        run: |
+          docker run --rm -v $PWD:/app --name chop-crm-container test:unit
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-report
+          path: test.json
+  report:
+    needs: [lint, test]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Output information
+        run: |
+          echo "Something went wrong on linting or testing ⛔️"
+          echo "${{ toJSON(github) }}"

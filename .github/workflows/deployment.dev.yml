@@ -1,0 +1,40 @@
+name: Deploy to Development Environment
+
+on:
+  workflow_run:
+    workflows: ["Linting/Testing"]
+    types:
+      - completed
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy-dev:
+    if: github.ref == 'refs/heads/develop' && ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if Linting/Testing workflow completed
+        if: ${{ github.event.workflow_run.name == 'Linting/Testing' }}
+        continue-on-error: true
+        run: "Linting/Testing workflow completed with status: ${{ github.event.workflow_run.conclusion }}"
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Dockerize application
+        run: |
+          docker build -t chop-crm-image .
+
+      - name: Deploy to Heroku (Development)
+        run: echo "Deployment process..."
+        # run: |
+        #   heroku login -i
+        #   heroku git:remote -a <heroku-app-name-dev>
+        #   heroku container:push web -a <heroku-app-name-dev>
+        #   heroku container:release web -a <heroku-app-name-dev>
