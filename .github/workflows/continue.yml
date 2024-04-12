@@ -22,7 +22,7 @@ jobs:
         run: docker build . -t chop-crm-image
 
       - name: Run lint
-        run: docker rm chop-crm-container && docker run --name chop-crm-container chop-crm-image npm run lint
+        run: docker run --name chop-crm-container chop-crm-image npm run lint
 
     # - name: Build application
     #   run: docker run chop-crm-image npm run build
