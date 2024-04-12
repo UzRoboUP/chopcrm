@@ -54,9 +54,7 @@ jobs:
         continue-on-error: true
         id: run-tests
         run: |
-          # docker run --rm -v $PWD:/app --name chop-crm-container test:unit
-          # docker rm chop-crm-container && docker run --name chop-crm-container chop-crm-image npm run test:unit
-          docker exec chop-crm-container npm run test:unit
+          docker run --name chop-crm-container chop-crm-image npm run test:unit
 
       - name: Upload test report
         uses: actions/upload-artifact@v3
