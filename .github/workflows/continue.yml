@@ -1,32 +1,39 @@
-name: Linting/Testing
+name: Testing
 on: [push, workflow_dispatch]
 
 jobs:
-  lint:
+  build:
     runs-on: ubuntu-latest
+
+    services:
+      app:
+        image: docker://docker.io/library/node:20
+        ports:
+          - 3000:3000
+        volumes:
+          - .:/app
+          - /app/node_modules
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
-      - name: Cache dependencies
-        id: cache
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Build the Docker image
+        run: docker build . -t chop-crm-image
 
-      - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: npm ci
+      - name: Run lint
+        run: docker rm chop-crm-container && docker run --name chop-crm-container chop-crm-image npm run lint
 
-      - name: Lint code
-        # run: docker lint -t myapp-dev .
-        run: |
-          docker run --rm -v $PWD:/app --name chop-crm-container lint
-        # Replace 'my-linter-image' with the name of your Docker image for linting
-        # Replace 'lint-command' with the actual linting command
+    # - name: Build application
+    #   run: docker run chop-crm-image npm run build
+
+    # - name: Save Artifacts
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #     name: build
+    #     path: build/
   test:
-    needs: lint
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -47,7 +54,9 @@ jobs:
         continue-on-error: true
         id: run-tests
         run: |
-          docker run --rm -v $PWD:/app --name chop-crm-container test:unit
+          # docker run --rm -v $PWD:/app --name chop-crm-container test:unit
+          # docker rm chop-crm-container && docker run --name chop-crm-container chop-crm-image npm run test:unit
+          docker exec chop-crm-container npm run test:unit
 
       - name: Upload test report
         uses: actions/upload-artifact@v3
@@ -55,7 +64,7 @@ jobs:
           name: test-report
           path: test.json
   report:
-    needs: [lint, test]
+    needs: [build, test]
     if: failure()
     runs-on: ubuntu-latest
     steps:
