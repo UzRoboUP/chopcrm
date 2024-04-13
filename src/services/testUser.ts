@@ -3,7 +3,8 @@ import ApiService from "./apiService";
 export const getUserApi = async (url:string) => {
     return await ApiService.fetchData({
         method: "get",
-        url: url
+        url: url,
+        
     })
 }
 
@@ -11,7 +12,7 @@ export const postUserApi = async (url:string, data:object) => {
     return await ApiService.fetchData({
         method: "post",
         url,
-        data
+        data,
     })
 }
 
