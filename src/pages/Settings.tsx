@@ -1,10 +1,11 @@
-import Heading from "../ui/Heading";
+import Breadcrumbs from "../ui/Breadcrumb";
 import Row from "../ui/Row";
 
 function Settings() {
   return (
     <Row>
-      <Heading as="h1">Settings</Heading>
+      <Breadcrumbs />
+
       <p>Settings page</p>
     </Row>
   );

@@ -10,13 +10,12 @@ type ApiResponse = {
 };
 
 export async function getCurrentUser(): Promise<User> {
-  const { data, error = "" } = await fakeApi();
+  const { data, error = '' } = await fakeApi();
 
   if (error) {
     throw new Error(error.message);
   }
 
-  console.log("log:", data, error);
   return data?.user;
 }
 
@@ -26,9 +25,9 @@ const fakeApi = (): Promise<ApiResponse> => {
       setTimeout(
         () =>
           resolve({
-            data: { user: { name: "John Doe", role: "admin", isAuth: true } },
+            data: { user: { name: 'John Doe', role: 'admin', isAuth: true } },
           }),
-        1000
+        1000,
       );
     } catch (error) {
       reject(error);

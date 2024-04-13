@@ -1,10 +1,12 @@
-import { NavLink } from "react-router-dom";
-import styled from "styled-components";
 import {
   HiOutlineCog6Tooth,
   HiOutlineHome,
   HiOutlineUsers,
 } from "react-icons/hi2";
+import { IconType } from "react-icons/lib";
+import { NavLink } from "react-router-dom";
+import styled from "styled-components";
+import { getMenuData } from "../services/menu";
 
 const NavList = styled.ul`
   display: flex;
@@ -51,28 +53,27 @@ const StyledNavLink = styled(NavLink)`
   }
 `;
 
+const iconMap: Record<string, IconType> = {
+  'HiOutlineHome': HiOutlineHome,
+  'HiOutlineUsers': HiOutlineUsers,
+  'HiOutlineCog6Tooth': HiOutlineCog6Tooth,
+};
+
 function MainNav() {
   return (
     <nav>
       <NavList>
-        <li>
-          <StyledNavLink to="/dashboard">
-            <HiOutlineHome />
-            <span>Dashboard</span>
-          </StyledNavLink>
-        </li>
-        <li>
-          <StyledNavLink to="/users">
-            <HiOutlineUsers />
-            <span>Users</span>
-          </StyledNavLink>
-        </li>
-        <li>
-          <StyledNavLink to="/settings">
-            <HiOutlineCog6Tooth />
-            <span>Settings</span>
-          </StyledNavLink>
-        </li>
+        {getMenuData.map(item => {
+          const Icon = iconMap[item.icon] || HiOutlineHome;
+          return (
+            <li key={item.key}>
+              <StyledNavLink to={item.url}>
+                <Icon />
+                <span>{item.title}</span>
+              </StyledNavLink>
+            </li>
+          )
+        })}
       </NavList>
     </nav>
   );

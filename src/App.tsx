@@ -1,15 +1,16 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "react-hot-toast";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
-import GlobalStyles from "./styles/GlobalStyles";
+import { BreadcrumbProvider } from "./context/BreadcrumbContext.tsx";
+import { DarkModeProvider } from "./context/DarkModeContext";
 import Dashboard from "./pages/Dashboard";
-import AppLayout from "./ui/AppLayout";
-import ProtectedRoute from "./ui/ProtectedRoute.tsx";
 import Settings from "./pages/Settings.tsx";
 import Users from "./pages/Users.tsx";
-import { DarkModeProvider } from "./context/DarkModeContext";
+import GlobalStyles from "./styles/GlobalStyles";
+import AppLayout from "./ui/AppLayout";
+import ProtectedRoute from "./ui/ProtectedRoute.tsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,24 +25,25 @@ function App() {
     <DarkModeProvider>
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={false} />
-
         <GlobalStyles />
         <BrowserRouter>
-          <Routes>
-            <Route
-              element={
-                <ProtectedRoute>
-                  <AppLayout />
-                </ProtectedRoute>
-              }
-            >
-              <Route index element={<Navigate replace to="dashboard" />} />
-              <Route path="dashboard" element={<Dashboard />} />
-              <Route path="users" element={< Users />} />
-              <Route path="settings" element={<Settings />} />
-            </Route>
+          <BreadcrumbProvider>
+            <Routes>
+              <Route
+                element={
+                  <ProtectedRoute>
+                    <AppLayout />
+                  </ProtectedRoute>
+                }
+              >
+                <Route index element={<Navigate replace to="dashboard" />} />
+                <Route path="dashboard" element={<Dashboard />} />
+                <Route path="users" element={< Users />} />
+                <Route path="settings" element={<Settings />} />
+              </Route>
 
-          </Routes>
+            </Routes>
+          </BreadcrumbProvider>
         </BrowserRouter>
 
         <Toaster
