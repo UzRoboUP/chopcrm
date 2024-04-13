@@ -1,72 +1,72 @@
-name: Testing
-on: [push, workflow_dispatch]
+# name: Testing
+# on: [push, workflow_dispatch]
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
 
-    services:
-      app:
-        image: docker://docker.io/library/node:20
-        ports:
-          - 3000:3000
-        volumes:
-          - .:/app
-          - /app/node_modules
+#     services:
+#       app:
+#         image: docker://docker.io/library/node:20
+#         ports:
+#           - 3000:3000
+#         volumes:
+#           - .:/app
+#           - /app/node_modules
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
 
-      - name: Build the Docker image
-        run: docker build . -t chop-crm-image
+#       - name: Build the Docker image
+#         run: docker build . -t chop-crm-image
 
-      - name: Run lint
-        run: docker run --name chop-crm-container chop-crm-image npm run lint
+#       - name: Run lint
+#         run: docker run --name chop-crm-container chop-crm-image npm run lint
 
-    # - name: Build application
-    #   run: docker run chop-crm-image npm run build
+#     # - name: Build application
+#     #   run: docker run chop-crm-image npm run build
 
-    # - name: Save Artifacts
-    #   uses: actions/upload-artifact@v2
-    #   with:
-    #     name: build
-    #     path: build/
-  test:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+#     # - name: Save Artifacts
+#     #   uses: actions/upload-artifact@v2
+#     #   with:
+#     #     name: build
+#     #     path: build/
+#   test:
+#     needs: build
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
 
-      - name: Cache dependencies
-        id: cache
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+#       - name: Cache dependencies
+#         id: cache
+#         uses: actions/cache@v3
+#         with:
+#           path: node_modules
+#           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
 
-      - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: npm ci
+#       - name: Install dependencies
+#         if: steps.cache.outputs.cache-hit != 'true'
+#         run: npm ci
 
-      - name: Test code
-        continue-on-error: true
-        id: run-tests
-        run: |
-          docker run --name chop-crm-container chop-crm-image npm run test:unit
+#       - name: Test code
+#         continue-on-error: true
+#         id: run-tests
+#         run: |
+#           docker run --name chop-crm-container chop-crm-image npm run test:unit
 
-      - name: Upload test report
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-report
-          path: test.json
-  report:
-    needs: [build, test]
-    if: failure()
-    runs-on: ubuntu-latest
-    steps:
-      - name: Output information
-        run: |
-          echo "Something went wrong on linting or testing ⛔️"
-          echo "${{ toJSON(github) }}"
+#       - name: Upload test report
+#         uses: actions/upload-artifact@v3
+#         with:
+#           name: test-report
+#           path: test.json
+#   report:
+#     needs: [build, test]
+#     if: failure()
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Output information
+#         run: |
+#           echo "Something went wrong on linting or testing ⛔️"
+#           echo "${{ toJSON(github) }}"

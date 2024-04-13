@@ -6,6 +6,8 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { BreadcrumbProvider } from "./context/BreadcrumbContext.tsx";
 import { DarkModeProvider } from "./context/DarkModeContext";
 import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login.tsx";
+import PageNotFound from "./pages/PageNotFound.tsx";
 import Settings from "./pages/Settings.tsx";
 import Users from "./pages/Users.tsx";
 import GlobalStyles from "./styles/GlobalStyles";
@@ -41,7 +43,8 @@ function App() {
                 <Route path="users" element={< Users />} />
                 <Route path="settings" element={<Settings />} />
               </Route>
-
+              <Route path="login" element={<Login />} />
+              <Route path="*" element={<PageNotFound />} />
             </Routes>
           </BreadcrumbProvider>
         </BrowserRouter>

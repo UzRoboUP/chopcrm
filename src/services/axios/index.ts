@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { clearToken, getToken } from '../../features/authentication/authSlice';
+import { useAppSelector } from '../../store/hooks';
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_URL,
@@ -7,10 +9,9 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   async (config) => {
-    // check the token is exist or not
-    const accessToken = 'accessToken'; // ??
-    if (accessToken) {
-      config.headers['Authorization'] = `Bearer ${accessToken}`;
+    const token = useAppSelector(getToken);
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
     }
     return config;
   },
@@ -27,7 +28,7 @@ axiosInstance.interceptors.response.use(
       error.response.status === 401 &&
       originalRequest.url === '/auth/token'
     ) {
-      // remove accessToken
+      clearToken();
       const navigate = useNavigate();
       navigate('/auth/login');
       return Promise.reject(error);
