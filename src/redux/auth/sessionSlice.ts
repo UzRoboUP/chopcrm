@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 type SessionType = {
   isAuthenticated: boolean;
-  token: string;
+  token: unknown;
 };
 
 const initialState: SessionType = {

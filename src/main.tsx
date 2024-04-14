@@ -6,7 +6,6 @@ import ErrorFallback from './components/ui/ErrorFallback.tsx'
 import { Provider } from "react-redux"
 import { store } from './redux/store.ts'
 import Root from './pages/Root.tsx'
-console.log(React.lazy(()=>import('./pages/auth/Login.tsx')));
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
