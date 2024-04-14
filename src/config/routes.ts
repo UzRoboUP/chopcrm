@@ -52,6 +52,5 @@ export const protectedRoutes = [
     path: '/settings',
     roles: ['ADMIN', 'USER'],
     component: Settings,
-  }
-  
+  },
 ];

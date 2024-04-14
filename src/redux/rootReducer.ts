@@ -6,4 +6,4 @@ const RootReducer = combineReducers({
     sessionSlice
 
 })
-export default RootReducer
+export default RootReducer;

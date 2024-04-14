@@ -4,20 +4,12 @@ import ProtectedRoutes from "../components/routes/ProtectedRoutes";
 import AuthRoutes from "../components/routes/AuthRoutes";
 import CheckRole from '../components/routes/CheckRole'
 import { protectedRoutes, authRoutes } from "../config/routes";
-type sessionSliceType = {
-    isAuthenticated: boolean,
-    token: string
-}
+import { IRootState } from "../redux/store";
 
-type userType = {
-    name: string,
-    surname: string
-    role: string
-};
 
 export default function Root() {
-    const sessionSlice: sessionSliceType = useSelector(state => state.sessionSlice)
-    const userSlice: userType = useSelector(state => state.userSlice)
+    const sessionSlice = useSelector((state: IRootState) => state.sessionSlice)
+    const userSlice = useSelector((state: IRootState) => state.userSlice)
     return (
         <BrowserRouter>
             <Routes >
