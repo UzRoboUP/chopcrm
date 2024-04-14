@@ -1,5 +1,9 @@
 import React from "react";
-export const authRoutes = [
+import { LazyExoticComponent } from "react";
+type AuthRoutesType = {key:string,path:string,compontent:LazyExoticComponent<() => JSX.Element>}[]
+type ProtectedRoutesType = {key:string,path:string,  roles:string[], compontent:LazyExoticComponent<() => JSX.Element>}[]
+
+export const authRoutes:AuthRoutesType = [
     {
         key:"login",
         path:"/login",
@@ -12,23 +16,30 @@ export const authRoutes = [
     },
 ]
 
-export const protectedRoutes = [
+export const protectedRoutes:ProtectedRoutesType = [
     {
         key:"home",
-        path:"/",
-        role:['admin','user'],
+        path:"/home",
+        roles:['ADMIN','USER'],
         compontent:React.lazy(()=>import('../pages/private/Dashboard'))
     },
     {
         key:"user",
-        path:"/user",
-        role:['admin','user'],
+        path:"/USER",
+        roles:['ADMIN','USER'],
         compontent:React.lazy(()=>import('../pages/private/Users'))
     },
     {
         key:"settings",
         path:"/settings",
-        role:['admin','user'],
+        roles:['ADMIN','USER'],
+        compontent:React.lazy(()=>import('../pages/private/Settings'))
+    },
+    {
+        key:"create",
+        path:"/create",
+        roles:['ADMIN'],
         compontent:React.lazy(()=>import('../pages/private/Settings'))
     }
+    
 ]

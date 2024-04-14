@@ -1,4 +1,4 @@
-import GlobalStyles from "../styles/GlobalStyles.ts";
+import GlobalStyles from "../../styles/GlobalStyles.ts";
 
 type ErrorFallbackProps = {
   error: Error,

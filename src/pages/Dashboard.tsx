@@ -1,6 +1,6 @@
 import DashboardLayout from "../features/dashboard/DashboardLayout";
-import Heading from "../ui/Heading.tsx";
-import Row from "../ui/Row.tsx";
+import Heading from "../components/ui/Heading.tsx";
+import Row from "../components/ui/Row.tsx";
 import { getUserApi } from "../services/testUser.ts";
 import { useEffect } from "react";
 function Dashboard() {

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Spinner from "../../ui/Spinner.tsx";
+import Spinner from "../../components/ui/Spinner.tsx";
 
 const StyledDashboardLayout = styled.div`
   display: grid;

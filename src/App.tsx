@@ -5,8 +5,8 @@ import { Toaster } from "react-hot-toast";
 
 import GlobalStyles from "./styles/GlobalStyles";
 import Dashboard from "./pages/Dashboard";
-import AppLayout from "./ui/AppLayout";
-import ProtectedRoute from "./ui/ProtectedRoute.tsx";
+import AppLayout from "./components/ui/AppLayout.tsx";
+import ProtectedRoute from "./components/ui/ProtectedRoute.tsx";
 import Settings from "./pages/Settings.tsx";
 import Users from "./pages/Users.tsx";
 import { DarkModeProvider } from "./context/DarkModeContext";
