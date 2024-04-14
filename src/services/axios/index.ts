@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { clearToken, getToken } from '../../features/authentication/authSlice';
 import { useAppSelector } from '../../store/hooks';
 
-const axiosInstance = axios.create({
+const apiClient = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_URL,
 });
 
-axiosInstance.interceptors.request.use(
+apiClient.interceptors.request.use(
   async (config) => {
     const token = useAppSelector(getToken);
     if (token) {
@@ -18,7 +18,7 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
-axiosInstance.interceptors.response.use(
+apiClient.interceptors.response.use(
   (response) => {
     return response;
   },
@@ -36,4 +36,4 @@ axiosInstance.interceptors.response.use(
   },
 );
 
-export default axiosInstance;
+export default apiClient;

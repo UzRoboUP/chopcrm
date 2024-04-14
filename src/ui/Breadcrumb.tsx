@@ -1,14 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
+import { MenuItem as BreadcrumbItem } from '../services/menu';
 import Heading from './Heading';
-
-export type BreadcrumbItem = {
-  url: string;
-  title: string;
-  key: string,
-  icon: string,
-  roles: string[],
-}
 
 const Breadcrumbs = () => {
   const breadcrumbs = useBreadcrumbs() as BreadcrumbItem[];

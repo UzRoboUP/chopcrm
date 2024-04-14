@@ -6,6 +6,7 @@ import {
 import { IconType } from "react-icons/lib";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
+import { useAuth } from "../context/AuthContext";
 import { getMenuData } from "../services/menu";
 
 const NavList = styled.ul`
@@ -60,10 +61,16 @@ const iconMap: Record<string, IconType> = {
 };
 
 function MainNav() {
+  const { user } = useAuth();
+
+  const filteredMenu = getMenuData.filter(item => {
+    return item.roles.some(role => user?.roles.includes(role))
+  })
+
   return (
     <nav>
       <NavList>
-        {getMenuData.map(item => {
+        {filteredMenu.map(item => {
           const Icon = iconMap[item.icon] || HiOutlineHome;
           return (
             <li key={item.key}>

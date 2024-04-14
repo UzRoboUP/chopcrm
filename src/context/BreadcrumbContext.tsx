@@ -1,7 +1,6 @@
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { getMenuData } from '../services/menu/index';
-import { BreadcrumbItem } from '../ui/Breadcrumb';
+import { MenuItem as BreadcrumbItem, getMenuData } from '../services/menu/index';
 
 type BreadcrumbContextType = BreadcrumbItem[];
 
