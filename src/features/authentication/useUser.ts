@@ -1,19 +1,21 @@
-import { useQuery } from "@tanstack/react-query";
-import { User, getCurrentUser } from "../../services/apiAuth";
+import { useQuery } from '@tanstack/react-query';
+import Profile from '../../services/profile';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { setCredentials } from './authSlice';
 
-type UseUserResult = {
-  isLoading: boolean;
-  user: User | undefined;
-  isAuthenticated: boolean;
-};
+export function useUser() {
+  const token = useAppSelector((state) => state.auth.token);
+  const dispatch = useAppDispatch();
 
-export function useUser(): UseUserResult {
-  const { isLoading, data: user } = useQuery({
-    queryKey: ["user"],
-    queryFn: getCurrentUser,
+  const { isPending, data: user } = useQuery({
+    queryKey: ['user'],
+    // queryFn: () => Profile.getCurrentUser({ token }),
+    queryFn: () => Profile.getCurrentUserFake({ token }),
+    enabled: !!token, // we need to wait for the auth that gives a token
   });
+  if (user?.data?.user && !isPending) {
+    dispatch(setCredentials({ credentials: user?.data?.user }));
+  }
 
-  const isAuthenticated = user?.isAuth === true;
-
-  return { isLoading, user, isAuthenticated };
+  return { isPending, user };
 }

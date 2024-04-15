@@ -1,7 +1,7 @@
 import { PropsWithChildren, useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useAuth } from '../context/AuthContext';
+import { useUser } from "../features/authentication/useUser";
 import Spinner from "./Spinner";
 
 const FullPage = styled.div`
@@ -17,23 +17,23 @@ type ProtectedRouteProps = {
 };
 
 function ProtectedRoute({ children, roles }: PropsWithChildren<ProtectedRouteProps>) {
-  const { isLoading, user } = useAuth();
+  const { isPending, user } = useUser();
   const navigate = useNavigate();
+  console.log('log:', isPending);
 
   useEffect(
     () => {
-      if (!user && !isLoading) {
-        navigate('/login');
+      if (!user && !isPending && roles && !roles.some(role => user?.roles.includes(role))) {
+
+        return navigate('/login');
       }
     },
-    [user]
+    [user, roles, navigate, isPending]
   );
 
-  if (user && roles && !roles.some(role => user.roles.includes(role))) {
-    return <Navigate to="/login" />;
-  }
 
-  if (isLoading) {
+
+  if (isPending) {
     return (
       <FullPage>
         <Spinner />
@@ -42,7 +42,6 @@ function ProtectedRoute({ children, roles }: PropsWithChildren<ProtectedRoutePro
   }
 
   return children;
-
 }
 
 export default ProtectedRoute;

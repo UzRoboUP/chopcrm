@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { clearToken, getToken } from '../../features/authentication/authSlice';
+import { logout, getToken } from '../../features/authentication/authSlice';
 import { useAppSelector } from '../../store/hooks';
 
 const apiClient = axios.create({
@@ -28,7 +28,7 @@ apiClient.interceptors.response.use(
       error.response.status === 401 &&
       originalRequest.url === '/auth/token'
     ) {
-      clearToken();
+      logout();
       const navigate = useNavigate();
       navigate('/auth/login');
       return Promise.reject(error);

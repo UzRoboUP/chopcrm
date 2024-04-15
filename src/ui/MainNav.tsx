@@ -6,7 +6,7 @@ import {
 import { IconType } from "react-icons/lib";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import { useAuth } from "../context/AuthContext";
+import { useUser } from "../features/authentication/useUser";
 import { getMenuData } from "../services/menu";
 
 const NavList = styled.ul`
@@ -60,12 +60,18 @@ const iconMap: Record<string, IconType> = {
   'HiOutlineCog6Tooth': HiOutlineCog6Tooth,
 };
 
+
 function MainNav() {
-  const { user } = useAuth();
+  const { user } = useUser();
+
+  if (!user?.data?.user) {
+    return null;
+  }
 
   const filteredMenu = getMenuData.filter(item => {
-    return item.roles.some(role => user?.roles.includes(role))
-  })
+
+    return item.roles.some(role => user.data.user?.roles?.includes(role));
+  });
 
   return (
     <nav>
@@ -79,7 +85,7 @@ function MainNav() {
                 <span>{item.title}</span>
               </StyledNavLink>
             </li>
-          )
+          );
         })}
       </NavList>
     </nav>
