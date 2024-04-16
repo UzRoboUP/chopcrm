@@ -3,15 +3,15 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 type AuthState = {
   token: string | null;
   user: object | null;
-  status: string;
-  error: null;
+  // status: string;
+  // error: null;
 };
 
 const initialState: AuthState = {
   token: null,
   user: null,
-  status: 'idle',
-  error: null,
+  // status: 'idle',
+  // error: null,
 };
 
 const authSlice = createSlice({

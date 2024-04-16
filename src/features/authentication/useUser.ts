@@ -13,8 +13,9 @@ export function useUser() {
     queryFn: () => Profile.getCurrentUserFake({ token }),
     enabled: !!token, // we need to wait for the auth that gives a token
   });
-  if (user?.data?.user && !isPending) {
-    dispatch(setCredentials({ credentials: user?.data?.user }));
+  const data = user?.data?.user;
+  if (data && !isPending) {
+    dispatch(setCredentials(data));
   }
 
   return { isPending, user };

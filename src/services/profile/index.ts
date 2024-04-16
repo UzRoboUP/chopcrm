@@ -55,18 +55,22 @@ class Profile {
     }
   }
   async getCurrentUserFake({ token }: { token: string }) {
-    return await new Promise((res) => {
-      setTimeout(() => {
-        console.log('getCurrentUserFake token :', token);
-        res({
-          data: {
-            user: {
-              name: 'Jakhongir',
-              roles: ['user'],
+    return await new Promise((res, rej) => {
+      if (token) {
+        setTimeout(() => {
+          console.log('getCurrentUserFake token :', token);
+          res({
+            data: {
+              user: {
+                name: 'Jakhongir',
+                roles: ['user'],
+              },
             },
-          },
-        });
-      }, 1500);
+          });
+        }, 1500);
+      } else {
+        rej('Token not found!');
+      }
     });
   }
 
