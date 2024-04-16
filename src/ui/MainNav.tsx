@@ -64,13 +64,13 @@ const iconMap: Record<string, IconType> = {
 function MainNav() {
   const { user } = useUser();
 
-  if (!user?.data?.user) {
+  if (!user) {
     return null;
   }
 
   const filteredMenu = getMenuData.filter(item => {
 
-    return item.roles.some(role => user.data.user?.roles?.includes(role));
+    return item.roles.some(role => user?.roles?.includes(role));
   });
 
   return (

@@ -17,20 +17,18 @@ type ProtectedRouteProps = {
 };
 
 function ProtectedRoute({ children, roles }: PropsWithChildren<ProtectedRouteProps>) {
-  const { isPending, user } = useUser();
+  const { isPending, user, error } = useUser();
   const navigate = useNavigate();
-  console.log('log:', isPending);
 
   useEffect(
     () => {
-      if (!user && !isPending && roles && !roles.some(role => user?.roles.includes(role))) {
+      if ((!user && !isPending) || (error && roles && !roles.some(role => user?.roles.includes(role)))) {
 
         return navigate('/login');
       }
     },
-    [user, roles, navigate, isPending]
+    [user, roles, navigate, isPending, error]
   );
-
 
 
   if (isPending) {

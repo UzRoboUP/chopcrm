@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyles = createGlobalStyle`
 :root {
@@ -6,6 +6,10 @@ const GlobalStyles = createGlobalStyle`
   /* Grey */
   --color-grey-0: #fff;
   --color-grey-50: #f9fafb;
+  --color-grey-50: #f9fafb;
+
+  --color-brand-600: #4f46e5;
+
   }
   
   &.dark-mode {

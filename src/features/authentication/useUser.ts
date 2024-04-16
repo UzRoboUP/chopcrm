@@ -7,16 +7,16 @@ export function useUser() {
   const token = useAppSelector((state) => state.auth.token);
   const dispatch = useAppDispatch();
 
-  const { isPending, data: user } = useQuery({
+  const { isPending, data, isError } = useQuery({
     queryKey: ['user'],
     // queryFn: () => Profile.getCurrentUser({ token }),
     queryFn: () => Profile.getCurrentUserFake({ token }),
-    enabled: !!token, // we need to wait for the auth that gives a token
+    enabled: !!token,
   });
-  const data = user?.data?.user;
-  if (data && !isPending) {
+  const user = data?.data?.user;
+  if (user && !isPending) {
     dispatch(setCredentials(data));
   }
 
-  return { isPending, user };
+  return { isPending, user, error: isError };
 }

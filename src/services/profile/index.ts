@@ -33,10 +33,16 @@ class Profile {
   }
 
   async loginFake({ email, password }: LoginParams) {
-    return await new Promise((res) => {
+    return await new Promise((res, rej) => {
       setTimeout(() => {
-        console.log('log:', email, password);
-        res({ token: 'jwt-access-token-blabla1235' });
+        if (email && password) {
+          console.log(email, password);
+          return res({ token: 'jwt-access-token-blabla1235' });
+        } else {
+          console.log('email or password not found');
+          rej('email or password not found');
+          return null;
+        }
       }, 1500);
     });
   }
@@ -56,10 +62,12 @@ class Profile {
   }
   async getCurrentUserFake({ token }: { token: string }) {
     return await new Promise((res, rej) => {
-      if (token) {
-        setTimeout(() => {
+      console.log('req', token);
+
+      setTimeout(() => {
+        if (token) {
           console.log('getCurrentUserFake token :', token);
-          res({
+          return res({
             data: {
               user: {
                 name: 'Jakhongir',
@@ -67,10 +75,12 @@ class Profile {
               },
             },
           });
-        }, 1500);
-      } else {
-        rej('Token not found!');
-      }
+        } else {
+          rej('Token not found!');
+          console.log('ERROR: Token not found!');
+          return null;
+        }
+      }, 1500);
     });
   }
 

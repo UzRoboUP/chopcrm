@@ -30,9 +30,9 @@ function UserAvatar() {
     <StyledUserAvatar>
       <Avatar
         src={avatar || "default-user.jpg"}
-        alt={`Avatar of ${user?.data?.user?.name}`}
+        alt={`Avatar of ${user?.name}`}
       />
-      <span>{user?.data?.user?.name}</span>
+      <span>{user?.name}</span>
     </StyledUserAvatar>
   );
 }
