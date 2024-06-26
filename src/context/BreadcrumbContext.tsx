@@ -6,14 +6,14 @@ type BreadcrumbContextType = BreadcrumbItem[];
 
 export const BreadcrumbContext = createContext<BreadcrumbContextType>([]);
 
-export const BreadcrumbProvider = ({ children }: { children: ReactNode }) => {
+export const BreadcrumbProvider = ({ children }: { children: ReactNode; }) => {
   const location = useLocation();
   const [breadcrumbs, setBreadcrumbs] = useState<BreadcrumbContextType>([]);
 
   useEffect(() => {
     function getPath(data: BreadcrumbItem[], url: string, parents: BreadcrumbItem[] = []): BreadcrumbItem[] {
       if (url === '/') {
-        url = '/dashboard';
+        url = '/analytics';
       }
       return data.reduce((result, entry) => {
         if (result.length) {

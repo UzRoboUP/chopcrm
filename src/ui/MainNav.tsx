@@ -1,9 +1,3 @@
-import {
-  HiOutlineCog6Tooth,
-  HiOutlineHome,
-  HiOutlineUsers,
-} from "react-icons/hi2";
-import { IconType } from "react-icons/lib";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { useUser } from "../features/authentication/useUser";
@@ -16,6 +10,8 @@ const NavList = styled.ul`
 `;
 
 const StyledNavLink = styled(NavLink)`
+    border-radius: 10px;
+
   &:link,
   &:visited {
     display: flex;
@@ -25,18 +21,20 @@ const StyledNavLink = styled(NavLink)`
     color: var(--color-grey-600);
     font-size: 1.6rem;
     font-weight: 500;
-    padding: 1.2rem 2.4rem;
+    padding: 1.2rem 12px;
     transition: all 0.3s;
   }
 
   /* This works because react-router places the active class on the active NavLink */
-  &:hover,
+  
   &:active,
   &.active:link,
   &.active:visited {
-    color: var(--color-grey-800);
+    color: #ffffff;
+    background: #21529C;
+  }
+  &:hover {
     background-color: var(--color-grey-50);
-    border-radius: var(--border-radius-sm);
   }
 
   & svg {
@@ -54,12 +52,6 @@ const StyledNavLink = styled(NavLink)`
   }
 `;
 
-const iconMap: Record<string, IconType> = {
-  'HiOutlineHome': HiOutlineHome,
-  'HiOutlineUsers': HiOutlineUsers,
-  'HiOutlineCog6Tooth': HiOutlineCog6Tooth,
-};
-
 
 function MainNav() {
   const { user } = useUser();
@@ -69,25 +61,51 @@ function MainNav() {
   }
 
   const filteredMenu = getMenuData.filter(item => {
-
     return item.roles.some(role => user?.roles?.includes(role));
   });
 
   return (
-    <nav>
+    <nav className="sidebar__nav">
       <NavList>
-        {filteredMenu.map(item => {
-          const Icon = iconMap[item.icon] || HiOutlineHome;
+        {filteredMenu.map(({ key, path, icon, title, iconActive }) => {
           return (
-            <li key={item.key}>
-              <StyledNavLink to={item.url}>
-                <Icon />
-                <span>{item.title}</span>
+            <li key={key}>
+              <StyledNavLink to={path}>
+                {({ isActive }) => (
+                  <>
+                    <img
+                      src={
+                        isActive
+                          ? iconActive
+                          : icon
+                      }
+                      alt="Icon"
+                    />
+                    <span>{title}</span>
+                  </>
+                )}
               </StyledNavLink>
             </li>
           );
         })}
       </NavList>
+      <div className="sidebar__bottom">
+        <NavList>
+          <li>
+            <StyledNavLink to='support' className='sidebar__support'>
+              <p>❤️ Поддержка <span>24/7</span></p>
+            </StyledNavLink>
+          </li>
+        </NavList>
+        <NavList>
+          <li>
+            <StyledNavLink to='/login' className='sidebar__logout'>
+              <img src="/img/sidebar/logout.svg" alt="" />
+              <span>Выйти</span>
+            </StyledNavLink>
+          </li>
+        </NavList>
+      </div>
     </nav>
   );
 }

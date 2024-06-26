@@ -1,0 +1,34 @@
+.sidebar {
+  &__nav {
+    @include flexbox();
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+  &__logout {
+    border-radius: 10px;
+    background: #fdf3f2;
+    justify-content: center;
+    @include anim(0.3s, 0s);
+    span {
+      color: #ff2d55;
+    }
+    &:hover {
+      background: #ff2d55 !important;
+      span {
+        color: #fdf3f2 !important;
+      }
+    }
+  }
+  &__support {
+    justify-content: center;
+    background-color: #f9fafb;
+    margin-bottom: 10px;
+    span {
+      font-weight: 500;
+    }
+    p {
+      color: #6b7280;
+    }
+  }
+}

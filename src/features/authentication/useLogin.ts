@@ -17,7 +17,7 @@ export function useLogin() {
       Profile.loginFake({ email, password }),
     onSuccess: (token) => {
       queryClient.invalidateQueries('user');
-      navigate('/dashboard', { replace: true });
+      navigate('/analytics', { replace: true });
       dispatch(setToken({ token }));
     },
     onError: (err) => {

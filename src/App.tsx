@@ -3,6 +3,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "react-hot-toast";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
+import { Skeleton } from "antd";
 import { Suspense, createElement } from "react";
 import { BreadcrumbProvider } from "./context/BreadcrumbContext.tsx";
 import { DarkModeProvider } from "./context/DarkModeContext";
@@ -12,7 +13,6 @@ import { getMenuData } from "./services/menu/index.ts";
 import GlobalStyles from "./styles/GlobalStyles";
 import AppLayout from "./ui/AppLayout.tsx";
 import ProtectedRoute from "./ui/ProtectedRoute.tsx";
-import Spinner from "./ui/Spinner.tsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -30,22 +30,23 @@ function App() {
         <GlobalStyles />
         <BrowserRouter>
           <BreadcrumbProvider>
-            <Suspense fallback={<Spinner />}>
-              <Routes>
-                <Route path="/" element={<AppLayout />}>
-                  <Route index element={<Navigate replace to="dashboard" />} />
-                  {getMenuData.map(menu => {
-                    return (<Route key={menu.key} path={menu.url} element={
+            <Routes>
+              <Route path="/" element={<AppLayout />}>
+                <Route index element={<Navigate replace to="analytics" />} />
+                {getMenuData.map(menu => {
+                  return (<Route key={menu.key} path={menu.path} element={
+                    <Suspense fallback={<Skeleton active />}>
                       <ProtectedRoute roles={menu.roles}>
                         {createElement(menu.component)}
                       </ProtectedRoute>
-                    } />);
-                  })}
-                </Route>
-                <Route path="login" element={<Login />} />
-                <Route path="*" element={<PageNotFound />} />
-              </Routes>
-            </Suspense>
+                    </Suspense>
+
+                  } />);
+                })}
+              </Route>
+              <Route path="login" element={<Login />} />
+              <Route path="*" element={<PageNotFound />} />
+            </Routes>
           </BreadcrumbProvider>
         </BrowserRouter>
 
