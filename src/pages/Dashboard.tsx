@@ -1,12 +1,12 @@
 import DashboardLayout from "../features/dashboard/DashboardLayout";
-import Heading from "../ui/Heading.tsx";
+import Breadcrumbs from "../ui/Breadcrumb.tsx";
 import Row from "../ui/Row.tsx";
-
 function Dashboard() {
+
   return (
     <>
       <Row type="horizontal">
-        <Heading as="h1">Dashboard</Heading>
+        <Breadcrumbs />
       </Row>
 
       <DashboardLayout />

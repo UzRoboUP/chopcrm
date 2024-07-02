@@ -1,0 +1,55 @@
+input {
+  height: 100%;
+  line-height: 40px;
+  font-size: 14px;
+  background-color: transparent;
+  color: #21232c;
+  font-family: $fontfamily;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  border-radius: 4px;
+  border: 1px solid #d1d1d1;
+  padding: 3px 5px;
+  background: #fff;
+  &[type='number'] {
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+}
+
+.label-name {
+}
+
+.input-search-big {
+  width: 150px;
+  height: 37px;
+  border-radius: 10px;
+  border: 1px solid #d1d1d1;
+  padding: 6px 5px 6px 12px;
+  color: $color-gray;
+  font-size: 16px;
+  &::placeholder {
+    color: $color-gray;
+    font-size: 16px;
+    height: 37px;
+  }
+}
+.input-search-small {
+  width: 180px;
+  height: 31px;
+  border-radius: 6px;
+  border: 1px solid #d1d1d1;
+  padding: 3px 6px;
+  font-size: 16px;
+  &:placeholder {
+    color: $color-gray;
+    font-size: 16px;
+    font-weight: 600;
+    height: 37px;
+  }
+}
