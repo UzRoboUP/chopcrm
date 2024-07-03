@@ -48,8 +48,8 @@ export const getMenuData: MenuData = [
   },
   {
     title: 'Отслежование',
-    key: 'tracking',
-    path: '/tracking',
+    key: 'tracks',
+    path: '/tracks',
     icon: icon02,
     iconActive: icon02Active,
     component: lazyLoad(() => import('../../pages/Tracks')),
@@ -57,8 +57,8 @@ export const getMenuData: MenuData = [
   },
   {
     title: 'Отчетность',
-    key: 'reporting',
-    path: '/reporting',
+    key: 'reports',
+    path: '/reports',
     icon: icon03,
     iconActive: icon03Active,
     component: lazyLoad(() => import('../../pages/Reports')),
