@@ -15,6 +15,15 @@
   // .content__card
   &__card {
   }
+  &__row {
+    @include flexbox();
+    align-items: center;
+    margin: 0 -12px;
+  }
+  &__col {
+    width: 25%;
+    padding: 0 12px;
+  }
 }
 .card {
   display: inline-flex;
@@ -26,7 +35,6 @@
   background: #fff;
   padding: 14px;
   min-width: 370px;
-  max-width: 370px;
   // .card__header
   &__header {
     @include flexbox();

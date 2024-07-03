@@ -1,7 +1,6 @@
 import ContentCard from "../../ui/ContentCard";
 
-function Reports() {
-
+function Leads() {
   return (
     <div className="content">
       <div className="content__header">
@@ -12,7 +11,7 @@ function Reports() {
         <div className="content__cards">
           <div className="content__row">
             <div className="content__col">
-              <ContentCard pagename='report' />
+              <ContentCard pagename='lead' />
             </div>
           </div>
         </div>
@@ -21,4 +20,4 @@ function Reports() {
   );
 }
 
-export default Reports;
+export default Leads;
