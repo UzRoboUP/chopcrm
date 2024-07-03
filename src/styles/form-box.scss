@@ -1,0 +1,74 @@
+.form__box {
+  border: 1px solid #e5e7eb;
+  padding: 8px 16px;
+  border-radius: 10px;
+  height: 36px;
+  @include flexbox();
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background-color: #fff;
+  &__title {
+    font-family: $fontfamily;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: left;
+    color: #9ca3af;
+  }
+  input {
+    width: 140px;
+    height: 25px;
+    background: #f6f8fb;
+    outline: none;
+    border: 0;
+    font-family: $fontfamily;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: left;
+    color: #1f2937;
+    &:focus {
+      outline: none;
+    }
+  }
+  .ant-space-item {
+    font-family: Inter !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    line-height: 20px !important;
+    text-align: left;
+    color: #374151 !important;
+    cursor: pointer;
+    position: relative !important;
+    top: -1px !important;
+    svg {
+      color: #9ca3af !important;
+      position: relative;
+      top: 2px !important;
+    }
+  }
+}
+.export-btn {
+  height: 36px;
+  padding: 8px 61px;
+  @include flexbox();
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-family: $fontfamily;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  letter-spacing: 0.01em;
+  text-align: left;
+  color: #6574d8;
+  border: 1px solid #6574d8;
+  outline: none;
+  cursor: pointer;
+  border-radius: 10px;
+  background: none;
+  &:focus {
+    outline: none;
+  }
+}

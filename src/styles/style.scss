@@ -1,6 +1,6 @@
 @import 'base/mixins';
 
-$fontfamily: 'Roboto', sans-serif;
+$fontfamily: 'Poppins', sans-serif;
 
 $minwidth: 320px;
 $mw: 1170;
@@ -52,6 +52,8 @@ $color-white: #ffffff;
 // base layout
 @import 'layout/header';
 @import 'layout/sidebar';
+@import 'content-header';
+@import 'form-box';
 
 // ====================================== MAIN CONTENT ============================================================================
 .wrapper {
