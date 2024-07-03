@@ -66,7 +66,6 @@ class Profile {
 
       setTimeout(() => {
         if (token) {
-          console.log('getCurrentUserFake token :', token);
           return res({
             data: {
               user: {
