@@ -1,4 +1,7 @@
 .content {
+  &__header__content{
+    margin-bottom: 40px;
+  }
   &__header__filter {
     @include flexbox();
     align-items: center;
