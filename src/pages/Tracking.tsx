@@ -1,9 +1,7 @@
+import TrackingApp from '../features/tracking/Tracking.tsx';
+
 function Tracking() {
-  return (
-    <div>
-      Tracking page
-    </div>
-  );
+  return <TrackingApp />;
 }
 
 export default Tracking;
