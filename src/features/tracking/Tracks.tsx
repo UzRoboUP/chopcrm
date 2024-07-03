@@ -11,7 +11,14 @@ function Tracks() {
       </div>
       <div className="content__main">
         <div className="content__cards">
-          <ContentCard pagename='track' />
+          <div className="content__row">
+            <div className="content__col">
+              <ContentCard pagename='track' />
+            </div>
+            <div className="content__col">
+              <ContentCard pagename='track' />
+            </div>
+          </div>
         </div>
       </div>
     </div>

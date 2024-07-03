@@ -1,14 +1,7 @@
-import Breadcrumbs from "../ui/Breadcrumb";
-import Row from "../ui/Row";
+import SettingsApp from "../features/settings/Settings";
 
 function Settings() {
-  return (
-    <Row>
-      <Breadcrumbs />
-
-      <p>Settings page</p>
-    </Row>
-  );
+  return <SettingsApp />;
 }
 
 export default Settings;

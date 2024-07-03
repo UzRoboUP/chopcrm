@@ -1,7 +1,7 @@
 import { Dropdown, DropdownProps, MenuProps, Space } from "antd";
 import { useState } from "react";
 
-type PageNameType = 'track' | 'report' | 'lead';
+type PageNameType = 'track' | 'report' | 'lead' | 'stock';
 
 type ContentCardProps = {
   pagename: PageNameType;
@@ -59,6 +59,19 @@ function ContentCard({ pagename }: ContentCardProps) {
     }
   };
   console.log(pagename);
+
+  const renderUserHeader = () => {
+    switch (pagename) {
+      case 'track':
+        return <p className="rate"><span>Сегодня 12:40</span></p>;
+      case 'report':
+      case 'stock':
+        return <p className="rate"><span>4.5</span><img src="/img/card/star.svg" alt="rate" /></p>;
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="content__card card">
       <div className="card__header">
@@ -68,10 +81,7 @@ function ContentCard({ pagename }: ContentCardProps) {
           </p>
           <div className="card__user--info">
             <p className="name">Jahongir Umirzaqov</p>
-            {pagename === 'track' ?
-              <p className="rate"><span>Сегодня 12:40</span></p>
-              : pagename === 'report' ? <p className="rate"><span>4.5</span><img src="/img/card/star.svg" alt="rate" /></p> : <p>something</p>
-            }
+            {renderUserHeader()}
           </div>
         </div>
         <Dropdown
@@ -117,24 +127,27 @@ function ContentCard({ pagename }: ContentCardProps) {
               <span>Рейтинг</span>
             </div>
             <div className="card__item--value">5</div>
+          </div>
+        }
+        {['track', 'report', 'stock'].includes(pagename) &&
+          <div className="card__item">
+            <div className="card__item--label">
+              <img src="/img/card/book.svg" alt="" />
+              <span>Компания</span>
+            </div>
+            <div className="card__item--value">Coca Cola</div>
           </div>}
-        {pagename === 'report' &&
+        {['report', 'lead', 'stock'].includes(pagename) &&
           <div className="card__item">
             <div className="card__item--label">
               <img src="/img/card/date.svg" alt="" />
-              <span>Дата регистрации</span>
-              <span className="d-none">Активность
-                водителя</span>
+              {pagename === 'report' && <span>Время последней обработки</span>}
+              {pagename === 'lead' && <span>Дата регистрации</span>}
+              {pagename === 'stock' && <span>Активность водителя</span>}
             </div>
-            <div className="card__item--value">2024.05 15:00</div>
-          </div>}
-        <div className="card__item">
-          <div className="card__item--label">
-            <img src="/img/card/book.svg" alt="" />
-            <span>Компания</span>
+            <div className="card__item--value">16.05.2024 15:00</div>
           </div>
-          <div className="card__item--value">Coca Cola</div>
-        </div>
+        }
         <div className="card__item card__item--comment">
           <div className="card__item--label">
             <img src="/img/card/comment.svg" alt="" />
@@ -143,7 +156,7 @@ function ContentCard({ pagename }: ContentCardProps) {
           <div className="card__item--value">Проехать с улицы Алишер навои
             до улицы фараби 15:00 - 16:00 20.05.2024</div>
         </div>
-        {pagename === 'report' &&
+        {pagename === 'stock' &&
           <div className="card__item">
             <div className="card__item--label">
               <img src="/img/card/loading.svg" alt="" />
@@ -159,10 +172,18 @@ function ContentCard({ pagename }: ContentCardProps) {
       {pagename === 'report' &&
         <div className="card__bottom">
           <button className="card__bottom--btn">
+            <span className="ml-5">Запросить</span>
+          </button>
+        </div>
+      }
+      {pagename === 'lead' &&
+        <div className="card__bottom">
+          <button className="card__bottom--btn">
             <img src="/img/card/location.svg" alt="" />
             <span className="ml-5">Показать последнюю активность</span>
           </button>
-        </div>}
+        </div>
+      }
     </div >
   );
 }

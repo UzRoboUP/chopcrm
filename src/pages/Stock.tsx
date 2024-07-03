@@ -1,9 +1,7 @@
-function Stock() {
-  return (
-    <div>
-      Stock page
-    </div>
-  );
+import StocksApp from '../features/stocks/Stocks';
+
+function Stocks() {
+  return <StocksApp />;
 }
 
-export default Stock;
+export default Stocks;

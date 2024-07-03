@@ -1,9 +1,7 @@
+import LeadsApp from '../features/leads/Leads';
+
 function Leads() {
-  return (
-    <div>
-      Lead page
-    </div>
-  );
+  return <LeadsApp />;
 }
 
 export default Leads;
