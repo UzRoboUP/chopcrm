@@ -17,4 +17,35 @@
     padding: 0 20px;
     color: #1f2937;
   }
+  .export-btn {
+    height: 36px;
+    padding: 8px 61px;
+    @include flexbox();
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-family: $fontfamily;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 21px;
+    letter-spacing: 0.01em;
+    text-align: left;
+    color: #6574d8;
+    border: 1px solid #6574d8;
+    outline: none;
+    cursor: pointer;
+    border-radius: 10px;
+    background: none;
+    transition: 0.4s;
+    &:hover {
+      opacity: 0.5;
+    }
+    &:active {
+      opacity: 1;
+    }
+    &:focus {
+      outline: none;
+    }
+   
+  }
 }
