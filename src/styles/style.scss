@@ -1,6 +1,6 @@
 @import 'base/mixins';
 
-$fontfamily: 'Roboto', sans-serif;
+$fontfamily: 'Poppins', sans-serif;
 
 $minwidth: 320px;
 $mw: 1170;
@@ -48,6 +48,7 @@ $color-white: #ffffff;
 
 // components styles
 @import 'login';
+@import 'content';
 
 // base layout
 @import 'layout/header';
