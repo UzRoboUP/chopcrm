@@ -1,6 +1,6 @@
 import ContentCard from "../../ui/ContentCard";
 
-function Tracking() {
+function Tracks() {
 
   return (
     <div className="content">
@@ -10,11 +10,11 @@ function Tracking() {
       </div>
       <div className="content__main">
         <div className="content__cards">
-          <ContentCard pagename='tracking' />
+          <ContentCard pagename='track' />
         </div>
       </div>
     </div>
   );
 }
 
-export default Tracking;
+export default Tracks;

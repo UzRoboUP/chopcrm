@@ -1,7 +1,7 @@
 import { Dropdown, DropdownProps, MenuProps, Space } from "antd";
 import { useState } from "react";
 
-type PageNameType = 'tracking' | 'lead';
+type PageNameType = 'track' | 'report' | 'lead';
 
 type ContentCardProps = {
   pagename: PageNameType;
@@ -10,7 +10,6 @@ type ContentCardProps = {
 function ContentCard({ pagename }: ContentCardProps) {
   const [isOpenMenu, setOpenMenu] = useState(false);
 
-  console.log('pagename', pagename);
   const itemsMenu: MenuProps['items'] = [
     {
       key: '1',
@@ -59,7 +58,7 @@ function ContentCard({ pagename }: ContentCardProps) {
       setOpenMenu(nextOpen);
     }
   };
-
+  console.log(pagename);
   return (
     <div className="content__card card">
       <div className="card__header">
@@ -69,7 +68,10 @@ function ContentCard({ pagename }: ContentCardProps) {
           </p>
           <div className="card__user--info">
             <p className="name">Jahongir Umirzaqov</p>
-            <p className="rate"><span>4.5</span><img src="/img/card/star.svg" alt="rate" /></p>
+            {pagename === 'track' ?
+              <p className="rate"><span>Сегодня 12:40</span></p>
+              : pagename === 'report' ? <p className="rate"><span>4.5</span><img src="/img/card/star.svg" alt="rate" /></p> : <p>something</p>
+            }
           </div>
         </div>
         <Dropdown
@@ -108,15 +110,24 @@ function ContentCard({ pagename }: ContentCardProps) {
           </div>
           <div className="card__item--value">Nexia 2</div>
         </div>
-        <div className="card__item">
-          <div className="card__item--label">
-            <img src="/img/card/date.svg" alt="" />
-            <span>Дата регистрации</span>
-            <span className="d-none">Активность
-              водителя</span>
-          </div>
-          <div className="card__item--value">2024.05 15:00</div>
-        </div>
+        {pagename === 'track' &&
+          <div className="card__item">
+            <div className="card__item--label">
+              <img src="/img/card/rating.svg" alt="" />
+              <span>Рейтинг</span>
+            </div>
+            <div className="card__item--value">5</div>
+          </div>}
+        {pagename === 'report' &&
+          <div className="card__item">
+            <div className="card__item--label">
+              <img src="/img/card/date.svg" alt="" />
+              <span>Дата регистрации</span>
+              <span className="d-none">Активность
+                водителя</span>
+            </div>
+            <div className="card__item--value">2024.05 15:00</div>
+          </div>}
         <div className="card__item">
           <div className="card__item--label">
             <img src="/img/card/book.svg" alt="" />
@@ -132,24 +143,27 @@ function ContentCard({ pagename }: ContentCardProps) {
           <div className="card__item--value">Проехать с улицы Алишер навои
             до улицы фараби 15:00 - 16:00 20.05.2024</div>
         </div>
-        <div className="card__item">
-          <div className="card__item--label">
-            <img src="/img/card/loading.svg" alt="" />
-            <span>Статус фотоотчета</span>
+        {pagename === 'report' &&
+          <div className="card__item">
+            <div className="card__item--label">
+              <img src="/img/card/loading.svg" alt="" />
+              <span>Статус фотоотчета</span>
+            </div>
+            <div className="card__item--value card__item--value-status">
+              <span className="dot-live"></span>
+              фото отчет
+              отправлен</div>
           </div>
-          <div className="card__item--value card__item--value-status">
-            <span className="dot-live"></span>
-            фото отчет
-            отправлен</div>
-        </div>
+        }
       </div>
-      <div className="card__bottom">
-        <button className="card__bottom--btn">
-          <img src="/img/card/location.svg" alt="" />
-          <span className="ml-5">Показать последнюю активность</span>
-        </button>
-      </div>
-    </div>
+      {pagename === 'report' &&
+        <div className="card__bottom">
+          <button className="card__bottom--btn">
+            <img src="/img/card/location.svg" alt="" />
+            <span className="ml-5">Показать последнюю активность</span>
+          </button>
+        </div>}
+    </div >
   );
 }
 
