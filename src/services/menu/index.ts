@@ -52,7 +52,7 @@ export const getMenuData: MenuData = [
     path: '/tracking',
     icon: icon02,
     iconActive: icon02Active,
-    component: lazyLoad(() => import('../../pages/Tracking')),
+    component: lazyLoad(() => import('../../pages/Tracks')),
     roles: ['admin', 'user'],
   },
   {
@@ -61,7 +61,7 @@ export const getMenuData: MenuData = [
     path: '/reporting',
     icon: icon03,
     iconActive: icon03Active,
-    component: lazyLoad(() => import('../../pages/Reporting')),
+    component: lazyLoad(() => import('../../pages/Reports')),
     roles: ['admin', 'user'],
   },
   {
