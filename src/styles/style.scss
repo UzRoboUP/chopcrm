@@ -46,14 +46,15 @@ $color-white: #ffffff;
 @import 'base/forms';
 // @import 'ant-styles';
 
-// components styles
-@import 'login';
-@import 'content';
-@import 'settings';
-
 // base layout
 @import 'layout/header';
 @import 'layout/sidebar';
+
+// components styles
+@import 'login';
+@import 'content';
+@import 'dashboard';
+@import 'settings';
 @import 'content-header';
 @import 'form-box';
 
