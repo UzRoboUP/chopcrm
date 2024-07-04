@@ -39,7 +39,7 @@ type MenuData = MenuItem[];
 export const getMenuData: MenuData = [
   {
     title: 'Аналитика',
-    key: 'analytics',
+    key: 'analytic',
     path: '/analytics',
     icon: icon01,
     iconActive: icon01Active,
@@ -48,7 +48,7 @@ export const getMenuData: MenuData = [
   },
   {
     title: 'Отслежование',
-    key: 'tracks',
+    key: 'track',
     path: '/tracks',
     icon: icon02,
     iconActive: icon02Active,
@@ -57,7 +57,7 @@ export const getMenuData: MenuData = [
   },
   {
     title: 'Отчетность',
-    key: 'reports',
+    key: 'report',
     path: '/reports',
     icon: icon03,
     iconActive: icon03Active,
@@ -66,7 +66,7 @@ export const getMenuData: MenuData = [
   },
   {
     title: 'Лиды',
-    key: 'leads',
+    key: 'lead',
     path: '/leads',
     icon: icon04,
     iconActive: icon04Active,
@@ -93,7 +93,7 @@ export const getMenuData: MenuData = [
   },
   {
     title: 'Настройки',
-    key: 'settings',
+    key: 'setting',
     path: '/settings',
     icon: icon07,
     iconActive: icon07Active,

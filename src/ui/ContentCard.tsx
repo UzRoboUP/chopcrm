@@ -1,9 +1,9 @@
 import { Dropdown, DropdownProps, MenuProps, Space } from "antd";
 import { useState } from "react";
 
-type PageNameType = 'track' | 'report' | 'lead' | 'stock';
+export type PageNameType = 'track' | 'report' | 'lead' | 'stock';
 
-type ContentCardProps = {
+export type ContentCardProps = {
   pagename: PageNameType;
 };
 

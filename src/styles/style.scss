@@ -50,12 +50,12 @@ $color-white: #ffffff;
 @import 'login';
 @import 'content';
 @import 'settings';
+@import 'content-header';
+@import 'form-box';
 
 // base layout
 @import 'layout/header';
 @import 'layout/sidebar';
-@import 'content-header';
-@import 'form-box';
 
 // ====================================== MAIN CONTENT ============================================================================
 .wrapper {

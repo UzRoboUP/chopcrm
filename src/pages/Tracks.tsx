@@ -1,4 +1,4 @@
-import TracksApp from '../features/tracking/Tracks.tsx';
+import TracksApp from '../features/tracks/Tracks.tsx';
 
 function Tracks() {
   return <TracksApp />;
