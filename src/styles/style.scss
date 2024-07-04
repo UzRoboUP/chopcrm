@@ -54,6 +54,8 @@ $color-white: #ffffff;
 // base layout
 @import 'layout/header';
 @import 'layout/sidebar';
+@import 'content-header';
+@import 'form-box';
 
 // ====================================== MAIN CONTENT ============================================================================
 .wrapper {
