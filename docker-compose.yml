@@ -22,3 +22,4 @@ services:
         - path: .
           target: /app
           action: sync
+    command: npm run dev

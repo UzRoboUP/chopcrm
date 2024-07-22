@@ -1,0 +1,114 @@
+@import 'base/mixins';
+
+$fontfamily: 'Poppins', sans-serif;
+
+$minwidth: 320px;
+$mw: 1170;
+$md1: $mw + 12;
+$md2: 992.98;
+$md3: 767.98;
+$md4: 479.98;
+
+$color1: #21232c;
+$color2: #086ed6;
+$color3: #ffffff;
+$color4: #164863;
+
+$color-secondary: #427d9d;
+$color-gray: #666;
+$color-white: #ffffff;
+
+._container {
+  max-width: $mw + px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 15px;
+  @media (max-width: ($md1+px)) {
+    max-width: 970px;
+  }
+  @media (max-width: ($md2+px)) {
+    max-width: 800px;
+    // padding: 0 10px;
+  }
+  @media (max-width: ($md3+px)) {
+    max-width: none;
+  } //padding: 0 10px;
+  @media (max-width: ($md4 + px)) {
+    padding: 0 18px;
+  }
+}
+
+// base variables styles
+@import 'base/ui';
+@import 'base/select';
+@import 'base/input';
+@import 'base/btn';
+@import 'base/forms';
+// @import 'ant-styles';
+
+// base layout
+@import 'layout/header';
+@import 'layout/sidebar';
+
+// components styles
+@import 'login';
+@import 'content';
+@import 'dashboard';
+@import 'settings';
+@import 'content-header';
+@import 'form-box';
+@import 'modal';
+
+// ====================================== MAIN CONTENT ============================================================================
+.wrapper {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  grid-template-rows: auto 1fr;
+  height: 100vh;
+}
+.main {
+  background-color: #f8f8f8;
+  padding: 12px 17px 4rem;
+  overflow: scroll;
+}
+.container {
+  max-width: 120rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 3.2rem;
+}
+
+.sidebar {
+  box-shadow: 2px 0px 5px 0px rgba(0, 0, 0, 0.15);
+  grid-row: 1 / -1;
+}
+
+.full-page {
+  height: 100vh;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.spinner {
+  margin: 2rem auto 6.8rem;
+  width: 6.4rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(farthest-side, #164863 94%, #0000) top/10px 10px no-repeat,
+    conic-gradient(#0000 30%, #164863);
+  -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 10px), #000 0);
+  animation: rotate 1.5s infinite linear;
+}
+.rc-virtual-list-scrollbar {
+  width: 5px !important;
+}
+@keyframes rotate {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+/* ========================================= MAIN CONTENT =========================================================================*/

@@ -1,25 +1,32 @@
-import styled from "styled-components";
-import HeaderMenu from "./HeaderMenu";
-import UserAvatar from "../features/authentication/UserAvatar";
-
-const StyledHeader = styled.header`
-  background-color: var(--color-grey-0);
-  padding: 1.2rem 4.8rem;
-  border-bottom: 1px solid var(--color-grey-100);
-
-  display: flex;
-  gap: 2.4rem;
-  align-items: center;
-  justify-content: flex-end;
-`;
 
 function Header() {
   return (
-    <StyledHeader>
-      <UserAvatar />
-      <HeaderMenu />
-    </StyledHeader>
-  );
+    <div className="header">
+      <div className="header__container">
+        <div className="header__row">
+          <div className="header__col"><span></span></div>
+          <div className="header__col">
+            <div className="header__content">
+              <div className="header__search">
+                <img src="/img/header/search.svg" alt="Search Icon" />
+                <input type="text" placeholder="Поиск" />
+              </div>
+              <div className="header__actions">
+                <p><img src="/img/header/notification.svg" alt="Notification Icon" /></p>
+                <p><img src="/img/header/global.svg" alt="Globe Icon" /></p>
+                <div className="header__profile">
+                  <p><img src="/img/header/empty-avatar.svg" alt="Profile Picture" /></p>
+                  <div className="header__profile--details">
+                    <div className="name">Shaxlo Oripova</div>
+                    <div className="role">call centre</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>);
 }
 
 export default Header;

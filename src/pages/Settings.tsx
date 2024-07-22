@@ -1,13 +1,7 @@
-import Heading from "../ui/Heading";
-import Row from "../ui/Row";
+import SettingsApp from "../features/settings/Settings";
 
 function Settings() {
-  return (
-    <Row>
-      <Heading as="h1">Settings</Heading>
-      <p>Settings page</p>
-    </Row>
-  );
+  return <SettingsApp />;
 }
 
 export default Settings;

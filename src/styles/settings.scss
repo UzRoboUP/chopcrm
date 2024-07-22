@@ -1,0 +1,103 @@
+.setting {
+  padding: 20px 50px;
+  // .setting__top
+  &__top {
+    @include flexbox();
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  // .setting__image
+  &__image {
+    border-radius: 50%;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    @include flexbox();
+    align-items: center;
+    justify-content: center;
+    width: 160px;
+    height: 160px;
+    img {
+      width: 34px;
+      height: 34px;
+    }
+  }
+  // .setting__info
+  &__info {
+    margin-left: 34px;
+  }
+  // .setting__title
+  &__title {
+    color: #000;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 130%; /* 28.6px */
+    letter-spacing: 0.44px;
+  }
+  // .setting__text
+  &__text {
+    color: #aeb2ba;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 150%; /* 18px */
+    letter-spacing: 0.12px;
+    margin-bottom: 28px;
+    max-width: 390px;
+  }
+  // .setting__btn
+  &__btn {
+    border-radius: 10px;
+    background: #ffd4cc;
+    color: #000;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 150%; /* 24px */
+    letter-spacing: 0.32px;
+    padding: 10px 40px;
+  }
+  // .setting__bottom
+  &__bottom {
+  }
+  // .setting__form
+  &__form {
+  }
+  // .setting__form-top
+  &__form-top {
+    @include flexbox();
+    margin-bottom: 10px;
+  }
+  // .setting__form-item
+  &__form-item {
+    @include flexbox();
+    flex-direction: column;
+    margin-right: 8px;
+  }
+  // .setting__form-label
+  &__form-label {
+    color: #000;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 150%; /* 24px */
+    letter-spacing: 0.32px;
+    margin-bottom: 8px;
+  }
+  // .setting__form-input
+  &__form-input {
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    box-shadow: 0px 1px 2px 0px rgba(31, 41, 55, 0.08);
+    color: #000;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%; /* 21px */
+    letter-spacing: 0.14px;
+    height: 37px;
+    width: 228px;
+    padding: 0 12px;
+  }
+  // .setting__form-bottom
+  &__form-bottom {
+    margin-top: 16px;
+  }
+}

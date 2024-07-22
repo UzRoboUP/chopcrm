@@ -24,8 +24,8 @@ const Avatar = styled.img`
 
 function UserAvatar() {
   const { user } = useUser();
-
   const avatar = null;
+
   return (
     <StyledUserAvatar>
       <Avatar

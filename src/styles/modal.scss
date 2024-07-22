@@ -1,0 +1,22 @@
+.modal {
+  .ant-modal-content {
+    border-radius: 45px;
+  }
+  .btn {
+    color: #fff;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 13px; /* 108.333% */
+    height: 32px;
+    padding: 5px 12px;
+    &-decline {
+      border-radius: 12px 0px 0px 12px;
+      background: #f00;
+    }
+    &-confirm {
+      border-radius: 0px 12px 12px 0px;
+      background: #30b0c7;
+    }
+  }
+}

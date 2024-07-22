@@ -1,9 +1,10 @@
-import Heading from "../ui/Heading";
+import Breadcrumbs from "../ui/Breadcrumb";
 
 function NewUsers() {
   return (
     <>
-      <Heading as="h1">Create a new user</Heading>
+      <Breadcrumbs />
+
       <p>Users page</p>
     </>
   );
