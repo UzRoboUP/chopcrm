@@ -8,8 +8,11 @@ type AuthState = {
 };
 
 const initialState: AuthState = {
-  token: null,
-  user: null,
+  token: 'token-has',
+  user: {
+    id: 'someid',
+    name: 'some name',
+  },
   // status: 'idle',
   // error: null,
 };
