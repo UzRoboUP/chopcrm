@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
+import { message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { LoginParams } from '../../models';
 import Profile from '../../services/profile';
@@ -11,23 +11,24 @@ export function useLogin() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { mutate: login, isPending } = useMutation({
-    mutationFn: ({ email, password }: LoginParams) =>
-      // Profile.login({ email, password }),
-      Profile.loginFake({ email, password }),
-    onSuccess: (token) => {
-      queryClient.invalidateQueries('user');
-      navigate('/analytics', { replace: true });
-      dispatch(setToken({ token }));
+  const { mutate: login, isPending: isLoading } = useMutation({
+    mutationFn: ({ ...payload }: LoginParams) => Profile.login({ ...payload }),
+    onSuccess: (data) => {
+      const token = data?.access;
+      queryClient.invalidateQueries({ queryKey: ['user'] });
+      if (token) {
+        dispatch(setToken({ token }));
+        navigate('/analytics', { replace: true });
+      }
     },
     onError: (err) => {
       console.log('ERROR', err);
-      toast.error('Provided email or password are incorrect');
+      message.error('Provided username or password are incorrect');
     },
   });
 
   return {
     login,
-    isPending,
+    isLoading,
   };
 }

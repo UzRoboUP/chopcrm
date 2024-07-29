@@ -3,7 +3,9 @@ import { LoginParams } from '../../models';
 import apiClient from '../axios';
 
 type LoginResponse = {
-  token: string;
+  access: string;
+  refresh: string;
+  id: string;
 };
 
 type ApiErrorResponse = {
@@ -17,13 +19,13 @@ class Profile {
     this.$api = apiClient;
   }
 
-  async login({ email, password }: LoginParams): Promise<LoginResponse> {
+  async login({ ...payload }: LoginParams): Promise<LoginResponse> {
     try {
-      const { data } = await this.$api.post<LoginResponse>('/auth/login', {
-        email,
-        password,
+      const { data } = await this.$api.post<LoginResponse>('/login/', {
+        ...payload,
       });
-      return { token: data.token };
+      console.log('login', data);
+      return data;
     } catch (error) {
       const axiosError = error as AxiosError<ApiErrorResponse>;
       throw new Error(
