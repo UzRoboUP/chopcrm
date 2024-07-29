@@ -5,7 +5,7 @@ function Tracks() {
   return (
     <div className="content">
       <div className="content__header">
-        <ContentHeader pagename="track" />
+        <ContentHeader pagename="Отслеживание" />
       </div>
       <div className="content__report">
       </div>
