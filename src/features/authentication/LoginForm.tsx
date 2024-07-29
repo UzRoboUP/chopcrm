@@ -3,16 +3,17 @@ import { useState } from "react";
 import { useLogin } from "./useLogin";
 
 function LoginForm() {
-  const [role, setRole] = useState('');
+  const [credentials, setCredentials] = useState({
+    username: '',
+    password: ''
+  });
 
-  const { login, isPending } = useLogin();
+  const { login, isLoading } = useLogin();
 
-
-  function handleLogin(e: MouseEvent) {
-    e.preventDefault();
+  function handleLogin() {
     login({
-      email: "mmyname@gmail.com",
-      password: '123456'
+      username: credentials.username,
+      password: credentials.password
     });
   }
 
@@ -20,11 +21,11 @@ function LoginForm() {
     <div className="login">
       <div className="login__form">
         <div className="d-flex mb-35">
-          <Input disabled={isPending} onInput={(e) => setRole(e.target.value)} value={role} style={{ height: 60, width: 250 }} placeholder='Login' className='login__input' />
-          <Input disabled={isPending} style={{ height: 60, width: 225 }} placeholder='Parol' className='login__input ml-20' />
+          <Input disabled={isLoading} onChange={({ target: { value: username } }) => setCredentials(prev => ({ ...prev, username }))} value={credentials.login} style={{ height: 60, width: 250 }} placeholder='Login' className='login__input' />
+          <Input disabled={isLoading} onChange={({ target: { value: password } }) => setCredentials(prev => ({ ...prev, password }))} value={credentials.password} style={{ height: 60, width: 250 }} placeholder='Parol' className='login__input ml-20' />
         </div>
-        <Button disabled={isPending} onClick={(e) => handleLogin(e)} className='login__btn'>
-          {isPending ? 'Yuklanmoqda...' : 'Kirish'}
+        <Button disabled={isLoading} onClick={handleLogin} className='login__btn'>
+          {isLoading ? 'Yuklanmoqda...' : 'Kirish'}
         </Button>
       </div>
     </div>
