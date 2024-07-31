@@ -12,7 +12,5 @@ export function useTrack(id: string) {
     enabled: !!id,
   });
 
-  console.log('retrieveData:', retrieveData);
-
   return { isLoadingData, retrieveData, error: isError };
 }

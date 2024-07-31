@@ -56,6 +56,26 @@ class Tracks {
     }
   }
 
+  // UPDATE: /tracking/update/:id/
+  async updateTrack({ ...payload }) {
+    try {
+      const response = await this.$api.put(`/tracking/update/${payload.id}/`, {
+        ...payload,
+      });
+      if (response && response.data) {
+        return response.data;
+      } else {
+        throw new Error('The API response did not contain any data.');
+      }
+    } catch (error) {
+      console.log('ERR', error);
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      throw new Error(
+        axiosError.response?.data?.message || 'An unknown error occurred',
+      );
+    }
+  }
+
   // POST: /carriers/create/
   async createCarrier({
     name,

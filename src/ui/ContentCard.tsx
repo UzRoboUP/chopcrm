@@ -1,13 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useQueryClient } from "@tanstack/react-query";
-import { Dropdown, DropdownProps, MenuProps, message, Popconfirm, Space } from "antd";
-import { useState } from "react";
-import { useTrackDelete } from "../features/tracks/useTrackDelete";
+import { useQueryClient } from '@tanstack/react-query';
+import {
+  Dropdown,
+  DropdownProps,
+  MenuProps,
+  message,
+  Popconfirm,
+  Space,
+} from 'antd';
+import { useState } from 'react';
+import { useTrackDelete } from '../features/tracks/useTrackDelete';
 
 export type PageNameType = 'track' | 'report' | 'lead' | 'stock';
 
 export type ContentCardProps = {
-  item: { id: string; };
+  item: { id: string };
   pagename: PageNameType;
   onEdit: () => void;
 };
@@ -18,11 +25,10 @@ function ContentCard({ item, pagename, onEdit }: ContentCardProps) {
   const [isOpenMenu, setOpenMenu] = useState(false);
   const [popconfirmOpen, setPopconfirmOpen] = useState(false);
 
-  console.log('item', item);
-
   let isLoadingDelete = false;
 
-  const { deleteTrack, isLoadingDelete: isLoadingTrackDelete } = useTrackDelete();
+  const { deleteTrack, isLoadingDelete: isLoadingTrackDelete } =
+    useTrackDelete();
 
   switch (pagename) {
     case 'track':
@@ -61,7 +67,7 @@ function ContentCard({ item, pagename, onEdit }: ContentCardProps) {
           <span className="card__menu--text ml-10">Место нахождения</span>
         </p>
       ),
-      className: 'mb-4'
+      className: 'mb-4',
     },
     {
       key: '2',
@@ -71,44 +77,60 @@ function ContentCard({ item, pagename, onEdit }: ContentCardProps) {
           <span className="card__menu--text ml-10">Оставить коментарий</span>
         </p>
       ),
-      className: 'mb-4'
+      className: 'mb-4',
     },
     {
       key: '3',
       label: (
-        <p onClick={() => {
-          onEdit();
-          setOpenMenu(false);
-        }} className="d-flex align-center">
+        <p
+          onClick={() => {
+            onEdit();
+            setOpenMenu(false);
+          }}
+          className="d-flex align-center"
+        >
           <img src="/img/card/menu/edit.svg" alt="" />
           <span className="card__menu--text ml-10">Изменить профиль</span>
         </p>
       ),
-      className: 'mb-4'
+      className: 'mb-4',
     },
     {
       key: '4',
       label: (
         <Popconfirm
           placement="top"
-          title='Are you sure to delete this item?'
-          description='Delete the item'
+          title="Are you sure to delete this item?"
+          description="Delete the item"
           okText={'Yes'}
           cancelText="No"
           open={popconfirmOpen}
           onConfirm={handleDelete}
-          okButtonProps={{ loading: isLoadingDelete, disabled: isLoadingDelete }}
-          cancelButtonProps={{ loading: isLoadingDelete, disabled: isLoadingDelete }}
+          okButtonProps={{
+            loading: isLoadingDelete,
+            disabled: isLoadingDelete,
+          }}
+          cancelButtonProps={{
+            loading: isLoadingDelete,
+            disabled: isLoadingDelete,
+          }}
           onCancel={() => setPopconfirmOpen(false)}
         >
-          <p onClick={() => setPopconfirmOpen(true)} className="d-flex align-center card__menu--label card__menu--label-delete">
+          <p
+            onClick={() => setPopconfirmOpen(true)}
+            className="d-flex align-center card__menu--label card__menu--label-delete"
+          >
             <img src="/img/card/menu/delete.svg" alt="" />
-            <span className="card__menu--text ml-10" style={{ color: '#FF2D55' }}>Удалить из списка</span>
+            <span
+              className="card__menu--text ml-10"
+              style={{ color: '#FF2D55' }}
+            >
+              Удалить из списка
+            </span>
           </p>
-        </Popconfirm >
-
+        </Popconfirm>
       ),
-      className: 'card__menu--label-delete'
+      className: 'card__menu--label-delete',
     },
   ];
 
@@ -117,20 +139,27 @@ function ContentCard({ item, pagename, onEdit }: ContentCardProps) {
       setOpenMenu(nextOpen);
     }
   };
-  console.log(pagename);
 
   const renderUserHeader = () => {
     switch (pagename) {
       case 'track':
-        return <p className="rate"><span>Сегодня 12:40</span></p>;
+        return (
+          <p className="rate">
+            <span>Сегодня 12:40</span>
+          </p>
+        );
       case 'report':
       case 'stock':
-        return <p className="rate"><span>4.5</span><img src="/img/card/star.svg" alt="rate" /></p>;
+        return (
+          <p className="rate">
+            <span>4.5</span>
+            <img src="/img/card/star.svg" alt="rate" />
+          </p>
+        );
       default:
         return null;
     }
   };
-
 
   return (
     <div className="content__col">
@@ -181,7 +210,7 @@ function ContentCard({ item, pagename, onEdit }: ContentCardProps) {
             </div>
             <div className="card__item--value">Nexia 2</div>
           </div>
-          {pagename === 'track' &&
+          {pagename === 'track' && (
             <div className="card__item">
               <div className="card__item--label">
                 <img src="/img/card/rating.svg" alt="" />
@@ -189,35 +218,40 @@ function ContentCard({ item, pagename, onEdit }: ContentCardProps) {
               </div>
               <div className="card__item--value">5</div>
             </div>
-          }
-          {['track', 'report', 'stock'].includes(pagename) &&
+          )}
+          {['track', 'report', 'stock'].includes(pagename) && (
             <div className="card__item">
               <div className="card__item--label">
                 <img src="/img/card/book.svg" alt="" />
                 <span>Компания</span>
               </div>
               <div className="card__item--value">Coca Cola</div>
-            </div>}
-          {['report', 'lead', 'stock'].includes(pagename) &&
+            </div>
+          )}
+          {['report', 'lead', 'stock'].includes(pagename) && (
             <div className="card__item">
               <div className="card__item--label">
                 <img src="/img/card/date.svg" alt="" />
-                {pagename === 'report' && <span>Время последней обработки</span>}
+                {pagename === 'report' && (
+                  <span>Время последней обработки</span>
+                )}
                 {pagename === 'lead' && <span>Дата регистрации</span>}
                 {pagename === 'stock' && <span>Активность водителя</span>}
               </div>
               <div className="card__item--value">16.05.2024 15:00</div>
             </div>
-          }
+          )}
           <div className="card__item card__item--comment">
             <div className="card__item--label">
               <img src="/img/card/comment.svg" alt="" />
               <span>Комментарий</span>
             </div>
-            <div className="card__item--value">Проехать с улицы Алишер навои
-              до улицы фараби 15:00 - 16:00 20.05.2024</div>
+            <div className="card__item--value">
+              Проехать с улицы Алишер навои до улицы фараби 15:00 - 16:00
+              20.05.2024
+            </div>
           </div>
-          {pagename === 'stock' &&
+          {pagename === 'stock' && (
             <div className="card__item">
               <div className="card__item--label">
                 <img src="/img/card/loading.svg" alt="" />
@@ -225,27 +259,27 @@ function ContentCard({ item, pagename, onEdit }: ContentCardProps) {
               </div>
               <div className="card__item--value card__item--value-status">
                 <span className="dot-live"></span>
-                фото отчет
-                отправлен</div>
+                фото отчет отправлен
+              </div>
             </div>
-          }
+          )}
         </div>
-        {pagename === 'report' &&
+        {pagename === 'report' && (
           <div className="card__bottom">
             <button className="card__bottom--btn">
               <span className="ml-5">Запросить</span>
             </button>
           </div>
-        }
-        {pagename === 'lead' &&
+        )}
+        {pagename === 'lead' && (
           <div className="card__bottom">
             <button className="card__bottom--btn">
               <img src="/img/card/location.svg" alt="" />
               <span className="ml-5">Показать последнюю активность</span>
             </button>
           </div>
-        }
-      </div >
+        )}
+      </div>
     </div>
   );
 }

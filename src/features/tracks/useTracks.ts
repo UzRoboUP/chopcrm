@@ -11,7 +11,5 @@ export function useTracks() {
     queryFn: () => Tracks.getTracks(),
   });
 
-  console.log('tracks', data);
-
   return { isLoading, data, error: isError };
 }
