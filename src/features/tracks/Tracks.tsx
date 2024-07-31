@@ -1,6 +1,18 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import ContentCard from "../../ui/ContentCard";
 import ContentHeader from "../../ui/ContentHeader";
+import Spinner from "../../ui/Spinner";
+import { useTracks } from "./useTracks";
 function Tracks() {
+
+  const { data } = useTracks();
+
+  if (!Object.keys(data || {})?.length) {
+    return <Spinner />;
+  }
+
+  // { count, current_page, total_pages, results }
+  console.log('DATA: ', data);
 
   return (
     <div className="content">
@@ -12,17 +24,16 @@ function Tracks() {
       <div className="content__main">
         <div className="content__cards">
           <div className="content__row">
-            <div className="content__col">
-              <ContentCard pagename='track' />
-            </div>
-            <div className="content__col">
-              <ContentCard pagename='track' />
-            </div>
+            {data?.results?.length > 0 ? (data?.results || []).map((item: { id: string; }) => (
+              <ContentCard key={item.id} item={item} pagename='track' />
+            )) : <p className="text-center">No data</p>}
+
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
+
 
 export default Tracks;
