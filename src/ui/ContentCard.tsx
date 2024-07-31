@@ -1,17 +1,57 @@
-import { Dropdown, DropdownProps, MenuProps, Space } from "antd";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useQueryClient } from "@tanstack/react-query";
+import { Dropdown, DropdownProps, MenuProps, message, Popconfirm, Space } from "antd";
 import { useState } from "react";
+import { useTrackDelete } from "../features/tracks/useTrackDelete";
 
 export type PageNameType = 'track' | 'report' | 'lead' | 'stock';
 
 export type ContentCardProps = {
-  item: unknown;
+  item: { id: string; };
   pagename: PageNameType;
+  onEdit: () => void;
 };
 
-function ContentCard({ item, pagename }: ContentCardProps) {
+function ContentCard({ item, pagename, onEdit }: ContentCardProps) {
+  const queryClient = useQueryClient();
+
   const [isOpenMenu, setOpenMenu] = useState(false);
+  const [popconfirmOpen, setPopconfirmOpen] = useState(false);
 
   console.log('item', item);
+
+  let isLoadingDelete = false;
+
+  const { deleteTrack, isLoadingDelete: isLoadingTrackDelete } = useTrackDelete();
+
+  switch (pagename) {
+    case 'track':
+      isLoadingDelete = isLoadingTrackDelete;
+      break;
+    case 'report':
+      // isLoadingDelete = isLoadingTrackDelete;
+      break;
+
+    default:
+      throw new Error('There is no such pagename property');
+  }
+
+  const handleDelete = () => {
+    switch (pagename) {
+      case 'track':
+        deleteTrack(item.id, {
+          onSuccess: (data) => {
+            queryClient.setQueryData(['trackDelete'], data);
+            queryClient.invalidateQueries({ queryKey: ['tracks'] });
+            message.success('Track deleted successfully');
+          },
+        });
+        break;
+
+      default:
+        throw new Error('There is no such pagename property');
+    }
+  };
   const itemsMenu: MenuProps['items'] = [
     {
       key: '1',
@@ -36,7 +76,10 @@ function ContentCard({ item, pagename }: ContentCardProps) {
     {
       key: '3',
       label: (
-        <p className="d-flex align-center">
+        <p onClick={() => {
+          onEdit();
+          setOpenMenu(false);
+        }} className="d-flex align-center">
           <img src="/img/card/menu/edit.svg" alt="" />
           <span className="card__menu--text ml-10">Изменить профиль</span>
         </p>
@@ -46,10 +89,24 @@ function ContentCard({ item, pagename }: ContentCardProps) {
     {
       key: '4',
       label: (
-        <p className="d-flex align-center card__menu--label card__menu--label-delete">
-          <img src="/img/card/menu/delete.svg" alt="" />
-          <span className="card__menu--text ml-10" style={{ color: '#FF2D55' }}>Удалить из списка</span>
-        </p>
+        <Popconfirm
+          placement="top"
+          title='Are you sure to delete this item?'
+          description='Delete the item'
+          okText={'Yes'}
+          cancelText="No"
+          open={popconfirmOpen}
+          onConfirm={handleDelete}
+          okButtonProps={{ loading: isLoadingDelete, disabled: isLoadingDelete }}
+          cancelButtonProps={{ loading: isLoadingDelete, disabled: isLoadingDelete }}
+          onCancel={() => setPopconfirmOpen(false)}
+        >
+          <p onClick={() => setPopconfirmOpen(true)} className="d-flex align-center card__menu--label card__menu--label-delete">
+            <img src="/img/card/menu/delete.svg" alt="" />
+            <span className="card__menu--text ml-10" style={{ color: '#FF2D55' }}>Удалить из списка</span>
+          </p>
+        </Popconfirm >
+
       ),
       className: 'card__menu--label-delete'
     },
@@ -73,6 +130,7 @@ function ContentCard({ item, pagename }: ContentCardProps) {
         return null;
     }
   };
+
 
   return (
     <div className="content__col">

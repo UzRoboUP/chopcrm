@@ -12,6 +12,7 @@ class Tracks {
     this.$api = apiClient;
   }
 
+  // GET: /tracking/list/
   async getTracks() {
     try {
       const { data } = await this.$api.get(
@@ -20,6 +21,32 @@ class Tracks {
         //   params: { name, limit, offset, status, q },
         // }
       );
+      return data;
+    } catch (error) {
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      throw new Error(
+        axiosError.response?.data?.message || 'An unknown error occurred',
+      );
+    }
+  }
+
+  // GET: /tracking/retrieve/:id
+  async getTrack(id: string) {
+    try {
+      const { data } = await this.$api.get(`/tracking/retrieve/${id}`);
+      return data;
+    } catch (error) {
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      throw new Error(
+        axiosError.response?.data?.message || 'An unknown error occurred',
+      );
+    }
+  }
+
+  // DELETE: /tracking/delete/:id/
+  async deleteTrack(id: string) {
+    try {
+      const { data } = await this.$api.delete(`/tracking/delete/${id}/`);
       return data;
     } catch (error) {
       const axiosError = error as AxiosError<ApiErrorResponse>;
