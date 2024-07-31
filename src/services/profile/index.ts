@@ -64,8 +64,6 @@ class Profile {
   }
   async getCurrentUserFake({ token }: { token: string }) {
     return await new Promise((res, rej) => {
-      console.log('req', token);
-
       setTimeout(() => {
         if (token) {
           return res({

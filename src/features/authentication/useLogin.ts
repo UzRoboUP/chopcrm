@@ -17,7 +17,8 @@ export function useLogin() {
       const token = data?.access;
       queryClient.invalidateQueries({ queryKey: ['user'] });
       if (token) {
-        dispatch(setToken({ token }));
+        console.log('token', token);
+        dispatch(setToken(token));
         navigate('/analytics', { replace: true });
       }
     },
