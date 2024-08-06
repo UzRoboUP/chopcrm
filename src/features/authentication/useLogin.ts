@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { LoginParams } from '../../models';
 import Profile from '../../services/profile';
 import { useAppDispatch } from '../../store/hooks';
-import { setToken } from './authSlice';
+import { setToken, setTokenUserId } from './authSlice';
 
 export function useLogin() {
   const dispatch = useAppDispatch();
@@ -19,6 +19,7 @@ export function useLogin() {
       if (token) {
         console.log('token', token);
         dispatch(setToken(token));
+        dispatch(setTokenUserId(data.id));
         navigate('/analytics', { replace: true });
       }
     },

@@ -76,6 +76,26 @@ class Tracks {
     }
   }
 
+  // POST: /comment/create/
+  async createComment({ ...payload }) {
+    try {
+      const response = await this.$api.post(`/comment/create/`, {
+        ...payload,
+      });
+      if (response && response.data) {
+        return response.data;
+      } else {
+        throw new Error('The API response did not contain any data.');
+      }
+    } catch (error) {
+      console.log('ERR', error);
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      throw new Error(
+        axiosError.response?.data?.message || 'An unknown error occurred',
+      );
+    }
+  }
+
   // POST: /carriers/create/
   async createCarrier({
     name,

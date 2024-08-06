@@ -4,6 +4,8 @@ import { NavLink, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { useUser } from '../features/authentication/useUser';
 import { getMenuData } from '../services/menu';
+import { logout } from '../features/authentication/authSlice';
+import { useAppDispatch } from '../store/hooks';
 
 const NavList = styled.ul`
   display: flex;
@@ -55,16 +57,16 @@ const StyledNavLink = styled(NavLink)`
 `;
 
 function MainNav() {
-  const { user } = useUser();
-
+  const { userData } = useUser();
   const { pathname } = useLocation();
+  const dispatch = useAppDispatch();
 
-  if (!user) {
+  if (!userData) {
     return null;
   }
 
   const filteredMenu = getMenuData.filter((item) => {
-    return item.roles.some((role) => user?.roles?.includes(role));
+    return item.roles.some((role) => userData?.staff_status?.includes(role));
   });
 
   const onClick: MenuProps['onClick'] = (e) => {
@@ -209,7 +211,11 @@ function MainNav() {
         </NavList>
         <NavList>
           <li>
-            <StyledNavLink to="/login" className="sidebar__logout">
+            <StyledNavLink
+              to="/login"
+              className="sidebar__logout"
+              onClick={() => dispatch(logout())}
+            >
               <img src="/img/sidebar/logout.svg" alt="" />
               <span>Выйти</span>
             </StyledNavLink>

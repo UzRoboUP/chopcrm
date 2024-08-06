@@ -17,6 +17,7 @@ function Tracks() {
     return;
   }
 
+  console.log(data.results);
   // { count, current_page, total_pages, results }
 
   return (

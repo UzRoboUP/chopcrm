@@ -23,10 +23,9 @@ apiClient.interceptors.response.use(
     return response;
   },
   async function (error) {
-    // const originalRequest = error.config;
     if (error.response.status === 401) {
-      // need to redirect to login
       store.dispatch(logout());
+      window.location.replace('/login');
       return Promise.reject(error);
     }
   },
