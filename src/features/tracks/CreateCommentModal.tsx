@@ -26,7 +26,7 @@ function CreateCommentModal({
         createComment(
           {
             comment: comment,
-            comment_purpose: currentUser?.staff_status as string,
+            comment_purpose: `${pagename}ing`,
             by_whom: currentUser?.id as string,
             to_whom: retrieveData.driver_data.id,
           },

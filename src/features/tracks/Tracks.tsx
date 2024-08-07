@@ -17,9 +17,6 @@ function Tracks() {
     return;
   }
 
-  console.log(data.results);
-  // { count, current_page, total_pages, results }
-
   return (
     <div className="content">
       <div className="content__header">

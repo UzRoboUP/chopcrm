@@ -17,7 +17,6 @@
   }
   &__row {
     @include flexbox();
-    align-items: center;
     margin: 0 -12px;
     flex-wrap: wrap;
     row-gap: 24px;

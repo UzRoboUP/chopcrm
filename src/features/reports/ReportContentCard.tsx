@@ -1,16 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useQueryClient } from '@tanstack/react-query';
-import {
-  Dropdown,
-  DropdownProps,
-  MenuProps,
-  message,
-  Popconfirm,
-  Space,
-} from 'antd';
+import { Dropdown, DropdownProps, MenuProps, message, Popconfirm } from 'antd';
 import { useState } from 'react';
-import CreateCommentModal from '../features/tracks/CreateCommentModal';
-import { useTrackDelete } from '../features/tracks/useTrackDelete';
+import { convertTimestamp } from '../../utils/helpers';
+import CreateCommentModal from '../tracks/CreateCommentModal';
+import { useReportDelete } from '../tracks/useReportDelete';
 
 export type PageNameType = 'track' | 'report' | 'lead' | 'stock';
 
@@ -20,51 +14,23 @@ export type ContentCardProps = {
   onEdit: () => void;
 };
 
-function ContentCard({ item, pagename, onEdit }: ContentCardProps) {
+function ReportContentCard({ item, pagename, onEdit }: ContentCardProps) {
   const queryClient = useQueryClient();
 
   const [isOpenMenu, setOpenMenu] = useState(false);
   const [popconfirmOpen, setPopconfirmOpen] = useState(false);
   const [isOpenCommentModal, setOpenCommentModal] = useState(false);
 
-  let isLoadingDelete = false;
-
-  const { deleteTrack, isLoadingDelete: isLoadingTrackDelete } =
-    useTrackDelete();
-
-  switch (pagename) {
-    case 'track':
-      isLoadingDelete = isLoadingTrackDelete;
-      break;
-    case 'report':
-      // isLoadingDelete = isLoadingTrackDelete;
-      break;
-    case 'lead':
-      // isLoadingDelete = isLoadingTrackDelete;
-      break;
-    case 'stock':
-      // isLoadingDelete = isLoadingTrackDelete;
-      break;
-
-    default:
-      throw new Error('There is no such pagename property');
-  }
+  const { deleteReport, isLoadingDelete } = useReportDelete();
 
   const handleDelete = () => {
-    switch (pagename) {
-      case 'track':
-        deleteTrack(item.id, {
-          onSuccess: (data) => {
-            queryClient.setQueryData(['trackDelete'], data);
-            queryClient.invalidateQueries({ queryKey: ['tracks'] });
-            message.success('Track deleted successfully');
-          },
-        });
-        break;
-
-      default:
-        throw new Error('There is no such pagename property');
-    }
+    deleteReport(item.id, {
+      onSuccess: (data) => {
+        queryClient.setQueryData(['reportDelete'], data);
+        queryClient.invalidateQueries({ queryKey: ['reports'] });
+        message.success('Report deleted successfully');
+      },
+    });
   };
 
   const itemsMenu: MenuProps['items'] = [
@@ -154,26 +120,85 @@ function ContentCard({ item, pagename, onEdit }: ContentCardProps) {
     }
   };
 
-  const renderUserHeader = () => {
-    switch (pagename) {
-      case 'track':
-        return (
-          <p className="rate">
-            <span>Сегодня 12:40</span>
-          </p>
-        );
-      case 'report':
-      case 'stock':
-        return (
-          <p className="rate">
-            <span>4.5</span>
-            <img src="/img/card/star.svg" alt="rate" />
-          </p>
-        );
-      default:
-        return null;
-    }
-  };
+  // {
+  //   "contract": "94ba02d5-0385-4abf-ade4-fcd60833ee8f",
+  //   "status_foto_report": "pending",
+  //   "updated_at": "2024-08-06T16:37:27.595782+05:00",
+  //   "created_at": "2024-08-06T16:37:27.595755+05:00",
+  //   "id": "b5ff973f-54fe-4ab0-960d-b60ca8e4d29c",
+  //   "contract_data": {
+  //     "id": "94ba02d5-0385-4abf-ade4-fcd60833ee8f",
+  //     "created_at": "2024-08-06T16:36:56.603781+05:00",
+  //     "updated_at": "2024-08-06T16:36:56.603808+05:00",
+  //     "company": "7217e6f7-3a4c-4d0f-98dd-16a93a3575d6",
+  //     "driver": "07d5bde1-31e0-470a-9286-e0f6738b4906",
+  //     "status_contract": "still_on",
+  //     "driver_data": {
+  //       "id": "07d5bde1-31e0-470a-9286-e0f6738b4906",
+  //       "created_at": "2024-08-03",
+  //       "updated_at": "2024-08-06",
+  //       "passport": null,
+  //       "full_name": "Kobe Brayn",
+  //       "address": "Tashkent",
+  //       "phone_number": "+998997777777",
+  //       "card_data": null,
+  //       "image": null,
+  //       "driver_status": "ready_to_work",
+  //       "car_data": "f1e21bfb-46dd-4544-83b6-dd38737a7d4f",
+  //       "car_data_get": {
+  //         "id": "f1e21bfb-46dd-4544-83b6-dd38737a7d4f",
+  //         "created_at": "2024-08-06T16:32:43.552114+05:00",
+  //         "updated_at": "2024-08-06T16:32:43.552150+05:00",
+  //         "car_model": "Malibu2",
+  //         "car_brand": "Chevrolet",
+  //         "car_service_type": "sedan",
+  //         "manufactured_year": "2024-08-06",
+  //         "government_number": "70G906CA",
+  //         "tech_passport_number": "1234552",
+  //         "issue_date_of_tech_passport": "2024-08-06",
+  //         "issue_date_of_power_attorney": "2024-08-06",
+  //         "photo_of_tech_passport": null,
+  //         "photo_of_tech_passport2": null,
+  //         "photo_of_power_attorney": null,
+  //         "license_photo_of_driver": null,
+  //         "icense_photo_of_driver2": null,
+  //         "car_photo": null
+  //       },
+  //       "last_active_time": "2024-08-06T16:35:25.997227+05:00"
+  //     },
+  //     "company_data": {
+  //       "id": "7217e6f7-3a4c-4d0f-98dd-16a93a3575d6",
+  //       "created_at": "2024-08-06T16:36:36.549881+05:00",
+  //       "updated_at": "2024-08-06T16:36:36.549923+05:00",
+  //       "name": "CocaCola",
+  //       "image": null
+  //     }
+  //   },
+  //   "report_comment": "None",
+  //   "car_number_by_status": [
+  //     {
+  //       "non_notified": 0
+  //     },
+  //     {
+  //       "notified": 0
+  //     },
+  //     {
+  //       "pending": 2
+  //     },
+  //     {
+  //       "rejected": 0
+  //     },
+  //     {
+  //       "sent": 0
+  //     },
+  //     {
+  //       "confirmed": 0
+  //     }
+  //   ],
+  //   "rate": {
+  //     "rate__avg": null
+  //   }
+  // },
 
   return (
     <>
@@ -185,8 +210,13 @@ function ContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <img src="/img/card/empty-avatar.svg" alt="avatar" />
               </p>
               <div className="card__user--info">
-                <p className="name">{item?.driver_data.fullName}</p>
-                {renderUserHeader()}
+                <p className="name">
+                  {item?.contract_data.driver_data?.fullName}
+                </p>
+                <p className="rate">
+                  <span>4.5</span>
+                  <img src="/img/card/star.svg" alt="rate" />
+                </p>
               </div>
             </div>
             <Dropdown
@@ -214,7 +244,7 @@ function ContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <span>Телефон</span>
               </div>
               <div className="card__item--value">
-                {item?.driver_data.phone_number}
+                {item?.contract_data.driver_data?.phone_number}
               </div>
             </div>
             <div className="card__item">
@@ -223,77 +253,40 @@ function ContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <span>Тип машины</span>
               </div>
               <div className="card__item--value">
-                {item?.driver_data.car_data_get.model}
+                {item?.contract_data.driver_data?.car_data_get.model}
               </div>
             </div>
-            {pagename === 'track' && (
-              <div className="card__item">
-                <div className="card__item--label">
-                  <img src="/img/card/rating.svg" alt="" />
-                  <span>Рейтинг</span>
-                </div>
-                <div className="card__item--value">{item?.rate.rate_avg}</div>
+            <div className="card__item">
+              <div className="card__item--label">
+                <img src="/img/card/book.svg" alt="" />
+                <span>Компания</span>
               </div>
-            )}
-            {['track', 'report', 'stock'].includes(pagename) && (
-              <div className="card__item">
-                <div className="card__item--label">
-                  <img src="/img/card/book.svg" alt="" />
-                  <span>Компания</span>
-                </div>
-                <div className="card__item--value">
-                  {item.company_data.name}
-                </div>
+              <div className="card__item--value">
+                {item?.company_data?.name}
               </div>
-            )}
-            {['report', 'lead', 'stock'].includes(pagename) && (
-              <div className="card__item">
-                <div className="card__item--label">
-                  <img src="/img/card/date.svg" alt="" />
-                  {pagename === 'report' && (
-                    <span>Время последней обработки</span>
-                  )}
-                  {pagename === 'lead' && <span>Дата регистрации</span>}
-                  {pagename === 'stock' && <span>Активность водителя</span>}
-                </div>
-                <div className="card__item--value">16.05.2024 15:00</div>
+            </div>
+            <div className="card__item">
+              <div className="card__item--label">
+                <img src="/img/card/date.svg" alt="" />
+                <span>Время последней обработки</span>
               </div>
-            )}
+              <div className="card__item--value">
+                {convertTimestamp(item.updated_at)}
+              </div>
+            </div>
             <div className="card__item card__item--comment">
               <div className="card__item--label">
                 <img src="/img/card/comment.svg" alt="" />
                 <span>Комментарий</span>
               </div>
-              <div className="card__item--value">{item?.contract_comment}</div>
+              <div className="card__item--value">{item?.report_comment}</div>
             </div>
-            {pagename === 'stock' && (
-              <div className="card__item">
-                <div className="card__item--label">
-                  <img src="/img/card/loading.svg" alt="" />
-                  <span>Статус фотоотчета</span>
-                </div>
-                <div className="card__item--value card__item--value-status">
-                  <span className="dot-live"></span>
-                  фото отчет отправлен
-                </div>
-              </div>
-            )}
           </div>
-          {pagename === 'report' && (
-            <div className="card__bottom">
-              <button className="card__bottom--btn">
-                <span className="ml-5">Запросить</span>
-              </button>
-            </div>
-          )}
-          {pagename === 'lead' && (
-            <div className="card__bottom">
-              <button className="card__bottom--btn">
-                <img src="/img/card/location.svg" alt="" />
-                <span className="ml-5">Показать последнюю активность</span>
-              </button>
-            </div>
-          )}
+          <div className="card__bottom">
+            <button className="card__bottom--btn">
+              <span className="ml-5">Запросить</span>
+            </button>
+          </div>
         </div>
       </div>
       <CreateCommentModal
@@ -306,4 +299,4 @@ function ContentCard({ item, pagename, onEdit }: ContentCardProps) {
   );
 }
 
-export default ContentCard;
+export default ReportContentCard;

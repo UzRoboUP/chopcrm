@@ -26,12 +26,6 @@ function ProtectedRoute({
   const navigate = useNavigate();
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
 
-  console.log({
-    isAuthenticated,
-    userData,
-    isLoadingUser,
-  });
-
   useEffect(() => {
     if (!userData && !isAuthenticated && !isFetching) {
       return navigate('/login');
