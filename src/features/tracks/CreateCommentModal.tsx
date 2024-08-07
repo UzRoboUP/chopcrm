@@ -4,9 +4,9 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Button, message, Typography } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import { useState } from 'react';
+import { useAppSelector } from '../../store/hooks';
 import Modal from '../../ui/Modal';
 import { useCreateComment } from './useCreateComment';
-import { useAppSelector } from '../../store/hooks';
 
 function CreateCommentModal({
   pagename,
@@ -21,28 +21,49 @@ function CreateCommentModal({
   const { createComment, isLoading } = useCreateComment();
 
   const handleSave = () => {
+    //     ('manager', 'manager'),
+    //     ('operator', 'operator'),
+    //     ('moderator', 'moderator'),
+    //     ('accountant', 'accountant'),
+
+    let comment_purpose = '',
+      to_whom = null;
+
     switch (pagename) {
       case 'track':
-        createComment(
-          {
-            comment: comment,
-            comment_purpose: `${pagename}ing`,
-            by_whom: currentUser?.id as string,
-            to_whom: retrieveData.driver_data.id,
-          },
-          {
-            onSuccess: (data) => {
-              queryClient.setQueryData(['createComment'], data);
-              queryClient.invalidateQueries({ queryKey: ['tracks'] });
-              message.success('Comment created successfully');
-              onCloseModal();
-            },
-          },
-        );
+        comment_purpose = 'tracking';
+        break;
+      case 'stock':
+        comment_purpose = 'stock';
+        to_whom = retrieveData.contract_data.driver_data.id;
+        break;
+      case 'leads':
+        comment_purpose = 'leads';
+        break;
+      case 'report':
+        comment_purpose = 'reporting';
         break;
       default:
-        throw new Error('There is no such pagename property');
+        to_whom = retrieveData.driver_data.id;
+        throw new Error('Smth gone with error');
     }
+
+    createComment(
+      {
+        comment: comment,
+        comment_purpose,
+        by_whom: currentUser?.id as string,
+        to_whom,
+      },
+      {
+        onSuccess: (data) => {
+          queryClient.setQueryData(['createComment'], data);
+          queryClient.invalidateQueries({ queryKey: [`${pagename}s`] });
+          message.success('Comment created successfully');
+          onCloseModal();
+        },
+      },
+    );
   };
 
   return (

@@ -89,7 +89,7 @@ function MainNav() {
         key: '100',
         label: (
           <StyledNavLink
-            to={`stock?company_id=${clientCompanies?.results[0]?.id}`}
+            to={`stock?company_id=${searchParams.get('company_id') || clientCompanies?.results[0]?.id}`}
           >
             {({ isActive }) => (
               <>
@@ -99,8 +99,8 @@ function MainNav() {
             )}
           </StyledNavLink>
         ),
-        children: (clientCompanies?.results || []).map((company) => ({
-          key: '105',
+        children: (clientCompanies?.results || []).map((company, index) => ({
+          key: index + 1,
           className:
             searchParams.get('company_id') === company.id
               ? 'active-client-company'
@@ -109,9 +109,7 @@ function MainNav() {
             <p
               key={company.id}
               onClick={() => {
-                navigate(`stock?company_id=${company.id}`, {
-                  replace: true,
-                });
+                navigate(`stock?company_id=${company.id}`);
               }}
               className="d-flex align-center justify-center"
             >
@@ -146,6 +144,7 @@ function MainNav() {
                     alt="arrow"
                   />
                 }
+                defaultOpenKeys={pathname.includes('stock') ? ['100'] : []}
                 mode="inline"
                 items={getMenuItems(icon, iconActive, title)}
               />

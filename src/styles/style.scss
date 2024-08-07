@@ -106,10 +106,10 @@ $color-white: #ffffff;
   width: 5px !important;
 }
 .active-client-company {
-  border: 1px solid #e5e7eb;
-  background: #cbe0ff;
+  border: 1px solid #e5e7eb !important;
+  background: #cbe0ff !important;
   .sidebar__nav-sub-link {
-    color: #21529c;
+    color: #21529c !important;
   }
 }
 @keyframes rotate {
