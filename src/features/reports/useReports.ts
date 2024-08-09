@@ -9,6 +9,7 @@ export function useReports() {
   } = useQuery({
     queryKey: ['reports'],
     queryFn: () => Reports.getReports(),
+    retry: 1,
   });
 
   return { isLoading, data, error: isError };

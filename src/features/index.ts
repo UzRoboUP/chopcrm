@@ -7,7 +7,7 @@ export function useClientCompanies() {
     data: clientCompanies,
     isError,
   } = useQuery({
-    queryKey: ['reports'],
+    queryKey: ['clientCompany'],
     queryFn: () => Api.getClientCompany(),
   });
 

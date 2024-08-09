@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import download from '../../public/img/page-header/download.svg';
 import left from '../../public/img/page-header/left-chevron.svg';
 import { usePageTitle } from '../features/usePageTitle';
-import { PageNameType } from './ContentCard';
+import { PageNameType } from '../services/tracks/TrackContentCard';
 import FormBox from './FormBox';
 
 type ContentHeaderProps = {
@@ -16,13 +16,11 @@ export default function ContentHeader({ pagename }: ContentHeaderProps) {
   const onChange: CheckboxProps['onChange'] = (e) => {
     console.log(`checked = ${e.target.checked}`);
     console.log(menu);
-
   };
 
-
   useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/users")
-      .then(item => item.json())
+    fetch('https://jsonplaceholder.typicode.com/users')
+      .then((item) => item.json())
       .then((result) => {
         setMenu(result);
       });
@@ -47,7 +45,7 @@ export default function ContentHeader({ pagename }: ContentHeaderProps) {
         <span className="content__header__title">{usePageTitle(pagename)}</span>
         <div className="content__header__filter">
           <FormBox title="Марка">
-            <Dropdown menu={{ items }} trigger={['click']}  >
+            <Dropdown menu={{ items }} trigger={['click']}>
               <a onClick={(e) => e.preventDefault()}>
                 <Space>
                   Выберите

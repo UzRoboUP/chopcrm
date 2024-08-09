@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Dropdown, DropdownProps, MenuProps } from 'antd';
 import { useState } from 'react';
-import CreateCommentModal from '../tracks/CreateCommentModal';
 import { convertTimestamp } from '../../utils/helpers';
+import CreateCommentModal from '../tracks/CreateCommentModal';
 
 export type PageNameType = 'track' | 'report' | 'lead' | 'stock';
 
@@ -15,21 +15,6 @@ export type ContentCardProps = {
 function LeadContentCard({ item, pagename }: ContentCardProps) {
   const [isOpenMenu, setOpenMenu] = useState(false);
   const [isOpenCommentModal, setOpenCommentModal] = useState(false);
-
-  // {
-  //   "id": "00cd6857-0e68-4e4b-bbf5-6b4857a437b5",
-  //   "created_at": "2024-08-06",
-  //   "updated_at": "2024-08-06",
-  //   "passport": null,
-  //   "full_name": "Frank Galo",
-  //   "address": "Qamoqxona",
-  //   "phone_number": "+998996600420",
-  //   "card_data": null,
-  //   "image": null,
-  //   "driver_status": "ready_to_work",
-  //   "last_active_time": "2024-08-06T12:28:20.267351+05:00",
-  //   "leads_comment": "None"
-  // },
 
   const itemsMenu: MenuProps['items'] = [
     {
@@ -110,7 +95,9 @@ function LeadContentCard({ item, pagename }: ContentCardProps) {
                 <img src="/img/card/car.svg" alt="" />
                 <span>Тип машины</span>
               </div>
-              <div className="card__item--value">{item.car_data_get.model}</div>
+              <div className="card__item--value">
+                {item.car_data_get.car_model}
+              </div>
             </div>
 
             <div className="card__item">
@@ -139,7 +126,7 @@ function LeadContentCard({ item, pagename }: ContentCardProps) {
         </div>
       </div>
       <CreateCommentModal
-        pagename={pagename}
+        pagename="lead"
         onCloseModal={() => setOpenCommentModal(false)}
         isOpenModal={isOpenCommentModal}
         retrieveData={item}

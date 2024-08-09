@@ -32,6 +32,7 @@ function CreateCommentModal({
     switch (pagename) {
       case 'track':
         comment_purpose = 'tracking';
+        to_whom = retrieveData.driver_data.id;
         break;
       case 'stock':
         comment_purpose = 'stock';
@@ -39,18 +40,19 @@ function CreateCommentModal({
         break;
       case 'leads':
         comment_purpose = 'leads';
+        to_whom = retrieveData.driver_data.id;
         break;
       case 'report':
         comment_purpose = 'reporting';
+        to_whom = retrieveData.contract_data.driver_data.id;
         break;
       default:
-        to_whom = retrieveData.driver_data.id;
-        throw new Error('Smth gone with error');
+        throw new Error('Something got wrong');
     }
 
     createComment(
       {
-        comment: comment,
+        comment,
         comment_purpose,
         by_whom: currentUser?.id as string,
         to_whom,

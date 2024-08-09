@@ -1,16 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useQueryClient } from '@tanstack/react-query';
-import {
-  Dropdown,
-  DropdownProps,
-  MenuProps,
-  message,
-  Popconfirm,
-  Space,
-} from 'antd';
+import { Dropdown, DropdownProps, MenuProps, message, Popconfirm } from 'antd';
 import { useState } from 'react';
-import CreateCommentModal from '../features/tracks/CreateCommentModal';
-import { useTrackDelete } from '../features/tracks/useTrackDelete';
+import CreateCommentModal from '../../features/tracks/CreateCommentModal';
+import { useTrackDelete } from '../../features/tracks/useTrackDelete';
 
 export type PageNameType = 'track' | 'report' | 'lead' | 'stock';
 
@@ -20,51 +13,23 @@ export type ContentCardProps = {
   onEdit: () => void;
 };
 
-function ContentCard({ item, pagename, onEdit }: ContentCardProps) {
+function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
   const queryClient = useQueryClient();
 
   const [isOpenMenu, setOpenMenu] = useState(false);
   const [popconfirmOpen, setPopconfirmOpen] = useState(false);
   const [isOpenCommentModal, setOpenCommentModal] = useState(false);
 
-  let isLoadingDelete = false;
-
-  const { deleteTrack, isLoadingDelete: isLoadingTrackDelete } =
-    useTrackDelete();
-
-  switch (pagename) {
-    case 'track':
-      isLoadingDelete = isLoadingTrackDelete;
-      break;
-    case 'report':
-      // isLoadingDelete = isLoadingTrackDelete;
-      break;
-    case 'lead':
-      // isLoadingDelete = isLoadingTrackDelete;
-      break;
-    case 'stock':
-      // isLoadingDelete = isLoadingTrackDelete;
-      break;
-
-    default:
-      throw new Error('There is no such pagename property');
-  }
+  const { deleteTrack, isLoadingDelete } = useTrackDelete();
 
   const handleDelete = () => {
-    switch (pagename) {
-      case 'track':
-        deleteTrack(item.id, {
-          onSuccess: (data) => {
-            queryClient.setQueryData(['trackDelete'], data);
-            queryClient.invalidateQueries({ queryKey: ['tracks'] });
-            message.success('Track deleted successfully');
-          },
-        });
-        break;
-
-      default:
-        throw new Error('There is no such pagename property');
-    }
+    deleteTrack(item.id, {
+      onSuccess: (data) => {
+        queryClient.setQueryData(['trackDelete'], data);
+        queryClient.invalidateQueries({ queryKey: ['tracks'] });
+        message.success('Track deleted successfully');
+      },
+    });
   };
 
   const itemsMenu: MenuProps['items'] = [
@@ -154,27 +119,6 @@ function ContentCard({ item, pagename, onEdit }: ContentCardProps) {
     }
   };
 
-  const renderUserHeader = () => {
-    switch (pagename) {
-      case 'track':
-        return (
-          <p className="rate">
-            <span>Сегодня 12:40</span>
-          </p>
-        );
-      case 'report':
-      case 'stock':
-        return (
-          <p className="rate">
-            <span>4.5</span>
-            <img src="/img/card/star.svg" alt="rate" />
-          </p>
-        );
-      default:
-        return null;
-    }
-  };
-
   return (
     <>
       <div className="content__col">
@@ -185,8 +129,10 @@ function ContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <img src="/img/card/empty-avatar.svg" alt="avatar" />
               </p>
               <div className="card__user--info">
-                <p className="name">{item?.driver_data.fullName}</p>
-                {renderUserHeader()}
+                <p className="name">{item?.driver_data.full_name}</p>
+                <p className="rate">
+                  <span>Сегодня 12:40</span>
+                </p>
               </div>
             </div>
             <Dropdown
@@ -223,42 +169,23 @@ function ContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <span>Тип машины</span>
               </div>
               <div className="card__item--value">
-                {item?.driver_data.car_data_get.model}
+                {item?.driver_data.car_data_get.car_model}
               </div>
             </div>
-            {pagename === 'track' && (
-              <div className="card__item">
-                <div className="card__item--label">
-                  <img src="/img/card/rating.svg" alt="" />
-                  <span>Рейтинг</span>
-                </div>
-                <div className="card__item--value">{item?.rate.rate_avg}</div>
+            <div className="card__item">
+              <div className="card__item--label">
+                <img src="/img/card/rating.svg" alt="" />
+                <span>Рейтинг</span>
               </div>
-            )}
-            {['track', 'report', 'stock'].includes(pagename) && (
-              <div className="card__item">
-                <div className="card__item--label">
-                  <img src="/img/card/book.svg" alt="" />
-                  <span>Компания</span>
-                </div>
-                <div className="card__item--value">
-                  {item.company_data.name}
-                </div>
+              <div className="card__item--value">{item?.rate.rate_avg}</div>
+            </div>
+            <div className="card__item">
+              <div className="card__item--label">
+                <img src="/img/card/book.svg" alt="" />
+                <span>Компания</span>
               </div>
-            )}
-            {['report', 'lead', 'stock'].includes(pagename) && (
-              <div className="card__item">
-                <div className="card__item--label">
-                  <img src="/img/card/date.svg" alt="" />
-                  {pagename === 'report' && (
-                    <span>Время последней обработки</span>
-                  )}
-                  {pagename === 'lead' && <span>Дата регистрации</span>}
-                  {pagename === 'stock' && <span>Активность водителя</span>}
-                </div>
-                <div className="card__item--value">16.05.2024 15:00</div>
-              </div>
-            )}
+              <div className="card__item--value">{item.company_data.name}</div>
+            </div>
             <div className="card__item card__item--comment">
               <div className="card__item--label">
                 <img src="/img/card/comment.svg" alt="" />
@@ -266,34 +193,7 @@ function ContentCard({ item, pagename, onEdit }: ContentCardProps) {
               </div>
               <div className="card__item--value">{item?.contract_comment}</div>
             </div>
-            {pagename === 'stock' && (
-              <div className="card__item">
-                <div className="card__item--label">
-                  <img src="/img/card/loading.svg" alt="" />
-                  <span>Статус фотоотчета</span>
-                </div>
-                <div className="card__item--value card__item--value-status">
-                  <span className="dot-live"></span>
-                  фото отчет отправлен
-                </div>
-              </div>
-            )}
           </div>
-          {pagename === 'report' && (
-            <div className="card__bottom">
-              <button className="card__bottom--btn">
-                <span className="ml-5">Запросить</span>
-              </button>
-            </div>
-          )}
-          {pagename === 'lead' && (
-            <div className="card__bottom">
-              <button className="card__bottom--btn">
-                <img src="/img/card/location.svg" alt="" />
-                <span className="ml-5">Показать последнюю активность</span>
-              </button>
-            </div>
-          )}
         </div>
       </div>
       <CreateCommentModal
@@ -306,4 +206,4 @@ function ContentCard({ item, pagename, onEdit }: ContentCardProps) {
   );
 }
 
-export default ContentCard;
+export default TrackContentCard;

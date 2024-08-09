@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from 'react';
-import ContentCard from '../../ui/ContentCard';
+import ContentCard from '../../services/tracks/TrackContentCard';
 import ContentHeader from '../../ui/ContentHeader';
 import EmptyCard from '../../ui/EmptyCard';
 import UpdateDataModal from './UpdateDataModal';

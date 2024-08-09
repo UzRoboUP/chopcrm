@@ -41,17 +41,17 @@ class Leads {
   //   }
   // }
 
-  // // DELETE: /reporting/delete/:id/
-  // async deleteLead(id: string) {
-  //   try {
-  //     return (await this.$api.delete(`/reporting/delete/${id}/`)).data;
-  //   } catch (error) {
-  //     const axiosError = error as AxiosError<ApiErrorResponse>;
-  //     throw new Error(
-  //       axiosError.response?.data?.message || 'An unknown error occurred',
-  //     );
-  //   }
-  // }
+  // DELETE: /stock/delete/:id/
+  async deleteStock(id: string) {
+    try {
+      return (await this.$api.delete(`/stock/delete/${id}/`)).data;
+    } catch (error) {
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      throw new Error(
+        axiosError.response?.data?.message || 'An unknown error occurred',
+      );
+    }
+  }
 
   // // UPDATE: /reporting/update/:id/
   // async updateLead({ ...payload }) {

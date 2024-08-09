@@ -1,17 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { DatePicker } from 'antd';
 import { useState } from 'react';
-import ContentCard from '../../ui/ContentCard';
 import EmptyCard from '../../ui/EmptyCard';
 import Modal from '../../ui/Modal';
-import { useReports } from './useReports';
 import ReportContentCard from './ReportContentCard';
+import { useReports } from './useReports';
 
 function Reports() {
   const [isOpenModal, setOpenModal] = useState(false);
   const [isOpenEditModal, setOpenEditModal] = useState(false);
   const [currentDataId, setCurrentDataId] = useState('');
   const { data, isLoading } = useReports();
+
+  console.log('reports', data);
 
   if (isLoading && !Object.keys(data || {})?.length) {
     return;

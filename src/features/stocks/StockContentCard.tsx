@@ -2,10 +2,10 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { Dropdown, DropdownProps, MenuProps, message, Popconfirm } from 'antd';
 import { useState } from 'react';
-import { stockStatuses } from '../../utils/constants';
+import { stockStatus } from '../../utils/constants';
 import { convertTimestamp } from '../../utils/helpers';
 import CreateCommentModal from '../tracks/CreateCommentModal';
-import { useReportDelete } from '../tracks/useReportDelete';
+import { useStockDelete } from '../tracks/useStockDelete';
 
 export type PageNameType = 'track' | 'report' | 'lead' | 'stock';
 
@@ -21,10 +21,10 @@ function StockContentCard({ item, onEdit }: ContentCardProps) {
   const [popconfirmOpen, setPopconfirmOpen] = useState(false);
   const [isOpenCommentModal, setOpenCommentModal] = useState(false);
 
-  const { deleteReport, isLoadingDelete } = useReportDelete();
+  const { deleteStock, isLoadingDelete } = useStockDelete();
 
   const handleDelete = () => {
-    deleteReport(item.id, {
+    deleteStock(item.id, {
       onSuccess: (data) => {
         queryClient.setQueryData(['stockDelete'], data);
         queryClient.invalidateQueries({ queryKey: ['stocks'] });
@@ -209,11 +209,11 @@ function StockContentCard({ item, onEdit }: ContentCardProps) {
               <div
                 className="card__item--value card__item--value-status"
                 style={{
-                  backgroundColor: stockStatuses[item.status_stock]?.color,
+                  backgroundColor: stockStatus[item.status_stock]?.color,
                 }}
               >
                 <span className="dot-live mr-5"></span>
-                {stockStatuses[item.status_stock]?.value}
+                {stockStatus[item.status_stock]?.value}
               </div>
             </div>
           </div>
