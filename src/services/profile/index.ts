@@ -47,6 +47,23 @@ class Profile {
 
   async logout() {}
 
+  async updateProfile(formData: FormData): Promise<LoginResponse> {
+    try {
+      const { data } = await this.$api.put<LoginResponse>(
+        `/staff/update/${formData.get('id')}`,
+        {
+          ...formData,
+        },
+      );
+      return data;
+    } catch (error) {
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      throw new Error(
+        axiosError.response?.data?.message || 'An unknown error occurred',
+      );
+    }
+  }
+
   throwError(error: unknown) {
     const axiosError = error as AxiosError<ApiErrorResponse>;
     throw new Error(

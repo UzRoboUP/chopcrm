@@ -13,6 +13,12 @@ import icon06 from '/img/sidebar/06.svg';
 import icon06Active from '/img/sidebar/06_a.svg';
 import icon07 from '/img/sidebar/07.svg';
 import icon07Active from '/img/sidebar/07_a.svg';
+import icon08 from '/img/sidebar/08.svg';
+import icon08Active from '/img/sidebar/08_a.svg';
+import icon09 from '/img/sidebar/09.svg';
+import icon09Active from '/img/sidebar/09_a.svg';
+import icon10 from '/img/sidebar/10.svg';
+import icon10Active from '/img/sidebar/10_a.svg';
 
 const lazyLoad = (
   importFunc: () => Promise<{ default: ComponentType<unknown> }>,
@@ -94,6 +100,33 @@ export const getMenuData: MenuData = [
     icon: icon07,
     iconActive: icon07Active,
     component: lazyLoad(() => import('../../pages/Settings')),
+    roles: ['admin', 'operator'],
+  },
+  {
+    title: 'Оператор',
+    key: 'operator',
+    path: '/operator',
+    icon: icon08,
+    iconActive: icon08Active,
+    component: lazyLoad(() => import('../../pages/Operator')),
+    roles: ['admin', 'operator'],
+  },
+  {
+    title: 'Регистратор',
+    key: 'registration',
+    path: '/registration',
+    icon: icon09,
+    iconActive: icon09Active,
+    component: lazyLoad(() => import('../../pages/Registration')),
+    roles: ['admin', 'operator'],
+  },
+  {
+    title: 'Бухгалтерия',
+    key: 'accountant',
+    path: '/accountant',
+    icon: icon10,
+    iconActive: icon10Active,
+    component: lazyLoad(() => import('../../pages/Accountant')),
     roles: ['admin', 'operator'],
   },
 ];

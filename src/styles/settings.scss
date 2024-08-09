@@ -1,5 +1,10 @@
 .setting {
   padding: 20px 50px;
+  .ant-upload.ant-upload-select {
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+  }
   // .setting__top
   &__top {
     @include flexbox();
@@ -17,9 +22,12 @@
     width: 160px;
     height: 160px;
     img {
-      width: 34px;
-      height: 34px;
+      border-radius: 50%;
     }
+    // img {
+    //   width: 34px;
+    //   height: 34px;
+    // }
   }
   // .setting__info
   &__info {
@@ -45,14 +53,6 @@
   }
   // .setting__btn
   &__btn {
-    border-radius: 10px;
-    background: #ffd4cc;
-    color: #000;
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 150%; /* 24px */
-    letter-spacing: 0.32px;
-    padding: 10px 40px;
   }
   // .setting__bottom
   &__bottom {
