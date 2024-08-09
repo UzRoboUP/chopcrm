@@ -4,19 +4,24 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { setCredentials } from './authSlice';
 
 export function useUser() {
-  const token = useAppSelector((state) => state.auth.token);
+  const userId = useAppSelector((state) => state.auth.userId);
   const dispatch = useAppDispatch();
 
-  const { isPending, data, isError } = useQuery({
+  const {
+    isPending: isLoadingUser,
+    data: userData,
+    isError,
+    isFetching,
+  } = useQuery({
     queryKey: ['user'],
-    // queryFn: () => Profile.getCurrentUser({ token }),
-    queryFn: () => Profile.getCurrentUserFake({ token }),
-    enabled: !!token,
+    queryFn: () => Profile.getCurrentUser(userId as string),
+    enabled: !!userId,
+    retry: 1,
   });
-  const user = data?.data?.user;
-  if (user && !isPending) {
-    dispatch(setCredentials(data));
+
+  if (userData && !isLoadingUser) {
+    dispatch(setCredentials(userData));
   }
 
-  return { isPending, user, error: isError };
+  return { isLoadingUser, isFetching, userData, error: isError };
 }

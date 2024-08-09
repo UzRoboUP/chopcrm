@@ -16,6 +16,8 @@ export default function ContentHeader({ pagename }: { pagename: string }) {
   useEffect(() => {
     fetch('https://jsonplaceholder.typicode.com/users')
       .then((item) => item.json())
+    fetch('https://jsonplaceholder.typicode.com/users')
+      .then((item) => item.json())
       .then((result) => {
         setMenu(result);
       });

@@ -1,4 +1,4 @@
-import { Modal as ModalUI } from 'antd';
+import { Modal as ModalUI, Spin } from 'antd';
 import { ReactNode } from 'react';
 
 type ModalProps = {
@@ -19,8 +19,6 @@ function Modal({
   children,
 }: ModalProps) {
   const modalWidth = width === 'small' ? 400 : width === 'middle' ? 525 : 780;
-
-  console.log(loading);
 
   return (
     <ModalUI
@@ -44,7 +42,9 @@ function Modal({
       afterClose={() => { }}
     >
       <div className="modal__body">
-        {children}
+        {loading ? <div className='d-flex justify-center mt-20 mb-20'>
+          <Spin size="default" />
+        </div> : children}
       </div>
     </ModalUI>
   );

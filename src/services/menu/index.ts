@@ -29,10 +29,6 @@ export type MenuItem = {
   component: React.FC<unknown>;
   roles: string[];
 };
-// ❤️ 24/7 support
-// Go out
-// ❤️ Поддержка 24/7
-// Выйти
 
 type MenuData = MenuItem[];
 
@@ -44,7 +40,7 @@ export const getMenuData: MenuData = [
     icon: icon01,
     iconActive: icon01Active,
     component: lazyLoad(() => import('../../pages/Dashboard')),
-    roles: ['admin', 'user'],
+    roles: ['admin', 'operator'],
   },
   {
     title: 'Отслежование',
@@ -53,7 +49,7 @@ export const getMenuData: MenuData = [
     icon: icon02,
     iconActive: icon02Active,
     component: lazyLoad(() => import('../../pages/Tracks')),
-    roles: ['admin', 'user'],
+    roles: ['admin', 'operator'],
   },
   {
     title: 'Отчетность',
@@ -62,7 +58,7 @@ export const getMenuData: MenuData = [
     icon: icon03,
     iconActive: icon03Active,
     component: lazyLoad(() => import('../../pages/Reports')),
-    roles: ['admin', 'user'],
+    roles: ['admin', 'operator'],
   },
   {
     title: 'Лиды',
@@ -71,7 +67,7 @@ export const getMenuData: MenuData = [
     icon: icon04,
     iconActive: icon04Active,
     component: lazyLoad(() => import('../../pages/Leads')),
-    roles: ['admin', 'user'],
+    roles: ['admin', 'operator'],
   },
   {
     title: 'Акции',
@@ -80,7 +76,7 @@ export const getMenuData: MenuData = [
     icon: icon05,
     iconActive: icon05Active,
     component: lazyLoad(() => import('../../pages/Stock')),
-    roles: ['admin', 'user'],
+    roles: ['admin', 'operator'],
   },
   {
     title: 'Обклейка',
@@ -89,7 +85,7 @@ export const getMenuData: MenuData = [
     icon: icon06,
     iconActive: icon06Active,
     component: lazyLoad(() => import('../../pages/Pasting')),
-    roles: ['admin', 'user'],
+    roles: ['admin', 'operator'],
   },
   {
     title: 'Настройки',
@@ -98,6 +94,6 @@ export const getMenuData: MenuData = [
     icon: icon07,
     iconActive: icon07Active,
     component: lazyLoad(() => import('../../pages/Settings')),
-    roles: ['admin', 'user'],
+    roles: ['admin', 'operator'],
   },
 ];
