@@ -7,7 +7,7 @@ import eslint from 'vite-plugin-eslint';
 export default defineConfig({
   plugins: [viteReact(), eslint()],
   server: {
-    port: 3001,
+    port: 3000,
     proxy: {
       // '/api': 'http://localhost:3000',
     },
