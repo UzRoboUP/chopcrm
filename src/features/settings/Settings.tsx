@@ -51,7 +51,7 @@ function Settings() {
 
   const submit = () => {
     const formData = new FormData();
-    formData.append('staff_status', 'operator');
+    formData.append('staff_status', profile.staff_status);
     formData.append('image', imageFile);
     formData.append('first_name', profile.first_name);
     formData.append('last_name', profile.last_name);

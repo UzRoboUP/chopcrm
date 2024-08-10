@@ -2,10 +2,10 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { Dropdown, DropdownProps, MenuProps, message, Popconfirm } from 'antd';
 import { useState } from 'react';
+import { reportPhotoStatus } from '../../utils/constants';
 import { convertTimestamp } from '../../utils/helpers';
 import CreateCommentModal from '../tracks/CreateCommentModal';
 import { useReportDelete } from '../tracks/useReportDelete';
-import { reportPhotoStatus } from '../../utils/constants';
 
 export type PageNameType = 'track' | 'report' | 'lead' | 'stock';
 
@@ -17,6 +17,7 @@ export type ContentCardProps = {
 
 function ReportContentCard({ item, pagename, onEdit }: ContentCardProps) {
   const queryClient = useQueryClient();
+  console.log('report: ', item);
 
   const [isOpenMenu, setOpenMenu] = useState(false);
   const [popconfirmOpen, setPopconfirmOpen] = useState(false);
@@ -174,7 +175,7 @@ function ReportContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <span>Тип машины</span>
               </div>
               <div className="card__item--value">
-                {item?.contract_data?.driver_data?.car_data_get.model}
+                {item?.contract_data?.driver_data?.car_data_get.car_model}
               </div>
             </div>
             <div className="card__item">
@@ -183,7 +184,7 @@ function ReportContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <span>Компания</span>
               </div>
               <div className="card__item--value">
-                {item?.company_data?.name}
+                {item?.contract_data?.company_data?.name}
               </div>
             </div>
             <div className="card__item">
@@ -205,16 +206,17 @@ function ReportContentCard({ item, pagename, onEdit }: ContentCardProps) {
             <div className="card__item mb-0">
               <div className="card__item--label">
                 <img src="/img/card/loading.svg" alt="" />
-                <span>Статус</span>
+                <span>Статус фотоотчета</span>
               </div>
               <div
                 className="card__item--value card__item--value-status"
                 style={{
-                  backgroundColor: reportPhotoStatus[item.status_stock]?.color,
+                  backgroundColor:
+                    reportPhotoStatus[item.status_foto_report]?.color,
                 }}
               >
                 <span className="dot-live mr-5"></span>
-                {reportPhotoStatus[item.status_stock]?.value}
+                {reportPhotoStatus[item.status_foto_report]?.value}
               </div>
             </div>
           </div>

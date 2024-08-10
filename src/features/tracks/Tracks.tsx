@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from 'react';
-import ContentCard from '../../services/tracks/TrackContentCard';
 import ContentHeader from '../../ui/ContentHeader';
 import EmptyCard from '../../ui/EmptyCard';
+import TrackContentCard from './TrackContentCard';
 import UpdateDataModal from './UpdateDataModal';
 import { useTrack } from './useTrack';
 import { useTracks } from './useTracks';
@@ -28,7 +28,7 @@ function Tracks() {
           <div className="content__row">
             {data?.results?.length > 0 ? (
               (data?.results || []).map((item: { id: string }) => (
-                <ContentCard
+                <TrackContentCard
                   key={item.id}
                   item={item}
                   pagename="track"

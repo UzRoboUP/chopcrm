@@ -3,8 +3,8 @@ import { Checkbox, CheckboxProps, Dropdown, MenuProps, Space } from 'antd';
 import { useEffect, useState } from 'react';
 import download from '../../public/img/page-header/download.svg';
 import left from '../../public/img/page-header/left-chevron.svg';
+import { PageNameType } from '../features/tracks/TrackContentCard';
 import { usePageTitle } from '../features/usePageTitle';
-import { PageNameType } from '../services/tracks/TrackContentCard';
 import FormBox from './FormBox';
 
 type ContentHeaderProps = {

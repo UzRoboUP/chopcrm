@@ -2,8 +2,8 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { Dropdown, DropdownProps, MenuProps, message, Popconfirm } from 'antd';
 import { useState } from 'react';
-import CreateCommentModal from '../../features/tracks/CreateCommentModal';
-import { useTrackDelete } from '../../features/tracks/useTrackDelete';
+import CreateCommentModal from './CreateCommentModal';
+import { useTrackDelete } from './useTrackDelete';
 
 export type PageNameType = 'track' | 'report' | 'lead' | 'stock';
 
@@ -15,6 +15,7 @@ export type ContentCardProps = {
 
 function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
   const queryClient = useQueryClient();
+  console.log('track: ', item);
 
   const [isOpenMenu, setOpenMenu] = useState(false);
   const [popconfirmOpen, setPopconfirmOpen] = useState(false);
@@ -177,7 +178,9 @@ function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <img src="/img/card/rating.svg" alt="" />
                 <span>Рейтинг</span>
               </div>
-              <div className="card__item--value">{item?.rate.rate_avg}</div>
+              <div className="card__item--value">
+                {item?.rate.rate_avg || '-'}
+              </div>
             </div>
             <div className="card__item">
               <div className="card__item--label">
@@ -191,7 +194,9 @@ function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <img src="/img/card/comment.svg" alt="" />
                 <span>Комментарий</span>
               </div>
-              <div className="card__item--value">{item?.contract_comment}</div>
+              <div className="card__item--value">
+                {item?.contract_comment || 'без комментариев'}
+              </div>
             </div>
           </div>
         </div>
