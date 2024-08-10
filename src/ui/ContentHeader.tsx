@@ -1,21 +1,21 @@
-import { Checkbox, CheckboxProps, Dropdown, MenuProps, Space } from 'antd';
+import { Dropdown, Space } from 'antd';
 import left from '../../public/img/page-header/left-chevron.svg';
+
 import download from '../../public/img/page-header/download.svg';
 import { DownOutlined } from '@ant-design/icons';
+
 import FormBox from './FormBox';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import HeaderRadioGroup from './HeaderRadioGroup';
 export default function ContentHeader({ pagename }: { pagename: string }) {
-  const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams();
+  const params = new URLSearchParams(searchParams.toString());
+
+  const navigate = useNavigate();
   const [menu, setMenu] = useState([]);
-  const onChange: CheckboxProps['onChange'] = (e) => {
-    console.log(`checked = ${e.target.checked}`);
-    console.log(menu);
-  };
 
   useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/users')
-      .then((item) => item.json())
     fetch('https://jsonplaceholder.typicode.com/users')
       .then((item) => item.json())
       .then((result) => {
@@ -23,26 +23,36 @@ export default function ContentHeader({ pagename }: { pagename: string }) {
       });
   }, []);
 
-  const items: MenuProps['items'] = menu.map(
-    (item: { name: string; id: string }) => ({
-      label: (
-        <div className="d-flex align-center" onClick={(e)=>e.stopPropagation()}>
-          <Checkbox onChange={onChange} >
-            <span className="form-box-check-title">{item.name}</span>
-          </Checkbox>
-        </div>
-      ),
-      key: item.id,
-    }),
-  );
+  const onChange = (data: { id: string; name: string; type: string }) => {
+    console.log(data);
+    params.set(data.type, data.name);
+    setSearchParams(params);
+  };
+
   return (
     <div className="content__header__content d-flex align-center justify-between ">
       <div className="content__headera__category d-flex align-center">
-        <img className="pointer" width="36px" height="36px" src={left} alt="" onClick={()=>navigate(-1)} />
+        <img
+          className="pointer"
+          width="36px"
+          height="36px"
+          src={left}
+          alt=""
+          onClick={() => navigate(-1)}
+        />
         <span className="content__header__title">{pagename}</span>
         <div className="content__header__filter">
           <FormBox title="Марка">
-            <Dropdown menu={{ items }} trigger={['click']} >
+            <Dropdown
+              trigger={['click']}
+              dropdownRender={() => (
+                <HeaderRadioGroup
+                  menu={menu}
+                  onChange={onChange}
+                  type="car_brand"
+                />
+              )}
+            >
               <a onClick={(e) => e.preventDefault()}>
                 <Space>
                   Выберите
@@ -52,7 +62,16 @@ export default function ContentHeader({ pagename }: { pagename: string }) {
             </Dropdown>
           </FormBox>
           <FormBox title="Модель">
-            <Dropdown menu={{ items }} trigger={['click']}>
+            <Dropdown
+              trigger={['click']}
+              dropdownRender={() => (
+                <HeaderRadioGroup
+                  menu={menu}
+                  onChange={onChange}
+                  type="car_model"
+                />
+              )}
+            >
               <a onClick={(e) => e.preventDefault()}>
                 <Space>
                   Выберите
@@ -62,7 +81,16 @@ export default function ContentHeader({ pagename }: { pagename: string }) {
             </Dropdown>
           </FormBox>
           <FormBox title="Компания">
-            <Dropdown menu={{ items }} trigger={['click']}>
+            <Dropdown
+              trigger={['click']}
+              dropdownRender={() => (
+                <HeaderRadioGroup
+                  menu={menu}
+                  onChange={onChange}
+                  type="company__name"
+                />
+              )}
+            >
               <a onClick={(e) => e.preventDefault()}>
                 <Space>
                   Выберите
