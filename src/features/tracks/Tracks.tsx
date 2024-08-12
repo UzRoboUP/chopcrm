@@ -20,7 +20,13 @@ function Tracks() {
   return (
     <div className="content">
       <div className="content__header">
-        <ContentHeader pagename="Отслеживание" />
+        <ContentHeader
+          pagename="Отслеживание"
+          hasBrand={true}
+          hasModel={true}
+          hasCompany={true}
+          hasPhone={true}
+        />
       </div>
       <div className="content__report"></div>
       <div className="content__main">
