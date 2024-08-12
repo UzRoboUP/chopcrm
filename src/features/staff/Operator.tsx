@@ -2,12 +2,13 @@
 import { useState } from 'react';
 import ContentHeader from '../../ui/ContentHeader';
 import EmptyCard from '../../ui/EmptyCard';
-import TrackContentCard from '../tracks/TrackContentCard';
-import { useTracks } from '../tracks/useTracks';
+import { useStaffList } from '../authentication/useStaffList';
+import OperatorContentCard from '../tracks/StaffContentCard';
 function Operator() {
   const [isOpenEditModal, setOpenEditModal] = useState(false);
   const [currentDataId, setCurrentDataId] = useState('');
-  const { data, isLoading } = useTracks();
+  const { data, isLoading } = useStaffList('operator');
+  console.log('staff', data);
 
   if (isLoading && !Object.keys(data || {})?.length) {
     return;
@@ -22,12 +23,12 @@ function Operator() {
       <div className="content__main">
         <div className="content__cards">
           <div className="content__row">
-            {data?.results?.length > 0 ? (
-              (data?.results || []).map((item: { id: string }) => (
-                <TrackContentCard
+            {data?.length > 0 ? (
+              (data || []).map((item: { id: string }) => (
+                <OperatorContentCard
                   key={item.id}
                   item={item}
-                  pagename="track"
+                  pagename="operator"
                   onEdit={() => {
                     setCurrentDataId('');
                     setOpenEditModal(true);

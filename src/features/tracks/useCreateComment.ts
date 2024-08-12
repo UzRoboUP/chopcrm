@@ -24,3 +24,20 @@ export function useCreateComment() {
     error,
   };
 }
+
+export function useCreateStaffComment() {
+  const {
+    mutate: createStaffComment,
+    isPending: isLoadingStaffComment,
+    isError: error,
+  } = useMutation({
+    mutationFn: ({ ...payload }: CreateCommentProps) =>
+      Tracks.createStaffComment({ ...payload }),
+    onError: (err) => message.error(err.message),
+  });
+  return {
+    createStaffComment,
+    isLoadingStaffComment,
+    error,
+  };
+}

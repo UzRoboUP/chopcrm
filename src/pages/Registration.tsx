@@ -1,4 +1,4 @@
-import RegistrationApp from '../features/registration/Registration';
+import RegistrationApp from '../features/staff/Registration';
 
 function Registration() {
   return <RegistrationApp />;
