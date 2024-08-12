@@ -58,4 +58,11 @@
     text-align: left;
     color: #374151;
   }
+  button{
+    background: none;
+    outline: none !important;
+    border: 0 !important;
+    position: relative;
+    z-index: 10 !important;
+  }
 }

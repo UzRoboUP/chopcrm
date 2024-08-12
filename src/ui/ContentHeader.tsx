@@ -1,31 +1,42 @@
-import { Dropdown, Space } from 'antd';
+import { Dropdown, Input, Space } from 'antd';
 import left from '../../public/img/page-header/left-chevron.svg';
-
 import download from '../../public/img/page-header/download.svg';
 import { DownOutlined } from '@ant-design/icons';
-
 import FormBox from './FormBox';
-import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import HeaderRadioGroup from './HeaderRadioGroup';
+import { useBrand } from '../features/brand/useBrand';
+import { useModel } from '../features/model/useModel';
+import { useCompany } from '../features/company/useCompany';
+import { useQueryClient } from '@tanstack/react-query';
 export default function ContentHeader({ pagename }: { pagename: string }) {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
   const params = new URLSearchParams(searchParams.toString());
 
-  const navigate = useNavigate();
-  const [menu, setMenu] = useState([]);
+  const { brand } = useBrand();
+  const { model } = useModel(params.get('car_brand'));
+  const { company } = useCompany();
 
-  useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/users')
-      .then((item) => item.json())
-      .then((result) => {
-        setMenu(result);
-      });
-  }, []);
+  const onChange = (data: {
+    id: string;
+    name: string;
+    searchParam: string;
+  }) => {
+    if (data.searchParam == 'car_brand') {
+      params.delete('car_model');
+      setTimeout(() => {
+        queryClient.invalidateQueries('model');
+      }, 300);
+    }
+    params.set(data.searchParam, data.name);
+    setSearchParams(params);
+  };
 
-  const onChange = (data: { id: string; name: string; type: string }) => {
-    console.log(data);
-    params.set(data.type, data.name);
+
+  const serachPhone = (e: React.ChangeEvent<HTMLInputElement>) => {
+    params.set('search', e.target.value);
     setSearchParams(params);
   };
 
@@ -47,15 +58,19 @@ export default function ContentHeader({ pagename }: { pagename: string }) {
               trigger={['click']}
               dropdownRender={() => (
                 <HeaderRadioGroup
-                  menu={menu}
+                  defaultValue={searchParams.get('car_brand')}
+                  menu={brand}
+                  name="brand"
                   onChange={onChange}
-                  type="car_brand"
+                  searchParam="car_brand"
                 />
               )}
             >
               <a onClick={(e) => e.preventDefault()}>
                 <Space>
-                  Выберите
+                  {searchParams.get('car_brand')
+                    ? searchParams.get('car_brand')
+                    : 'Выберите'}
                   <DownOutlined />
                 </Space>
               </a>
@@ -66,15 +81,27 @@ export default function ContentHeader({ pagename }: { pagename: string }) {
               trigger={['click']}
               dropdownRender={() => (
                 <HeaderRadioGroup
-                  menu={menu}
+                  defaultValue={searchParams.get('car_model')}
+                  menu={model}
+                  name="model"
                   onChange={onChange}
-                  type="car_model"
+                  searchParam="car_model"
                 />
               )}
             >
-              <a onClick={(e) => e.preventDefault()}>
+              <a onClick={(e) => e.preventDefault()} >
                 <Space>
-                  Выберите
+                  {searchParams.get('car_model') ? (
+                    searchParams.get('car_model')
+                  ) : (
+                    <span
+                      className={
+                        !searchParams.has('car_brand') ? 'disabled-text' : ''
+                      }
+                    >
+                      Выберите
+                    </span>
+                  )}
                   <DownOutlined />
                 </Space>
               </a>
@@ -85,15 +112,19 @@ export default function ContentHeader({ pagename }: { pagename: string }) {
               trigger={['click']}
               dropdownRender={() => (
                 <HeaderRadioGroup
-                  menu={menu}
+                  defaultValue={searchParams.get('company__name')}
+                  name="name"
+                  menu={company}
                   onChange={onChange}
-                  type="company__name"
+                  searchParam="company__name"
                 />
               )}
             >
               <a onClick={(e) => e.preventDefault()}>
                 <Space>
-                  Выберите
+                  {searchParams.get('company__name')
+                    ? searchParams.get('company__name')
+                    : 'Выберите'}
                   <DownOutlined />
                 </Space>
               </a>
@@ -101,7 +132,11 @@ export default function ContentHeader({ pagename }: { pagename: string }) {
           </FormBox>
 
           <FormBox title="Номер телефона">
-            <input type="text" />
+            <Input
+              type="number"
+              value={`${searchParams.get('search') ? searchParams.get('search') : ''}`}
+              onChange={serachPhone}
+            />
           </FormBox>
         </div>
       </div>

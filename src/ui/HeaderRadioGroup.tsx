@@ -1,26 +1,33 @@
 import { Radio } from 'antd';
-
+interface MenuItem {
+  [key: string]: string; // Adjust this if you need specific properties
+  id: string;
+}
 export default function HeaderRadioGroup({
   menu,
   onChange,
-  type,
+  searchParam,
+  name,
+  defaultValue
 }: {
-  menu: { name: string; id: string }[];
-  onChange: (a: { id: string; name: string; type: string }) => void;
-  type: string;
+  name:string;
+  menu: MenuItem[];
+  onChange: (a: { id: string; name: string; searchParam: string }) => void;
+  searchParam: string;
+  defaultValue?:string|null
 }) {
   return (
-    <Radio.Group className="ant-dropdown-menu radio-group-menu">
-      {menu.map((item: { name: string; id: string }) => (
+    <Radio.Group className="ant-dropdown-menu radio-group-menu" defaultValue={defaultValue}>
+      {(menu?menu:[]).map((item) => (
         <Radio
           onChange={() =>
-            onChange({ id: item.id, name: item.name, type: type })
+            onChange({ id: item.id, name: item[name], searchParam: searchParam })
           }
-          value={item.name}
+          value={item[name]}
           key={item.id}
           style={{ display: 'flex', padding: '4px 16px' }}
         >
-          <span className="form-box-check-title"> {item.name}</span>
+          <span className="form-box-check-title"> {item[name]}</span>
         </Radio>
       ))}
     </Radio.Group>
