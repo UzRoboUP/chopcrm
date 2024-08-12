@@ -22,15 +22,36 @@ function Reports() {
   return (
     <div className="content">
       <div className="content__header">
-      <ContentHeader
+        <ContentHeader
           pagename="Отчетность"
           hasBrand={true}
           hasModel={true}
           hasSaveButton={true}
         />
-        <button onClick={() => setOpenModal(true)}>Open modal</button>
+        {/* <button onClick={() => setOpenModal(true)}>Open modal</button> */}
       </div>
-      <div className="content__report"></div>
+      <div className="content__report content__report__container">
+        <div className="report__box" style={{ borderColor: '#ff9500' }}>
+          <div className="report__title">
+            <div
+              className="report__title__dot"
+              style={{ background: '#ff9500' }}
+            ></div>
+            <h5>Уведомлено</h5>
+          </div>
+          <div className="report__count">5 машины</div>
+        </div>
+        <div className="report__box" style={{ borderColor: '#C17272' }}>
+          <div className="report__title">
+            <div
+              className="report__title__dot"
+              style={{ background: '#C17272' }}
+            ></div>
+            <h5>Уведомлено</h5>
+          </div>
+          <div className="report__count">5 машины</div>
+        </div>
+      </div>
       <div className="content__main">
         <div className="content__cards">
           <div className="content__row">

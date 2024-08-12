@@ -9,6 +9,7 @@ import { useBrand } from '../features/brand/useBrand';
 import { useModel } from '../features/model/useModel';
 import { useCompany } from '../features/company/useCompany';
 import { useQueryClient } from '@tanstack/react-query';
+import dayjs from 'dayjs';
 export default function ContentHeader({
   pagename,
   hasBrand = false,
@@ -76,14 +77,15 @@ export default function ContentHeader({
         <div className="content__header__filter">
           {hasDate && (
             <DatePicker
+              form="YYYY-MM-DD"
               onChange={onChangeDate}
               placeholder="Выберите дату"
               className="header-datepicer"
-              // defaultValue={
-              //   searchParams.get('created_at__gt')
-              //     ? searchParams.get('created_at__gt')
-              //     : ''
-              // }
+              defaultValue={
+                params.has('created_at__gt')
+                  ? dayjs(searchParams.get('created_at__gt'))
+                  : null
+              }
             />
           )}
           {hasBrand && (
