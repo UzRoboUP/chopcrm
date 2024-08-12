@@ -1,4 +1,4 @@
-import AccountantApp from '../features/accountant/Accountant';
+import AccountantApp from '../features/staff/Accountant';
 
 function Accountant() {
   return <AccountantApp />;

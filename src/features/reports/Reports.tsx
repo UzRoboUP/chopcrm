@@ -13,8 +13,6 @@ function Reports() {
   const [currentDataId, setCurrentDataId] = useState('');
   const { data, isLoading } = useReports();
 
-  console.log('reports', data);
-
   if (isLoading && !Object.keys(data || {})?.length) {
     return;
   }

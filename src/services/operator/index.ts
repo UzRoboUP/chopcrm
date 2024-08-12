@@ -12,8 +12,8 @@ class Tracks {
     this.$api = apiClient;
   }
 
-  // GET: /tracking/list/
-  async getTracks() {
+  // GET: /tracking/list/ //todo
+  async getOperators() {
     try {
       const { data } = await this.$api.get(
         '/tracking/list/',
@@ -80,26 +80,6 @@ class Tracks {
   async createComment({ ...payload }) {
     try {
       const response = await this.$api.post(`/comment/create/`, {
-        ...payload,
-      });
-      if (response && response.data) {
-        return response.data;
-      } else {
-        throw new Error('The API response did not contain any data.');
-      }
-    } catch (error) {
-      console.log('ERR', error);
-      const axiosError = error as AxiosError<ApiErrorResponse>;
-      throw new Error(
-        axiosError.response?.data?.message || 'An unknown error occurred',
-      );
-    }
-  }
-
-  // POST: /comment/create/
-  async createStaffComment({ ...payload }) {
-    try {
-      const response = await this.$api.post(`/comment-staff2staff/create/`, {
         ...payload,
       });
       if (response && response.data) {

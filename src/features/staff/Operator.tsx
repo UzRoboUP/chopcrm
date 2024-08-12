@@ -2,16 +2,13 @@
 import { useState } from 'react';
 import ContentHeader from '../../ui/ContentHeader';
 import EmptyCard from '../../ui/EmptyCard';
-import TrackContentCard from './TrackContentCard';
-import UpdateDataModal from './UpdateDataModal';
-import { useTrack } from './useTrack';
-import { useTracks } from './useTracks';
-function Tracks() {
+import { useStaffList } from '../authentication/useStaffList';
+import OperatorContentCard from '../tracks/StaffContentCard';
+function Operator() {
   const [isOpenEditModal, setOpenEditModal] = useState(false);
   const [currentDataId, setCurrentDataId] = useState('');
-  const { data, isLoading } = useTracks();
-
-  const { retrieveData, isLoadingData } = useTrack(currentDataId);
+  const { data, isLoading } = useStaffList('operator');
+  console.log('staff', data);
 
   if (isLoading && !Object.keys(data || {})?.length) {
     return;
@@ -20,24 +17,18 @@ function Tracks() {
   return (
     <div className="content">
       <div className="content__header">
-        <ContentHeader
-          pagename="Отслеживание"
-          hasBrand={true}
-          hasModel={true}
-          hasCompany={true}
-          hasPhone={true}
-        />
+        <ContentHeader pagename="track" />
       </div>
       <div className="content__report"></div>
       <div className="content__main">
         <div className="content__cards">
           <div className="content__row">
-            {data?.results?.length > 0 ? (
-              (data?.results || []).map((item: { id: string }) => (
-                <TrackContentCard
+            {data?.length > 0 ? (
+              (data || []).map((item: { id: string }) => (
+                <OperatorContentCard
                   key={item.id}
                   item={item}
-                  pagename="track"
+                  pagename="operator"
                   onEdit={() => {
                     setCurrentDataId('');
                     setOpenEditModal(true);
@@ -46,20 +37,13 @@ function Tracks() {
                 />
               ))
             ) : (
-              <EmptyCard text="tracks" />
+              <EmptyCard text="operator" />
             )}
           </div>
         </div>
       </div>
-      <UpdateDataModal
-        pagename="track"
-        retrieveData={retrieveData}
-        isOpenModal={isOpenEditModal}
-        isLoadingData={isLoadingData}
-        onCloseModal={() => setOpenEditModal(false)}
-      />
     </div>
   );
 }
 
-export default Tracks;
+export default Operator;

@@ -62,6 +62,8 @@ export default function ContentHeader({
     setSearchParams(params);
   };
 
+
+
   return (
     <div className="content__header__content d-flex align-center justify-between ">
       <div className="content__headera__category d-flex align-center">

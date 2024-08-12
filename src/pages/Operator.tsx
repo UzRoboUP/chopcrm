@@ -1,4 +1,4 @@
-import OperatorApp from '../features/operator/Operator';
+import OperatorApp from '../features/staff/Operator';
 
 function Operator() {
   return <OperatorApp />;

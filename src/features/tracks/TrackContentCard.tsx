@@ -2,10 +2,8 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { Dropdown, DropdownProps, MenuProps, message, Popconfirm } from 'antd';
 import { useState } from 'react';
-import { reportPhotoStatus } from '../../utils/constants';
-import { convertTimestamp } from '../../utils/helpers';
-import CreateCommentModal from '../tracks/CreateCommentModal';
-import { useReportDelete } from '../tracks/useReportDelete';
+import CreateCommentModal from './CreateCommentModal';
+import { useTrackDelete } from './useTrackDelete';
 
 export type PageNameType = 'track' | 'report' | 'lead' | 'stock';
 
@@ -15,22 +13,22 @@ export type ContentCardProps = {
   onEdit: () => void;
 };
 
-function ReportContentCard({ item, pagename, onEdit }: ContentCardProps) {
+function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
   const queryClient = useQueryClient();
-  console.log('report: ', item);
+  console.log('track: ', item);
 
   const [isOpenMenu, setOpenMenu] = useState(false);
   const [popconfirmOpen, setPopconfirmOpen] = useState(false);
   const [isOpenCommentModal, setOpenCommentModal] = useState(false);
 
-  const { deleteReport, isLoadingDelete } = useReportDelete();
+  const { deleteTrack, isLoadingDelete } = useTrackDelete();
 
   const handleDelete = () => {
-    deleteReport(item.id, {
+    deleteTrack(item.id, {
       onSuccess: (data) => {
-        queryClient.setQueryData(['reportDelete'], data);
-        queryClient.invalidateQueries({ queryKey: ['reports'] });
-        message.success('Report deleted successfully');
+        queryClient.setQueryData(['trackDelete'], data);
+        queryClient.invalidateQueries({ queryKey: ['tracks'] });
+        message.success('Track deleted successfully');
       },
     });
   };
@@ -132,12 +130,9 @@ function ReportContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <img src="/img/card/empty-avatar.svg" alt="avatar" />
               </p>
               <div className="card__user--info">
-                <p className="name">
-                  {item?.contract_data?.driver_data?.full_name}
-                </p>
+                <p className="name">{item?.driver.full_name}</p>
                 <p className="rate">
-                  <span>4.5</span>
-                  <img src="/img/card/star.svg" alt="rate" />
+                  <span>Сегодня 12:40</span>
                 </p>
               </div>
             </div>
@@ -166,7 +161,7 @@ function ReportContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <span>Телефон</span>
               </div>
               <div className="card__item--value">
-                {item?.contract_data?.driver_data?.phone_number}
+                {item?.driver.phone_number}
               </div>
             </div>
             <div className="card__item">
@@ -175,7 +170,16 @@ function ReportContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <span>Тип машины</span>
               </div>
               <div className="card__item--value">
-                {item?.contract_data?.driver_data?.car_data.car_model}
+                {item?.driver.car_data.car_model}
+              </div>
+            </div>
+            <div className="card__item">
+              <div className="card__item--label">
+                <img src="/img/card/rating.svg" alt="" />
+                <span>Рейтинг</span>
+              </div>
+              <div className="card__item--value">
+                {item?.rate.rate_avg || '-'}
               </div>
             </div>
             <div className="card__item">
@@ -183,47 +187,17 @@ function ReportContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <img src="/img/card/book.svg" alt="" />
                 <span>Компания</span>
               </div>
-              <div className="card__item--value">
-                {item?.contract_data?.company_data?.name}
-              </div>
-            </div>
-            <div className="card__item">
-              <div className="card__item--label">
-                <img src="/img/card/date.svg" alt="" />
-                <span>Время последней обработки</span>
-              </div>
-              <div className="card__item--value">
-                {convertTimestamp(item.updated_at)}
-              </div>
+              <div className="card__item--value">{item.company.name}</div>
             </div>
             <div className="card__item card__item--comment">
               <div className="card__item--label">
                 <img src="/img/card/comment.svg" alt="" />
                 <span>Комментарий</span>
               </div>
-              <div className="card__item--value">{item?.report_comment}</div>
-            </div>
-            <div className="card__item mb-0">
-              <div className="card__item--label">
-                <img src="/img/card/loading.svg" alt="" />
-                <span>Статус фотоотчета</span>
-              </div>
-              <div
-                className="card__item--value card__item--value-status"
-                style={{
-                  backgroundColor:
-                    reportPhotoStatus[item.status_foto_report]?.color,
-                }}
-              >
-                <span className="dot-live mr-5"></span>
-                {reportPhotoStatus[item.status_foto_report]?.value}
+              <div className="card__item--value">
+                {item?.contract_comment || 'без комментариев'}
               </div>
             </div>
-          </div>
-          <div className="card__bottom">
-            <button className="card__bottom--btn">
-              <span className="ml-5">Запросить</span>
-            </button>
           </div>
         </div>
       </div>
@@ -237,4 +211,4 @@ function ReportContentCard({ item, pagename, onEdit }: ContentCardProps) {
   );
 }
 
-export default ReportContentCard;
+export default TrackContentCard;

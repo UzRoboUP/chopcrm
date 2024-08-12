@@ -64,6 +64,34 @@ class Profile {
     }
   }
 
+  async getStaffList(staff_status: string) {
+    try {
+      return (
+        await this.$api.get('/staff/list/', {
+          params: { staff_status },
+        })
+      ).data;
+    } catch (error) {
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      throw new Error(
+        axiosError.response?.data?.message || 'An unknown error occurred',
+      );
+    }
+  }
+
+  // DELETE: /staff/delete/:id/
+  async deleteStaff(id: string) {
+    try {
+      const { data } = await this.$api.delete(`/staff/delete/${id}/`);
+      return data;
+    } catch (error) {
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      throw new Error(
+        axiosError.response?.data?.message || 'An unknown error occurred',
+      );
+    }
+  }
+
   throwError(error: unknown) {
     const axiosError = error as AxiosError<ApiErrorResponse>;
     throw new Error(

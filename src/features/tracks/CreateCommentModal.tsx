@@ -6,7 +6,7 @@ import TextArea from 'antd/es/input/TextArea';
 import { useState } from 'react';
 import { useAppSelector } from '../../store/hooks';
 import Modal from '../../ui/Modal';
-import { useCreateComment } from './useCreateComment';
+import { useCreateComment, useCreateStaffComment } from './useCreateComment';
 
 function CreateCommentModal({
   pagename,
@@ -19,6 +19,7 @@ function CreateCommentModal({
   const currentUser = useAppSelector((state) => state.auth.user);
 
   const { createComment, isLoading } = useCreateComment();
+  const { createStaffComment, isLoadingStaffComment } = useCreateStaffComment();
 
   const handleSave = () => {
     //     ('manager', 'manager'),
@@ -32,22 +33,46 @@ function CreateCommentModal({
     switch (pagename) {
       case 'track':
         comment_purpose = 'tracking';
-        to_whom = retrieveData.driver_data.id;
+        to_whom = retrieveData.driver.id;
         break;
       case 'stock':
         comment_purpose = 'stock';
-        to_whom = retrieveData.contract_data.driver_data.id;
+        to_whom = retrieveData.contract_data.driver.id;
         break;
       case 'leads':
         comment_purpose = 'leads';
-        to_whom = retrieveData.driver_data.id;
+        to_whom = retrieveData.driver.id;
         break;
       case 'report':
         comment_purpose = 'reporting';
-        to_whom = retrieveData.contract_data.driver_data.id;
+        to_whom = retrieveData.contract_data.driver.id;
+        break;
+      case 'operator':
+        comment_purpose = 'staff';
+        to_whom = retrieveData.id;
         break;
       default:
         throw new Error('Something got wrong');
+    }
+
+    if (['moderator', 'accountant', 'operator', 'manager'].includes(pagename)) {
+      createStaffComment(
+        {
+          comment,
+          comment_purpose,
+          by_whom: currentUser?.id as string,
+          to_whom,
+        },
+        {
+          onSuccess: (data) => {
+            queryClient.setQueryData(['createComment'], data);
+            queryClient.invalidateQueries({ queryKey: [`staffList`] });
+            message.success('Comment created successfully');
+            onCloseModal();
+          },
+        },
+      );
+      return;
     }
 
     createComment(
@@ -82,14 +107,14 @@ function CreateCommentModal({
             style={{ width: '100%', float: 'inline-end', height: 60 }}
             defaultValue={comment}
             value={comment}
-            disabled={isLoading}
+            disabled={isLoading || isLoadingStaffComment}
             onChange={(e) => setComment(e.target.value)}
           />
         </div>
         <div className="mt-20 d-flex justify-center">
           <Button
-            disabled={isLoading}
-            loading={isLoading}
+            disabled={isLoading || isLoadingStaffComment}
+            loading={isLoading || isLoadingStaffComment}
             onClick={handleSave}
             type="primary"
             style={{ backgroundColor: '#21529C', width: 225 }}
