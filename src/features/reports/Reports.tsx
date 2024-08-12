@@ -6,14 +6,16 @@ import Modal from '../../ui/Modal';
 import ReportContentCard from './ReportContentCard';
 import { useReports } from './useReports';
 import ContentHeader from '../../ui/ContentHeader';
+import ReportStatus from '../../ui/ReportStatus';
 
 function Reports() {
   const [isOpenModal, setOpenModal] = useState(false);
   const [isOpenEditModal, setOpenEditModal] = useState(false);
   const [currentDataId, setCurrentDataId] = useState('');
-  const { data, isLoading } = useReports();
+  const {  reports, isLoading,reportsCount } = useReports();
+  console.log( reports);
 
-  if (isLoading && !Object.keys(data || {})?.length) {
+  if (isLoading && !Object.keys( reports || {})?.length) {
     return;
   }
 
@@ -29,32 +31,13 @@ function Reports() {
         {/* <button onClick={() => setOpenModal(true)}>Open modal</button> */}
       </div>
       <div className="content__report content__report__container">
-        <div className="report__box" style={{ borderColor: '#ff9500' }}>
-          <div className="report__title">
-            <div
-              className="report__title__dot"
-              style={{ background: '#ff9500' }}
-            ></div>
-            <h5>Уведомлено</h5>
-          </div>
-          <div className="report__count">5 машины</div>
-        </div>
-        <div className="report__box" style={{ borderColor: '#C17272' }}>
-          <div className="report__title">
-            <div
-              className="report__title__dot"
-              style={{ background: '#C17272' }}
-            ></div>
-            <h5>Уведомлено</h5>
-          </div>
-          <div className="report__count">5 машины</div>
-        </div>
+        <ReportStatus reportsCount={reportsCount} />
       </div>
       <div className="content__main">
         <div className="content__cards">
           <div className="content__row">
-            {data?.results?.length > 0 ? (
-              (data?.results || []).map((item: { id: string }) => (
+            { reports?.results?.length > 0 ? (
+              ( reports?.results || []).map((item: { id: string }) => (
                 <ReportContentCard
                   key={item.id}
                   item={item}

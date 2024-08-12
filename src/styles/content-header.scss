@@ -70,12 +70,15 @@
     align-items: center;
     gap: 8px;
     //styleName: Poppins Body/16/SemiBold;
+   h5{
     font-family: Poppins;
     font-size: 16px;
     font-weight: 600;
     line-height: 24px;
     letter-spacing: 0.02em;
     text-align: left;
+    color: #1F2937;
+   }
 
     &__dot {
       padding: 10px;

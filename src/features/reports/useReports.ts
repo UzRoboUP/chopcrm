@@ -12,5 +12,8 @@ export function useReports() {
     retry: 1,
   });
 
-  return { isLoading, data, error: isError };
+  const reportsCount = data?.number_report_status;
+  const reports = data?.reports;
+
+  return { isLoading, reports, reportsCount, error: isError };
 }

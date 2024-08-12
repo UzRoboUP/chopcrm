@@ -16,7 +16,7 @@ class Reports {
   async getReports() {
     try {
       const obj = (await this.$api.get('/reporting/list/')).data;
-      return obj.reports;
+      return obj;
     } catch (error) {
       const axiosError = error as AxiosError<ApiErrorResponse>;
       throw new Error(
