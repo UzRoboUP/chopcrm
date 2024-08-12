@@ -5,6 +5,7 @@ import EmptyCard from '../../ui/EmptyCard';
 import Modal from '../../ui/Modal';
 import ReportContentCard from './ReportContentCard';
 import { useReports } from './useReports';
+import ContentHeader from '../../ui/ContentHeader';
 
 function Reports() {
   const [isOpenModal, setOpenModal] = useState(false);
@@ -21,6 +22,12 @@ function Reports() {
   return (
     <div className="content">
       <div className="content__header">
+      <ContentHeader
+          pagename="Отчетность"
+          hasBrand={true}
+          hasModel={true}
+          hasSaveButton={true}
+        />
         <button onClick={() => setOpenModal(true)}>Open modal</button>
       </div>
       <div className="content__report"></div>

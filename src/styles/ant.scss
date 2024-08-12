@@ -1,0 +1,16 @@
+:where(.css-dev-only-do-not-override-m4timi).ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-selected:not(
+    .ant-picker-cell-disabled
+  )
+  .ant-picker-cell-inner {
+  background: #FF0000 !important;
+}
+
+:where(.css-dev-only-do-not-override-m4timi).ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-today
+  .ant-picker-cell-inner::before {
+    border: 1px solid #FF0000 !important;
+}
+.ant-picker-footer{
+    display: none !important;
+  }

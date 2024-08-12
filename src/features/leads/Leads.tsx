@@ -4,6 +4,7 @@ import EmptyCard from '../../ui/EmptyCard';
 import { useReports } from '../reports/useReports';
 import LeadContentCard from './LeadContentCard';
 import { useLeads } from './useLeads';
+import ContentHeader from '../../ui/ContentHeader';
 
 function Leads() {
   const [isOpenModal, setOpenModal] = useState(false);
@@ -16,7 +17,13 @@ function Leads() {
   }
   return (
     <div className="content">
-      <div className="content__header"></div>
+      <div className="content__header">
+      <ContentHeader
+          pagename="Лиды"
+          hasSaveButton={true}
+          hasDate={true}
+        />
+      </div>
       <div className="content__report"></div>
       <div className="content__main">
         <div className="content__cards">
