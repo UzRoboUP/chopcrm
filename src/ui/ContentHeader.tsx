@@ -1,54 +1,129 @@
 import { DownOutlined } from '@ant-design/icons';
-import { Checkbox, CheckboxProps, Dropdown, MenuProps, Space } from 'antd';
-import { useEffect, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { Dropdown, Input, Space } from 'antd';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import download from '../../public/img/page-header/download.svg';
 import left from '../../public/img/page-header/left-chevron.svg';
-import { PageNameType } from '../features/tracks/TrackContentCard';
-import { usePageTitle } from '../features/usePageTitle';
+import { useBrand } from '../features/brand/useBrand';
+import { useCompany } from '../features/company/useCompany';
+import { useModel } from '../features/model/useModel';
 import FormBox from './FormBox';
+import HeaderRadioGroup from './HeaderRadioGroup';
+export default function ContentHeader({ pagename }: { pagename: string }) {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const params = new URLSearchParams(searchParams.toString());
 
-type ContentHeaderProps = {
-  pagename: PageNameType;
-};
+  const { brand } = useBrand();
+  const { model } = useModel(params.get('car_brand'));
+  const { company } = useCompany();
 
-export default function ContentHeader({ pagename }: ContentHeaderProps) {
-  const [menu, setMenu] = useState([]);
-  const onChange: CheckboxProps['onChange'] = (e) => {
-    console.log(`checked = ${e.target.checked}`);
-    console.log(menu);
+  const onChange = (data: {
+    id: string;
+    name: string;
+    searchParam: string;
+  }) => {
+    if (data.searchParam == 'car_brand') {
+      params.delete('car_model');
+      setTimeout(() => {
+        queryClient.invalidateQueries('model');
+      }, 300);
+    }
+    params.set(data.searchParam, data.name);
+    setSearchParams(params);
   };
 
-  useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/users')
-      .then((item) => item.json())
-      .then((result) => {
-        setMenu(result);
-      });
-  }, []);
+  const serachPhone = (e: React.ChangeEvent<HTMLInputElement>) => {
+    params.set('search', e.target.value);
+    setSearchParams(params);
+  };
 
-  const items: MenuProps['items'] = [
-    {
-      label: (
-        <div className="d-flex align-center">
-          <Checkbox onChange={onChange}>
-            <span className=" form-box-check-title">Daewoo</span>
-          </Checkbox>
-        </div>
-      ),
-      key: '0',
-    },
-  ];
   return (
     <div className="content__header__content d-flex align-center justify-between ">
       <div className="content__headera__category d-flex align-center">
-        <img className="pointer" width="36px" height="36px" src={left} alt="" />
-        <span className="content__header__title">{usePageTitle(pagename)}</span>
+        <img
+          className="pointer"
+          width="36px"
+          height="36px"
+          src={left}
+          alt=""
+          onClick={() => navigate(-1)}
+        />
+        <span className="content__header__title">{pagename}</span>
         <div className="content__header__filter">
           <FormBox title="Марка">
-            <Dropdown menu={{ items }} trigger={['click']}>
+            <Dropdown
+              trigger={['click']}
+              dropdownRender={() => (
+                <HeaderRadioGroup
+                  defaultValue={searchParams.get('car_brand')}
+                  menu={brand}
+                  name="brand"
+                  onChange={onChange}
+                  searchParam="car_brand"
+                />
+              )}
+            >
               <a onClick={(e) => e.preventDefault()}>
                 <Space>
-                  Выберите
+                  {searchParams.get('car_brand')
+                    ? searchParams.get('car_brand')
+                    : 'Выберите'}
+                  <DownOutlined />
+                </Space>
+              </a>
+            </Dropdown>
+          </FormBox>
+          <FormBox title="Модель">
+            <Dropdown
+              trigger={['click']}
+              dropdownRender={() => (
+                <HeaderRadioGroup
+                  defaultValue={searchParams.get('car_model')}
+                  menu={model}
+                  name="model"
+                  onChange={onChange}
+                  searchParam="car_model"
+                />
+              )}
+            >
+              <a onClick={(e) => e.preventDefault()}>
+                <Space>
+                  {searchParams.get('car_model') ? (
+                    searchParams.get('car_model')
+                  ) : (
+                    <span
+                      className={
+                        !searchParams.has('car_brand') ? 'disabled-text' : ''
+                      }
+                    >
+                      Выберите
+                    </span>
+                  )}
+                  <DownOutlined />
+                </Space>
+              </a>
+            </Dropdown>
+          </FormBox>
+          <FormBox title="Компания">
+            <Dropdown
+              trigger={['click']}
+              dropdownRender={() => (
+                <HeaderRadioGroup
+                  defaultValue={searchParams.get('company__name')}
+                  name="name"
+                  menu={company}
+                  onChange={onChange}
+                  searchParam="company__name"
+                />
+              )}
+            >
+              <a onClick={(e) => e.preventDefault()}>
+                <Space>
+                  {searchParams.get('company__name')
+                    ? searchParams.get('company__name')
+                    : 'Выберите'}
                   <DownOutlined />
                 </Space>
               </a>
@@ -56,7 +131,11 @@ export default function ContentHeader({ pagename }: ContentHeaderProps) {
           </FormBox>
 
           <FormBox title="Номер телефона">
-            <input type="text" />
+            <Input
+              type="number"
+              value={`${searchParams.get('search') ? searchParams.get('search') : ''}`}
+              onChange={serachPhone}
+            />
           </FormBox>
         </div>
       </div>

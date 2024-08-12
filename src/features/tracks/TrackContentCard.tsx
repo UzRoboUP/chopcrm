@@ -130,7 +130,7 @@ function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <img src="/img/card/empty-avatar.svg" alt="avatar" />
               </p>
               <div className="card__user--info">
-                <p className="name">{item?.driver_data.full_name}</p>
+                <p className="name">{item?.driver.full_name}</p>
                 <p className="rate">
                   <span>Сегодня 12:40</span>
                 </p>
@@ -161,7 +161,7 @@ function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <span>Телефон</span>
               </div>
               <div className="card__item--value">
-                {item?.driver_data.phone_number}
+                {item?.driver.phone_number}
               </div>
             </div>
             <div className="card__item">
@@ -170,7 +170,7 @@ function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <span>Тип машины</span>
               </div>
               <div className="card__item--value">
-                {item?.driver_data.car_data_get.car_model}
+                {item?.driver.car_data.car_model}
               </div>
             </div>
             <div className="card__item">
@@ -187,7 +187,7 @@ function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <img src="/img/card/book.svg" alt="" />
                 <span>Компания</span>
               </div>
-              <div className="card__item--value">{item.company_data.name}</div>
+              <div className="card__item--value">{item.company.name}</div>
             </div>
             <div className="card__item card__item--comment">
               <div className="card__item--label">

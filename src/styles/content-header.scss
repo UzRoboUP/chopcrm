@@ -1,5 +1,5 @@
 .content {
-  &__header__content{
+  &__header__content {
     margin-bottom: 40px;
   }
   &__header__filter {
@@ -46,6 +46,22 @@
     &:focus {
       outline: none;
     }
-   
   }
+}
+
+.radio-group-menu {
+  padding: 16px 6px !important;
+}
+.form-box-check-title {
+  font-family: Poppins !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 21px !important;
+  letter-spacing: 0.01em !important;
+  text-align: lef !important;
+  color: #374151 !important;
+}
+.disabled-text{
+  opacity: .5;
+  cursor:no-drop;
 }
