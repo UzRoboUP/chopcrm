@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useQueryClient } from '@tanstack/react-query';
 import { Button, Input, message, Typography } from 'antd';
+import { useEffect, useState } from 'react';
 import Modal from '../../ui/Modal';
 import { useTrackUpdate } from './useTrackUpdate';
 
@@ -12,8 +13,30 @@ function UpdateDataModal({
   onCloseModal,
 }) {
   const queryClient = useQueryClient();
+  const [fullName, setFullName] = useState('');
+
+  const [trackData, setTrackData] = useState({
+    id: retrieveData?.id,
+    status_contract: retrieveData?.status_contract,
+    companyName: retrieveData?.company.name,
+    fullName: retrieveData?.driver.full_name,
+    phoneNumber: retrieveData?.driver.phone_number,
+    carModel: retrieveData?.driver.car_data.car_model,
+  });
 
   const { updateTrack, isLoadingUpdate } = useTrackUpdate();
+
+  useEffect(() => {
+    setTrackData({
+      id: retrieveData?.id,
+      status_contract: retrieveData?.status_contract,
+      companyName: retrieveData?.company.name,
+      fullName: retrieveData?.driver.full_name,
+      phoneNumber: retrieveData?.driver.phone_number,
+      carModel: retrieveData?.driver.car_data.car_model,
+    });
+    setFullName(retrieveData?.driver.full_name);
+  }, [retrieveData]);
 
   const handleSaveUpdate = () => {
     switch (pagename) {
@@ -21,9 +44,14 @@ function UpdateDataModal({
         updateTrack(
           {
             id: retrieveData.id,
-            status_contract: retrieveData.status_contract,
-            company: retrieveData.company,
-            driver: retrieveData.driver,
+            company: {
+              name: trackData.companyName,
+            },
+            driver: {
+              full_name: trackData.fullName,
+              phone_number: trackData.phoneNumber,
+            },
+            status_contract: trackData.status_contract,
           },
           {
             onSuccess: (data) => {
@@ -42,48 +70,58 @@ function UpdateDataModal({
 
   return (
     <Modal
-      title="Update: Jahongir Umirzoqov"
+      title={`Update: ${fullName}`}
       width="middle"
       open={isOpenModal}
       loading={isLoadingData}
       onCancel={onCloseModal}
     >
       <div className="mt-20">
-        {/* {JSON.stringify(retrieveData)} */}
         <div className="d-flex justify-between mb-5">
-          <Typography.Title level={5}>Фамилия *</Typography.Title>
+          <Typography.Title level={5}>ФИО *</Typography.Title>
           <Input
             style={{ width: 225, float: 'inline-end', height: 30 }}
-            defaultValue=""
+            value={trackData.fullName}
+            onChange={({ target: { value: fullName } }) =>
+              setTrackData((prev) => ({ ...prev, fullName }))
+            }
           />
         </div>
-        <div className="d-flex justify-between mb-5">
+        {/* <div className="d-flex justify-between mb-5">
           <Typography.Title level={5}>Имя *</Typography.Title>
           <Input
             style={{ width: 225, float: 'inline-end', height: 30 }}
             defaultValue=""
           />
-        </div>
+        </div> */}
         <div className="d-flex justify-between mb-5">
           <Typography.Title level={5}>Номер телефона</Typography.Title>
           <Input
             style={{ width: 225, float: 'inline-end', height: 30 }}
-            defaultValue=""
-            type="number"
+            value={trackData.phoneNumber}
+            onChange={({ target: { value: phoneNumber } }) =>
+              setTrackData((prev) => ({ ...prev, phoneNumber }))
+            }
           />
         </div>
         <div className="d-flex justify-between mb-5">
           <Typography.Title level={5}>Тип машины</Typography.Title>
           <Input
             style={{ width: 225, float: 'inline-end', height: 30 }}
-            defaultValue=""
+            value={trackData.carModel}
+            onChange={({ target: { value: carModel } }) =>
+              setTrackData((prev) => ({ ...prev, carModel }))
+            }
           />
         </div>
         <div className="d-flex justify-between">
           <Typography.Title level={5}>Компания</Typography.Title>
           <Input
             style={{ width: 225, float: 'inline-end', height: 30 }}
-            defaultValue=""
+            value={trackData.companyName}
+            onChange={({ target: { value: companyName } }) =>
+              setTrackData((prev) => ({ ...prev, companyName }))
+            }
           />
         </div>
         <div className="mt-20 d-flex justify-center">

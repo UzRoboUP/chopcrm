@@ -63,22 +63,6 @@ function ReportContentCard({ item, pagename, onEdit }: ContentCardProps) {
       className: 'mb-4',
     },
     {
-      key: '3',
-      label: (
-        <p
-          onClick={() => {
-            onEdit();
-            setOpenMenu(false);
-          }}
-          className="d-flex align-center"
-        >
-          <img src="/img/card/menu/edit.svg" alt="" />
-          <span className="card__menu--text ml-10">Изменить профиль</span>
-        </p>
-      ),
-      className: 'mb-4',
-    },
-    {
       key: '4',
       label: (
         <Popconfirm

@@ -24,7 +24,7 @@ function Reports() {
           hasModel={true}
           hasSaveButton={true}
         />
-        {/* <button onClick={() => setOpenModal(true)}>Open modal</button> */}
+        <button onClick={() => setOpenModal(true)}>Open modal</button>
       </div>
       <div className="content__report content__report__container">
         <ReportStatus reportsCount={reportsCount} />

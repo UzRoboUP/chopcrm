@@ -13,6 +13,8 @@ function Tracks() {
 
   const { retrieveData, isLoadingData } = useTrack(currentDataId);
 
+  console.log('track: ', retrieveData);
+
   return (
     <div className="content">
       <div className="content__header">
