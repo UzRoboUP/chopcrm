@@ -1,14 +1,22 @@
 import { useQuery } from '@tanstack/react-query';
 import Tracks from '../../services/tracks';
+import { useSearchParams } from 'react-router-dom';
 
 export function useTracks() {
+  const [params] = useSearchParams();
+  const url = new URLSearchParams(params.toString());
+  const brand = params.get('car_brand') || '';
+  const model = params.get('car_model') || '';
+  const company = params.get('company__name') || '';
+  const search = params.get('search') || '';
+
   const {
     isPending: isLoading,
     data,
     isError,
   } = useQuery({
-    queryKey: ['tracks'],
-    queryFn: () => Tracks.getTracks(),
+    queryKey: ['tracks', brand, model, company, search],
+    queryFn: () => Tracks.getTracks(url),
   });
 
   return { isLoading, data, error: isError };

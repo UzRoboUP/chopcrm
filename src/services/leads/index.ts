@@ -13,9 +13,10 @@ class Leads {
   }
 
   // GET: /leads/list/
-  async getLeads() {
+  async getLeads(url: URLSearchParams) {
     try {
-      return (await this.$api.get('/leads/list')).data;
+      return (await this.$api.get(url ? `/leads/list?${url}` : '/leads/list'))
+        .data;
     } catch (error) {
       const axiosError = error as AxiosError<ApiErrorResponse>;
       throw new Error(

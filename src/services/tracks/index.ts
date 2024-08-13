@@ -13,10 +13,11 @@ class Tracks {
   }
 
   // GET: /tracking/list/
-  async getTracks() {
+  async getTracks(url: URLSearchParams) {
+    console.log(url);
     try {
       const { data } = await this.$api.get(
-        '/tracking/list/',
+        url ? `/tracking/list/?${url}` : '/tracking/list/',
         //    {
         //   params: { name, limit, offset, status, q },
         // }

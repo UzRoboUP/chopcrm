@@ -15,7 +15,6 @@ export type ContentCardProps = {
 
 function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
   const queryClient = useQueryClient();
-  console.log('track: ', item);
 
   const [isOpenMenu, setOpenMenu] = useState(false);
   const [popconfirmOpen, setPopconfirmOpen] = useState(false);

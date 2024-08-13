@@ -1,14 +1,19 @@
 import { useQuery } from '@tanstack/react-query';
 import Reports from '../../services/reports';
+import { useSearchParams } from 'react-router-dom';
 
 export function useReports() {
+  const [params] = useSearchParams();
+  const url = new URLSearchParams(params.toString());
+  const brand = params.get('car_brand') || '';
+  const model = params.get('car_model') || '';
   const {
     isPending: isLoading,
     data,
     isError,
   } = useQuery({
-    queryKey: ['reports'],
-    queryFn: () => Reports.getReports(),
+    queryKey: ['reports', brand, model],
+    queryFn: () => Reports.getReports(url),
     retry: 1,
   });
 
