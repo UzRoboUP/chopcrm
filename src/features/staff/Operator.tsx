@@ -12,7 +12,6 @@ function Operator() {
   const { data, isLoading } = useStaffList('operator');
 
   const { retrieveData, isLoadingData } = useStaff(currentDataId);
-  console.log('staff', data);
 
   return (
     <div className="content">
