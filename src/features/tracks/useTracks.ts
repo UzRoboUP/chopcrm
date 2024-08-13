@@ -8,14 +8,14 @@ export function useTracks() {
   const brand = params.get('car_brand') || '';
   const model = params.get('car_model') || '';
   const company = params.get('company__name') || '';
-  const search = params.get('search') || '';
+  const phone = params.get('phone_number') || '';
 
   const {
     isPending: isLoading,
     data,
     isError,
   } = useQuery({
-    queryKey: ['tracks', brand, model, company, search],
+    queryKey: ['tracks', brand, model, company, phone],
     queryFn: () => Tracks.getTracks(url),
   });
 

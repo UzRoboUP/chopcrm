@@ -10,6 +10,7 @@ import { useModel } from '../features/model/useModel';
 import { useCompany } from '../features/company/useCompany';
 import { useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
+// import { useEffect } from 'react';
 export default function ContentHeader({
   pagename,
   hasBrand = false,
@@ -18,6 +19,8 @@ export default function ContentHeader({
   hasPhone = false,
   hasSaveButton = false,
   hasDate = false,
+  hasTask = false,
+  taskText = '',
 }: {
   pagename: string;
   hasBrand?: boolean;
@@ -26,6 +29,8 @@ export default function ContentHeader({
   hasPhone?: boolean;
   hasSaveButton?: boolean;
   hasDate?: boolean;
+  hasTask?: boolean;
+  taskText?: string;
 }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -52,17 +57,21 @@ export default function ContentHeader({
   };
 
   const serachPhone = (e: React.ChangeEvent<HTMLInputElement>) => {
-    params.set('search', e.target.value);
+    params.set('phone_number', e.target.value);
     setSearchParams(params);
   };
 
   const onChangeDate: DatePickerProps['onChange'] = (date, dateString) => {
-    console.log(date, dateString);
     params.set('created_at__gt', dateString as unknown as string);
     setSearchParams(params);
   };
 
-
+  // useEffect(() => {
+  //   if (!params.has('car_brand')) {
+  //     params.delete('car_model');
+  //     setSearchParams(params);
+  //   }
+  // }, [searchParams]);
 
   return (
     <div className="content__header__content d-flex align-center justify-between ">
@@ -122,7 +131,8 @@ export default function ContentHeader({
                 dropdownRender={() => (
                   <HeaderRadioGroup
                     defaultValue={searchParams.get('car_model')}
-                    menu={model}
+                    // menu={ model}
+                    menu={searchParams.has('car_brand') ? model : []}
                     name="model"
                     onChange={onChange}
                     searchParam="car_model"
@@ -178,10 +188,16 @@ export default function ContentHeader({
             <FormBox title="Номер телефона">
               <Input
                 type="number"
-                value={`${searchParams.get('search') ? searchParams.get('search') : ''}`}
+                value={`${searchParams.get('phone_number') ? searchParams.get('phone_number') : ''}`}
                 onChange={serachPhone}
               />
             </FormBox>
+          )}
+
+          {hasTask && (
+            <>
+              <div className="stock__task">{taskText}</div>
+            </>
           )}
         </div>
       </div>

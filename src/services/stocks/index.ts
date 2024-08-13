@@ -14,6 +14,8 @@ class Leads {
 
   // GET: /leads/list/
   async getStocks({ ...params }) {
+    console.log(params);
+    
     try {
       return (
         await this.$api.get('/stock/list', {

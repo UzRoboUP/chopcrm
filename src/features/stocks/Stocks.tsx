@@ -3,17 +3,30 @@ import { useState } from 'react';
 import EmptyCard from '../../ui/EmptyCard';
 import StockContentCard from './StockContentCard';
 import { useStocks } from './useStocks';
+import ContentHeader from '../../ui/ContentHeader';
+import StockStatus from '../../ui/StockStatus';
 
 function Stocks() {
   const [isOpenModal, setOpenModal] = useState(false);
   const [isOpenEditModal, setOpenEditModal] = useState(false);
   const [currentDataId, setCurrentDataId] = useState('');
   const { data, isLoading } = useStocks();
+  console.log(data);
 
   return (
     <div className="content">
-      <div className="content__header"></div>
-      <div className="content__report"></div>
+      <div className="content__header">
+        <ContentHeader
+          pagename="Отчетность"
+          hasBrand={true}
+          hasModel={true}
+          hasTask={true}
+          taskText="Задание: Проехать с улицы Алишер навои до улицы фараби 15:00 - 16:00 20.05.2024"
+        />
+      </div>
+      <div className="content__report content__report__container">
+        <StockStatus reportsCount={data?.number_stock_status} />
+      </div>
       <div className="content__main">
         <div className="content__cards">
           <div className="content__row">
