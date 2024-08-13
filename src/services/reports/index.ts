@@ -13,9 +13,13 @@ class Reports {
   }
 
   // GET: /reporting/list/
-  async getReports() {
+  async getReports(url: URLSearchParams) {
     try {
-      const obj = (await this.$api.get('/reporting/list/')).data;
+      const obj = (
+        await this.$api.get(
+          url ? `/reporting/list/?${url}` : '/reporting/list/',
+        )
+      ).data;
       return obj;
     } catch (error) {
       const axiosError = error as AxiosError<ApiErrorResponse>;
