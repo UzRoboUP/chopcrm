@@ -92,6 +92,18 @@ class Profile {
     }
   }
 
+  // GET: /staff/retrieve/:id
+  async getStaff(id: string) {
+    try {
+      return (await this.$api.get(`/staff/retrieve/${id}`)).data;
+    } catch (error) {
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      throw new Error(
+        axiosError.response?.data?.message || 'An unknown error occurred',
+      );
+    }
+  }
+
   throwError(error: unknown) {
     const axiosError = error as AxiosError<ApiErrorResponse>;
     throw new Error(

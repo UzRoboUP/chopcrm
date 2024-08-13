@@ -173,6 +173,9 @@ body {
 .mt-5 {
   margin-top: 5px;
 }
+.ml-30 {
+  margin-left: 30px;
+}
 .mt-20 {
   margin-top: 20px !important;
 }
@@ -248,11 +251,17 @@ body {
 .d-inline {
   display: inline;
 }
+.gap-20 {
+  gap: 20px;
+}
 .align-center {
   align-items: center;
 }
 .align-baseline {
   align-items: baseline !important;
+}
+.align-end {
+  align-items: flex-end !important;
 }
 .justify-between {
   justify-content: space-between;

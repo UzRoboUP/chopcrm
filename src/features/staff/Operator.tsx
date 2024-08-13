@@ -4,10 +4,14 @@ import ContentHeader from '../../ui/ContentHeader';
 import EmptyCard from '../../ui/EmptyCard';
 import { useStaffList } from '../authentication/useStaffList';
 import OperatorContentCard from '../tracks/StaffContentCard';
+import UpdateStaffDataModal from './UpdateStaffDataModal';
+import { useStaff } from './useStaff';
 function Operator() {
   const [isOpenEditModal, setOpenEditModal] = useState(false);
   const [currentDataId, setCurrentDataId] = useState('');
   const { data, isLoading } = useStaffList('operator');
+
+  const { retrieveData, isLoadingData } = useStaff(currentDataId);
   console.log('staff', data);
 
   return (
@@ -38,6 +42,13 @@ function Operator() {
           </div>
         </div>
       </div>
+      <UpdateStaffDataModal
+        pagename="operator"
+        retrieveData={retrieveData}
+        isOpenModal={isOpenEditModal}
+        isLoadingData={isLoadingData}
+        onCloseModal={() => setOpenEditModal(false)}
+      />
     </div>
   );
 }
