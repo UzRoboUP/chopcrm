@@ -71,6 +71,8 @@ function MainNav() {
 
   const { clientCompanies } = useClientCompanies();
 
+  console.log('clientCompanies', clientCompanies);
+
   if (!userData) {
     return null;
   }
@@ -89,7 +91,7 @@ function MainNav() {
         key: '100',
         label: (
           <StyledNavLink
-            to={`stock?company_id=${searchParams.get('company_id') || clientCompanies?.results[0]?.id}`}
+            to={`stock?company_id=${searchParams.get('company_id') || clientCompanies?.[0]?.company_data.id}`}
           >
             {({ isActive }) => (
               <>
@@ -99,27 +101,29 @@ function MainNav() {
             )}
           </StyledNavLink>
         ),
-        children: (clientCompanies?.results || []).map((company, index) => ({
+        children: (clientCompanies || []).map((company, index) => ({
           key: index + 1,
           className:
-            searchParams.get('company_id') === company.id
+            searchParams.get('company_id') === company?.company_data.id
               ? 'active-client-company'
               : '',
           label: (
             <p
               key={company.id}
               onClick={() => {
-                navigate(`stock?company_id=${company.id}`);
+                navigate(`stock?company_id=${company?.company_data.id}`);
               }}
               className="d-flex align-center justify-center"
             >
               <img
                 width="38"
                 height="14"
-                src={company.image}
-                alt={company.image || 'no-image'}
+                src={company?.company_data.image}
+                alt={company?.company_data.image || 'no-image'}
               />
-              <span className="sidebar__nav-sub-link">{company.name}</span>
+              <span className="sidebar__nav-sub-link">
+                {company?.company_data.name}
+              </span>
             </p>
           ),
         })),
