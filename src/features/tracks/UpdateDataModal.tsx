@@ -6,7 +6,6 @@ import Modal from '../../ui/Modal';
 import { useTrackUpdate } from './useTrackUpdate';
 
 function UpdateDataModal({
-  pagename,
   retrieveData,
   isLoadingData,
   isOpenModal,
@@ -39,33 +38,33 @@ function UpdateDataModal({
   }, [retrieveData]);
 
   const handleSaveUpdate = () => {
-    switch (pagename) {
-      case 'track':
-        updateTrack(
-          {
-            id: retrieveData.id,
-            company: {
-              name: trackData.companyName,
-            },
-            driver: {
-              full_name: trackData.fullName,
-              phone_number: trackData.phoneNumber,
-            },
-            status_contract: trackData.status_contract,
-          },
-          {
-            onSuccess: (data) => {
-              queryClient.setQueryData(['trackUpdate'], data);
-              queryClient.invalidateQueries({ queryKey: ['tracks'] });
-              message.success('Track updated successfully');
-              onCloseModal();
-            },
-          },
-        );
-        break;
-      default:
-        throw new Error('There is no such pagename property');
-    }
+    const model = {
+      id: retrieveData.id,
+      company: {
+        name: trackData.companyName,
+        id: retrieveData.company?.id,
+      },
+      driver: {
+        full_name: trackData.fullName,
+        phone_number: trackData.phoneNumber,
+        id: retrieveData.driver?.id,
+        car_data: {
+          car_model: trackData.carModel,
+        },
+      },
+      status_contract: trackData.status_contract,
+    };
+    updateTrack(
+      { ...model },
+      {
+        onSuccess: (data) => {
+          queryClient.setQueryData(['trackUpdate'], data);
+          queryClient.invalidateQueries({ queryKey: ['tracks'] });
+          message.success('Track updated successfully');
+          onCloseModal();
+        },
+      },
+    );
   };
 
   return (

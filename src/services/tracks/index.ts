@@ -59,18 +59,13 @@ class Tracks {
 
   // UPDATE: /tracking/update/:id/
   async updateTrack({ ...payload }) {
+    const reqBody = { ...payload };
+    delete reqBody.id;
     try {
       const response = await this.$api.patch(
         `/tracking/update/${payload.id}/`,
         {
-          company: {
-            name: payload.companyName,
-          },
-          driver: {
-            full_name: payload.fullName,
-            phone_number: payload.phoneNumber,
-          },
-          status_contract: payload.status_contract,
+          ...reqBody,
         },
       );
       if (response && response.data) {
