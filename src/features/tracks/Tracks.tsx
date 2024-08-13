@@ -13,10 +13,6 @@ function Tracks() {
 
   const { retrieveData, isLoadingData } = useTrack(currentDataId);
 
-  if (isLoading && !Object.keys(data || {})?.length) {
-    return;
-  }
-
   return (
     <div className="content">
       <div className="content__header">

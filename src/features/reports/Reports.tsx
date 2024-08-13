@@ -1,23 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { DatePicker } from 'antd';
 import { useState } from 'react';
+import ContentHeader from '../../ui/ContentHeader';
 import EmptyCard from '../../ui/EmptyCard';
 import Modal from '../../ui/Modal';
+import ReportStatus from '../../ui/ReportStatus';
 import ReportContentCard from './ReportContentCard';
 import { useReports } from './useReports';
-import ContentHeader from '../../ui/ContentHeader';
-import ReportStatus from '../../ui/ReportStatus';
 
 function Reports() {
   const [isOpenModal, setOpenModal] = useState(false);
   const [isOpenEditModal, setOpenEditModal] = useState(false);
   const [currentDataId, setCurrentDataId] = useState('');
-  const {  reports, isLoading,reportsCount } = useReports();
-  console.log( reports);
-
-  if (isLoading && !Object.keys( reports || {})?.length) {
-    return;
-  }
+  const { reports, isLoading, reportsCount } = useReports();
+  console.log(reports);
 
   return (
     <div className="content">
@@ -36,8 +32,8 @@ function Reports() {
       <div className="content__main">
         <div className="content__cards">
           <div className="content__row">
-            { reports?.results?.length > 0 ? (
-              ( reports?.results || []).map((item: { id: string }) => (
+            {reports?.results?.length > 0 ? (
+              (reports?.results || []).map((item: { id: string }) => (
                 <ReportContentCard
                   key={item.id}
                   item={item}

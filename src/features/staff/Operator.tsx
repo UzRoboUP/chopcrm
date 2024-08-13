@@ -10,10 +10,6 @@ function Operator() {
   const { data, isLoading } = useStaffList('operator');
   console.log('staff', data);
 
-  if (isLoading && !Object.keys(data || {})?.length) {
-    return;
-  }
-
   return (
     <div className="content">
       <div className="content__header">

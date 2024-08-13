@@ -9,10 +9,6 @@ function Accountant() {
   const [currentDataId, setCurrentDataId] = useState('');
   const { data, isLoading } = useStaffList('moderator');
 
-  if (isLoading && !Object.keys(data || {})?.length) {
-    return;
-  }
-
   return (
     <div className="content">
       <div className="content__header">

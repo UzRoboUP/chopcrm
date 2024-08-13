@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from 'react';
+import ContentHeader from '../../ui/ContentHeader';
 import EmptyCard from '../../ui/EmptyCard';
-import { useReports } from '../reports/useReports';
 import LeadContentCard from './LeadContentCard';
 import { useLeads } from './useLeads';
-import ContentHeader from '../../ui/ContentHeader';
 
 function Leads() {
   const [isOpenModal, setOpenModal] = useState(false);
@@ -12,17 +11,10 @@ function Leads() {
   const [currentDataId, setCurrentDataId] = useState('');
   const { data, isLoading } = useLeads();
 
-  if (isLoading && !Object.keys(data || {})?.length) {
-    return;
-  }
   return (
     <div className="content">
       <div className="content__header">
-      <ContentHeader
-          pagename="Лиды"
-          hasSaveButton={true}
-          hasDate={true}
-        />
+        <ContentHeader pagename="Лиды" hasSaveButton={true} hasDate={true} />
       </div>
       <div className="content__report"></div>
       <div className="content__main">
