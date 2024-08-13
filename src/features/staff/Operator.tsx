@@ -17,7 +17,7 @@ function Operator() {
   return (
     <div className="content">
       <div className="content__header">
-        <ContentHeader pagename="track" />
+        <ContentHeader pagename="Оператор" hasAddButton={true} />
       </div>
       <div className="content__report"></div>
       <div className="content__main">

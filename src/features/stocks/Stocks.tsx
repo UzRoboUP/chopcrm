@@ -17,7 +17,7 @@ function Stocks() {
     <div className="content">
       <div className="content__header">
         <ContentHeader
-          pagename="Отчетность"
+          pagename="Акции"
           hasBrand={true}
           hasModel={true}
           hasTask={true}

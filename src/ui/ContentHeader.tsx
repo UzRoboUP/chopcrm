@@ -10,6 +10,7 @@ import { useModel } from '../features/model/useModel';
 import { useCompany } from '../features/company/useCompany';
 import { useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
+import plus from '../../public/img/plus.svg';
 // import { useEffect } from 'react';
 export default function ContentHeader({
   pagename,
@@ -20,6 +21,7 @@ export default function ContentHeader({
   hasSaveButton = false,
   hasDate = false,
   hasTask = false,
+  hasAddButton = false,
   taskText = '',
 }: {
   pagename: string;
@@ -31,6 +33,7 @@ export default function ContentHeader({
   hasDate?: boolean;
   hasTask?: boolean;
   taskText?: string;
+  hasAddButton?: boolean;
 }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -211,6 +214,12 @@ export default function ContentHeader({
             alt=""
           />
           <span>Экспорт</span>
+        </button>
+      )}
+      {hasAddButton && (
+        <button className="header__add__btn">
+          <img src={plus} alt="" />
+          <span>Добавить</span>
         </button>
       )}
     </div>
