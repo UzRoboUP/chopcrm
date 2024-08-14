@@ -15,6 +15,7 @@ export const stockStatus = {
 
 export const reportPhotoStatus = {
   pending: {
+    // todo should be removed
     color: '#FF9500',
     value: 'В ожидании',
   },
