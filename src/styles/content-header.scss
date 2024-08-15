@@ -64,6 +64,11 @@
     padding: 22px 10px;
     border-radius: 20px;
     height: 54px;
+    cursor: pointer;
+    transition: .2s;
+  }
+  .report__box:hover {
+    opacity: 0.7;
   }
   .report__title {
     @include flexbox();
@@ -107,7 +112,6 @@
   padding: 16px 6px !important;
 }
 .form-box-check-title {
-  font-family: Poppins !important;
   font-size: 14px !important;
   font-weight: 500 !important;
   line-height: 21px !important;
@@ -120,7 +124,6 @@
   cursor: no-drop;
 }
 .stock__task {
-  font-family: Poppins;
   font-size: 16px;
   font-weight: 500;
   line-height: 20px;
@@ -128,4 +131,25 @@
   text-align: left;
   color: #000000;
   max-width: 347px;
+}
+.header__add__btn {
+  //styleName: Poppins Body/14/Medium;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  letter-spacing: 0.01em;
+  text-align: left;
+  padding: 8px 16px;
+  background: #21529c;
+  color: #ffffff;
+  border-radius: 10px;
+  border: 0;
+  outline: none;
+  @include flexbox();
+  align-items: center;
+  gap: 10px;
+  img {
+    width: 16px;
+    height: 16px;
+  }
 }

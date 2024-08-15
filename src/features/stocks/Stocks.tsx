@@ -11,13 +11,12 @@ function Stocks() {
   const [isOpenEditModal, setOpenEditModal] = useState(false);
   const [currentDataId, setCurrentDataId] = useState('');
   const { data, isLoading } = useStocks();
-  console.log(data);
 
   return (
     <div className="content">
       <div className="content__header">
         <ContentHeader
-          pagename="Отчетность"
+          pagename="Акции"
           hasBrand={true}
           hasModel={true}
           hasTask={true}

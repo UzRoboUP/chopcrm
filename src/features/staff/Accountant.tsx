@@ -12,7 +12,7 @@ function Accountant() {
   return (
     <div className="content">
       <div className="content__header">
-        <ContentHeader pagename="track" />
+        <ContentHeader pagename="Регистраторы" hasAddButton={true} />
       </div>
       <div className="content__report"></div>
       <div className="content__main">
