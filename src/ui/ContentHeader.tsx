@@ -96,7 +96,7 @@ export default function ContentHeader({
               placeholder="Выберите дату"
               className="header-datepicer"
               defaultValue={
-                params.has('created_at__gt')
+                searchParams.get('created_at__gt')
                   ? dayjs(searchParams.get('created_at__gt'))
                   : null
               }

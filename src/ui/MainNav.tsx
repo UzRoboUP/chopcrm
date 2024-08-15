@@ -71,8 +71,6 @@ function MainNav() {
 
   const { clientCompanies } = useClientCompanies();
 
-  console.log('clientCompanies', clientCompanies);
-
   if (!userData) {
     return null;
   }

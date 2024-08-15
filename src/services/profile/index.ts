@@ -64,11 +64,11 @@ class Profile {
     }
   }
 
-  async getStaffList(staff_status: string) {
+  async getStaffList(staff_status: string,search:string) {
     try {
       return (
         await this.$api.get('/staff/list/', {
-          params: { staff_status },
+          params: { staff_status,search },
         })
       ).data;
     } catch (error) {

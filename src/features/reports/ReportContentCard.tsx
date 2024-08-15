@@ -159,7 +159,7 @@ function ReportContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <span>Тип машины</span>
               </div>
               <div className="card__item--value">
-                {item?.contract_data?.driver_data?.car_data.car_model}
+                {item?.contract_data?.driver_data?.car_data?.car_model}
               </div>
             </div>
             <div className="card__item">

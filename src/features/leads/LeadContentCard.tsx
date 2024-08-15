@@ -15,7 +15,7 @@ export type ContentCardProps = {
 function LeadContentCard({ item, pagename }: ContentCardProps) {
   const [isOpenMenu, setOpenMenu] = useState(false);
   const [isOpenCommentModal, setOpenCommentModal] = useState(false);
-
+ 
   const itemsMenu: MenuProps['items'] = [
     {
       key: '1',
@@ -96,7 +96,7 @@ function LeadContentCard({ item, pagename }: ContentCardProps) {
                 <span>Тип машины</span>
               </div>
               <div className="card__item--value">
-                {item.car_data.car_model}
+                {item?.car_data?.car_model}
               </div>
             </div>
 

@@ -11,7 +11,6 @@ function Stocks() {
   const [isOpenEditModal, setOpenEditModal] = useState(false);
   const [currentDataId, setCurrentDataId] = useState('');
   const { data, isLoading } = useStocks();
-  console.log(data);
 
   return (
     <div className="content">

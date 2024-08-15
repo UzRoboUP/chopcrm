@@ -1,7 +1,17 @@
+import { useSearchParams } from 'react-router-dom';
 import { useUser } from '../features/authentication/useUser';
+import { Input } from 'antd';
 
 function Header() {
   const { userData } = useUser();
+  const [searchParam, setSearchParam] = useSearchParams();
+  const param = new URLSearchParams(searchParam.toString());
+
+  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    param.set('search', e.target.value);
+    setSearchParam(param);
+  };
+
   return (
     <div className="header">
       <div className="header__container">
@@ -13,7 +23,7 @@ function Header() {
             <div className="header__content">
               <div className="header__search">
                 <img src="/img/header/search.svg" alt="Search Icon" />
-                <input type="text" placeholder="Поиск" />
+                <Input type="text" placeholder="Поиск" onChange={onSearch}   value={`${searchParam.get('search') ? searchParam.get('search') : ''}`}/>
               </div>
               <div className="header__actions">
                 <p>

@@ -13,7 +13,6 @@ function Reports() {
   const [isOpenEditModal, setOpenEditModal] = useState(false);
   const [currentDataId, setCurrentDataId] = useState('');
   const { reports, isLoading, reportsCount } = useReports();
-  console.log(reports);
 
   return (
     <div className="content">
