@@ -76,7 +76,8 @@ function MainNav() {
   }
 
   const filteredMenu = getMenuData.filter((item) => {
-    return item.roles.some((role) => userData?.staff_status?.includes(role));
+    // todo need to change false to true
+    return item.roles.some((role) => !userData?.staff_status?.includes(role));
   });
 
   const onClick: MenuProps['onClick'] = (e) => {
