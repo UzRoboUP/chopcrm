@@ -43,7 +43,7 @@ function CreateStaffDataModal({
               <Typography.Title className="mb-10" level={5}>
                 Фамилия
               </Typography.Title>
-              <Form.Item name="last_name" rules={[{ required: true }]}>
+              <Form.Item name="last_name" rules={[{ required: true }]} className='m-0'>
                 <Input
                   style={{ width: '100%', float: 'inline-end', height: 40 }}
                 />
@@ -51,7 +51,7 @@ function CreateStaffDataModal({
             </div>
             <div className="w-100">
               <Typography.Title level={5}>Имя</Typography.Title>
-              <Form.Item name="first_name" rules={[{ required: true }]}>
+              <Form.Item name="first_name" rules={[{ required: true }]} className='m-0'>
                 <Input
                   style={{ width: '100%', float: 'inline-end', height: 40 }}
                   defaultValue=""
@@ -64,7 +64,7 @@ function CreateStaffDataModal({
               <Typography.Title className="mb-10" level={5}>
                 Логин
               </Typography.Title>
-              <Form.Item name="username" rules={[{ required: true }]}>
+              <Form.Item name="username" rules={[{ required: true }]} className='m-0'>
                 <Input
                   style={{ width: '100%', float: 'inline-end', height: 40 }}
                 />
@@ -72,7 +72,7 @@ function CreateStaffDataModal({
             </div>
             <div className="w-100">
               <Typography.Title level={5}>Пароль</Typography.Title>
-              <Form.Item name="password" rules={[{ required: true }]}>
+              <Form.Item name="password" rules={[{ required: true }]} className='m-0'>
                 <Input
                   style={{ width: '100%', float: 'inline-end', height: 40 }}
                 />
@@ -82,7 +82,7 @@ function CreateStaffDataModal({
           <div className="d-flex gap-20 mb-20">
             <div className="w-100">
               <Typography.Title level={5}>Номер телефона</Typography.Title>
-              <Form.Item name="phone_number" rules={[{ required: true }]}>
+              <Form.Item name="phone_number" rules={[{ required: true }]} className='m-0'>
                 <Input
                   style={{ width: '100%', float: 'inline-end', height: 40 }}
                 />
