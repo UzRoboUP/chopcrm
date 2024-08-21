@@ -1,9 +1,7 @@
+import PastingApp from '../features/pasting/Pasting';
+
 function Pasting() {
-  return (
-    <div>
-      Pasting page
-    </div>
-  );
+  return <PastingApp />;
 }
 
 export default Pasting;

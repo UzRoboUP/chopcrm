@@ -1,6 +1,6 @@
 import StatusCard from './StatusCard';
 
-export default function StockStatus({
+export default function STOCK_STATUS({
   reportsCount,
 }: {
   reportsCount: {

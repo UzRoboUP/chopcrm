@@ -2,7 +2,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { Dropdown, DropdownProps, MenuProps, message, Popconfirm } from 'antd';
 import { useState } from 'react';
-import { reportPhotoStatus } from '../../utils/constants';
+import { REPORT_PHOTO_STATUS } from '../../utils/constants';
 import { convertTimestamp } from '../../utils/helpers';
 import CreateCommentModal from '../tracks/CreateCommentModal';
 import { useReportDelete } from '../tracks/useReportDelete';
@@ -67,8 +67,8 @@ function ReportContentCard({ item, pagename, onEdit }: ContentCardProps) {
       label: (
         <Popconfirm
           placement="top"
-          title="Are you sure to delete this item?"
-          description="Delete the item"
+          title="Вы уверены, что хотите удалить этот элемент?"
+          description="Удалить элемент"
           okText={'Yes'}
           cancelText="No"
           open={popconfirmOpen}
@@ -196,11 +196,11 @@ function ReportContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 className="card__item--value card__item--value-status"
                 style={{
                   backgroundColor:
-                    reportPhotoStatus[item.status_foto_report]?.color,
+                    REPORT_PHOTO_STATUS[item.status_foto_report]?.color,
                 }}
               >
                 <span className="dot-live mr-5"></span>
-                {reportPhotoStatus[item.status_foto_report]?.value}
+                {REPORT_PHOTO_STATUS[item.status_foto_report]?.value}
               </div>
             </div>
           </div>

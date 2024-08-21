@@ -2,7 +2,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { Dropdown, DropdownProps, MenuProps, message, Popconfirm } from 'antd';
 import { useState } from 'react';
-import { stockStatus } from '../../utils/constants';
+import { STOCK_STATUS } from '../../utils/constants';
 import { convertTimestamp } from '../../utils/helpers';
 import CreateCommentModal from '../tracks/CreateCommentModal';
 import { useStockDelete } from '../tracks/useStockDelete';
@@ -81,8 +81,8 @@ function StockContentCard({ item, onEdit }: ContentCardProps) {
       label: (
         <Popconfirm
           placement="top"
-          title="Are you sure to delete this item?"
-          description="Delete the item"
+          title="Вы уверены, что хотите удалить этот элемент?"
+          description="Удалить элемент"
           okText={'Yes'}
           cancelText="No"
           open={popconfirmOpen}
@@ -209,11 +209,11 @@ function StockContentCard({ item, onEdit }: ContentCardProps) {
               <div
                 className="card__item--value card__item--value-status"
                 style={{
-                  backgroundColor: stockStatus[item.status_stock]?.color,
+                  backgroundColor: STOCK_STATUS[item.status_stock]?.color,
                 }}
               >
                 <span className="dot-live mr-5"></span>
-                {stockStatus[item.status_stock]?.value}
+                {STOCK_STATUS[item.status_stock]?.value}
               </div>
             </div>
           </div>
