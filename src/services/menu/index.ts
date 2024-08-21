@@ -19,6 +19,11 @@ import icon09 from '/img/sidebar/09.svg';
 import icon09Active from '/img/sidebar/09_a.svg';
 import icon10 from '/img/sidebar/10.svg';
 import icon10Active from '/img/sidebar/10_a.svg';
+import icon11 from '/img/sidebar/11.svg';
+import icon11Active from '/img/sidebar/11_a.svg';
+import icon12 from '/img/sidebar/12.svg';
+import icon12Active from '/img/sidebar/12_a.svg';
+
 
 const lazyLoad = (
   importFunc: () => Promise<{ default: ComponentType<unknown> }>,
@@ -127,6 +132,24 @@ export const getMenuData: MenuData = [
     icon: icon10,
     iconActive: icon10Active,
     component: lazyLoad(() => import('../../pages/Accountant')),
+    roles: ['admin', 'operator'],
+  },
+  {
+    title: 'Новые водители',
+    key: 'drivers',
+    path: '/drivers',
+    icon: icon11,
+    iconActive: icon11Active,
+    component: lazyLoad(() => import('../../pages/Drivers')),
+    roles: ['admin', 'operator'],
+  },
+  {
+    title: 'Заявки',
+    key: 'request',
+    path: '/request',
+    icon: icon12,
+    iconActive: icon12Active,
+    component: lazyLoad(() => import('../../pages/Request')),
     roles: ['admin', 'operator'],
   },
 ];
