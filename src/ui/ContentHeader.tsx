@@ -23,6 +23,7 @@ export default function ContentHeader({
   hasTask = false,
   hasAddButton = false,
   taskText = '',
+  openModal,
 }: {
   pagename: string;
   hasBrand?: boolean;
@@ -34,6 +35,7 @@ export default function ContentHeader({
   hasTask?: boolean;
   taskText?: string;
   hasAddButton?: boolean;
+  openModal?: () => void;
 }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -217,7 +219,7 @@ export default function ContentHeader({
         </button>
       )}
       {hasAddButton && (
-        <button className="header__add__btn">
+        <button className="header__add__btn" onClick={openModal}>
           <img src={plus} alt="" />
           <span>Добавить</span>
         </button>

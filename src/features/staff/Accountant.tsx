@@ -4,15 +4,24 @@ import ContentHeader from '../../ui/ContentHeader';
 import EmptyCard from '../../ui/EmptyCard';
 import { useStaffList } from '../authentication/useStaffList';
 import StaffContentCard from '../tracks/StaffContentCard';
+import CreateStaffDataModal from './CreateStaffDataModal';
 function Accountant() {
   const [isOpenEditModal, setOpenEditModal] = useState(false);
   const [currentDataId, setCurrentDataId] = useState('');
   const { data, isLoading } = useStaffList('moderator');
+  const [isOpenCreateModal, setOpenCreateModal] = useState(false);
+  const openModal = () => {
+    setOpenCreateModal(true);
+  };
 
   return (
     <div className="content">
       <div className="content__header">
-        <ContentHeader pagename="Регистраторы" hasAddButton={true} />
+        <ContentHeader
+          pagename="Регистраторы"
+          hasAddButton={true}
+          openModal={openModal}
+        />
       </div>
       <div className="content__report"></div>
       <div className="content__main">
@@ -37,6 +46,11 @@ function Accountant() {
           </div>
         </div>
       </div>
+      <CreateStaffDataModal
+        isOpenModal={isOpenCreateModal}
+        onCloseModal={() => setOpenCreateModal(false)}
+        isStatus="manager"
+      />
     </div>
   );
 }
