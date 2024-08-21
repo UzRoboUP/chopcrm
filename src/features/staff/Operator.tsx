@@ -6,17 +6,25 @@ import { useStaffList } from '../authentication/useStaffList';
 import OperatorContentCard from '../tracks/StaffContentCard';
 import UpdateStaffDataModal from './UpdateStaffDataModal';
 import { useStaff } from './useStaff';
+import CreateStaffDataModal from './CreateStaffDataModal';
 function Operator() {
   const [isOpenEditModal, setOpenEditModal] = useState(false);
   const [currentDataId, setCurrentDataId] = useState('');
   const { data, isLoading } = useStaffList('operator');
-
   const { retrieveData, isLoadingData } = useStaff(currentDataId);
+  const [isOpenCreateModal, setOpenCreateModal] = useState(false);
+  const openModal = () => {
+    setOpenCreateModal(true);
+  };
 
   return (
     <div className="content">
       <div className="content__header">
-        <ContentHeader pagename="Оператор" hasAddButton={true} />
+        <ContentHeader
+          pagename="Оператор"
+          hasAddButton={true}
+          openModal={openModal}
+        />
       </div>
       <div className="content__report"></div>
       <div className="content__main">
@@ -47,6 +55,11 @@ function Operator() {
         isOpenModal={isOpenEditModal}
         isLoadingData={isLoadingData}
         onCloseModal={() => setOpenEditModal(false)}
+      />
+      <CreateStaffDataModal
+        isOpenModal={isOpenCreateModal}
+        onCloseModal={() => setOpenCreateModal(false)}
+        isStatus="operator"
       />
     </div>
   );

@@ -1,6 +1,7 @@
 import { AxiosError } from 'axios';
 import { LoginParams } from '../../models';
 import apiClient from '../axios';
+import { StaffType } from '../../features/staff/CreateStaffDataModal';
 
 type LoginResponse = {
   access: string;
@@ -64,11 +65,11 @@ class Profile {
     }
   }
 
-  async getStaffList(staff_status: string,search:string) {
+  async getStaffList(staff_status: string, search: string) {
     try {
       return (
         await this.$api.get('/staff/list/', {
-          params: { staff_status,search },
+          params: { staff_status, search },
         })
       ).data;
     } catch (error) {
@@ -96,6 +97,20 @@ class Profile {
   async getStaff(id: string) {
     try {
       return (await this.$api.get(`/staff/retrieve/${id}`)).data;
+    } catch (error) {
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      throw new Error(
+        axiosError.response?.data?.message || 'An unknown error occurred',
+      );
+    }
+  }
+
+  // Post: /staff/
+  async createStaff(data:StaffType) {
+    console.log(data);
+    
+    try {
+      return (await this.$api.post(`/${data.status}/create/`,data)).data;
     } catch (error) {
       const axiosError = error as AxiosError<ApiErrorResponse>;
       throw new Error(
