@@ -15,7 +15,7 @@ export type ContentCardProps = {
 function LeadContentCard({ item, pagename }: ContentCardProps) {
   const [isOpenMenu, setOpenMenu] = useState(false);
   const [isOpenCommentModal, setOpenCommentModal] = useState(false);
- 
+
   const itemsMenu: MenuProps['items'] = [
     {
       key: '1',
