@@ -76,7 +76,7 @@ function MainNav() {
   }
 
   const filteredMenu = getMenuData.filter((item) => {
-    return item.roles.some((role) => !userData?.staff_status?.includes(role));
+    return item.roles.some((role) => userData?.staff_status?.includes(role));
   });
 
   const onClick: MenuProps['onClick'] = (e) => {
@@ -130,10 +130,57 @@ function MainNav() {
     return items;
   };
 
+  const getDriversMenuItems = (icon, iconActive, title) => {
+    const items = [
+      {
+        key: '101',
+        label: (
+          <StyledNavLink to={`/drivers`}>
+            {({ isActive }) => (
+              <>
+                <img src={isActive ? iconActive : icon} alt="Icon" />
+                <span>{title}</span>
+              </>
+            )}
+          </StyledNavLink>
+        ),
+        children: [
+          { key: '1', label: (<span className="sidebar__nav-sub-link">Черновики</span>) },
+          { key: '2', label:(<span className="sidebar__nav-sub-link">Проверка</span>) },
+        ],
+      },
+    ];
+    return items;
+  };
+  const getRequestMenuItems = (icon, iconActive, title) => {
+    const items = [
+      {
+        key: '102',
+        label: (
+          <StyledNavLink to={`/request`}>
+            {({ isActive }) => (
+              <>
+                <img src={isActive ? iconActive : icon} alt="Icon" />
+                <span>{title}</span>
+              </>
+            )}
+          </StyledNavLink>
+        ),
+        children: [
+          { key: '1', label:(<span className="sidebar__nav-sub-link"> Заявки клиентов</span>) },
+          { key: '2', label:(<span className="sidebar__nav-sub-link">Заявки водителей</span>) },
+          { key: '3', label: (<span className="sidebar__nav-sub-link">Создать компанию</span>) },
+        ],
+      },
+    ];
+    return items;
+  };
+
   return (
     <nav className="sidebar__nav">
       <NavList>
         {filteredMenu.map(({ key, path, icon, title, iconActive }) => {
+          console.log(key);
           if (key === 'stock') {
             return (
               <Menu
@@ -152,6 +199,43 @@ function MainNav() {
               />
             );
           }
+          if (key === 'drivers') {
+            return (
+              <Menu
+                key={key}
+                onClick={onClick}
+                style={{ padding: '1.2rem 12px !important' }}
+                expandIcon={
+                  <img
+                    src={`/img/sidebar/${path.includes(pathname) ? 'arrow_w' : 'arrow_b'}.svg`}
+                    alt="arrow"
+                  />
+                }
+                defaultOpenKeys={pathname.includes('drivers') ? ['101'] : []}
+                mode="inline"
+                items={getDriversMenuItems(icon, iconActive, title)}
+              />
+            );
+          }
+          if (key === 'request') {
+            return (
+              <Menu
+                key={key}
+                onClick={onClick}
+                style={{ padding: '1.2rem 12px !important' }}
+                expandIcon={
+                  <img
+                    src={`/img/sidebar/${path.includes(pathname) ? 'arrow_w' : 'arrow_b'}.svg`}
+                    alt="arrow"
+                  />
+                }
+                defaultOpenKeys={pathname.includes('request') ? ['102'] : []}
+                mode="inline"
+                items={getRequestMenuItems(icon, iconActive, title)}
+              />
+            );
+          }
+
           return (
             <li key={key}>
               <StyledNavLink to={path}>

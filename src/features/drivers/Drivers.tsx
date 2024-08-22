@@ -1,9 +1,6 @@
-import React from 'react'
+
+import { Navigate } from 'react-router-dom'
 
 export default function Drivers() {
-  return (
-    <div>
-      Drivers
-    </div>
-  )
+  return <Navigate to={"/drivers/drafts"} replace/>
 }

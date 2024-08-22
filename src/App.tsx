@@ -1,17 +1,17 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
-import { Skeleton } from "antd";
-import { Suspense, createElement } from "react";
-import { BreadcrumbProvider } from "./context/BreadcrumbContext.tsx";
-import { DarkModeProvider } from "./context/DarkModeContext";
-import Login from "./pages/Login.tsx";
-import PageNotFound from "./pages/PageNotFound.tsx";
-import { getMenuData } from "./services/menu/index.ts";
-import GlobalStyles from "./styles/GlobalStyles";
-import AppLayout from "./ui/AppLayout.tsx";
-import ProtectedRoute from "./ui/ProtectedRoute.tsx";
+import { Skeleton } from 'antd';
+import { Suspense, createElement } from 'react';
+import { BreadcrumbProvider } from './context/BreadcrumbContext.tsx';
+import { DarkModeProvider } from './context/DarkModeContext';
+import Login from './pages/Login.tsx';
+import PageNotFound from './pages/PageNotFound.tsx';
+import { getMenuData } from './services/menu/index.ts';
+import GlobalStyles from './styles/GlobalStyles';
+import AppLayout from './ui/AppLayout.tsx';
+import ProtectedRoute from './ui/ProtectedRoute.tsx';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -32,14 +32,33 @@ function App() {
             <Routes>
               <Route path="/" element={<AppLayout />}>
                 <Route index element={<Navigate replace to="analytics" />} />
-                {getMenuData.map(menu => {
-                  return (<Route key={menu.key} path={menu.path} element={
-                    <Suspense fallback={<Skeleton active />}>
-                      <ProtectedRoute roles={menu.roles}>
-                        {createElement(menu.component)}
-                      </ProtectedRoute>
-                    </Suspense>
-                  } />);
+                {getMenuData.map((menu) => {
+                  return (
+                    <Route
+                      key={menu.key}
+                      path={menu.path}
+                      element={
+                        <Suspense fallback={<Skeleton active />}>
+                          <ProtectedRoute roles={menu.roles}>
+                            {createElement(menu.component)}
+                          </ProtectedRoute>
+                        </Suspense>
+                      }
+                    >
+                      {menu?.elements &&
+                        menu?.elements.map((item) =>{
+                          console.log(item);
+                          
+                          return  (
+                            <Route
+                              key={item.path}
+                              path={item.path}
+                              element={createElement(item.el)}
+                            />
+                          )
+                        })}
+                    </Route>
+                  );
                 })}
               </Route>
               <Route path="login" element={<Login />} />
@@ -47,7 +66,6 @@ function App() {
             </Routes>
           </BreadcrumbProvider>
         </BrowserRouter>
-
       </QueryClientProvider>
     </DarkModeProvider>
   );
