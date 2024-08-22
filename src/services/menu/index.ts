@@ -19,8 +19,13 @@ import icon09 from '/img/sidebar/09.svg';
 import icon09Active from '/img/sidebar/09_a.svg';
 import icon10 from '/img/sidebar/10.svg';
 import icon10Active from '/img/sidebar/10_a.svg';
+import icon11 from '/img/sidebar/11.svg';
+import icon11Active from '/img/sidebar/11_a.svg';
+import icon12 from '/img/sidebar/12.svg';
+import icon12Active from '/img/sidebar/12_a.svg';
+import { MenuNestedData, driversMenu } from './nestedElements';
 
-const lazyLoad = (
+export const lazyLoad = (
   importFunc: () => Promise<{ default: ComponentType<unknown> }>,
 ) => {
   return lazy(importFunc);
@@ -34,6 +39,7 @@ export type MenuItem = {
   iconActive: string;
   component: React.FC<unknown>;
   roles: string[];
+  elements?:MenuNestedData[]
 };
 
 type MenuData = MenuItem[];
@@ -46,7 +52,7 @@ export const getMenuData: MenuData = [
     icon: icon01,
     iconActive: icon01Active,
     component: lazyLoad(() => import('../../pages/Dashboard')),
-    roles: ['admin', 'operator'],
+    roles: ['admin', 'operator',"manager"],
   },
   {
     title: 'Отслежование',
@@ -55,7 +61,7 @@ export const getMenuData: MenuData = [
     icon: icon02,
     iconActive: icon02Active,
     component: lazyLoad(() => import('../../pages/Tracks')),
-    roles: ['admin', 'operator'],
+    roles: ['admin', 'operator',"manager"],
   },
   {
     title: 'Отчетность',
@@ -64,7 +70,7 @@ export const getMenuData: MenuData = [
     icon: icon03,
     iconActive: icon03Active,
     component: lazyLoad(() => import('../../pages/Reports')),
-    roles: ['admin', 'operator'],
+    roles: ['admin', 'operator',"manager"],
   },
   {
     title: 'Лиды',
@@ -73,7 +79,7 @@ export const getMenuData: MenuData = [
     icon: icon04,
     iconActive: icon04Active,
     component: lazyLoad(() => import('../../pages/Leads')),
-    roles: ['admin', 'operator'],
+    roles: ['admin', 'operator',"manager"],
   },
   {
     title: 'Акции',
@@ -82,7 +88,7 @@ export const getMenuData: MenuData = [
     icon: icon05,
     iconActive: icon05Active,
     component: lazyLoad(() => import('../../pages/Stock')),
-    roles: ['admin', 'operator'],
+    roles: ['admin', 'operator',"manager"],
   },
   {
     title: 'Обклейка',
@@ -91,7 +97,7 @@ export const getMenuData: MenuData = [
     icon: icon06,
     iconActive: icon06Active,
     component: lazyLoad(() => import('../../pages/Pasting')),
-    roles: ['admin', 'operator'],
+    roles: ['admin', 'operator',"manager"],
   },
   {
     title: 'Настройки',
@@ -100,7 +106,7 @@ export const getMenuData: MenuData = [
     icon: icon07,
     iconActive: icon07Active,
     component: lazyLoad(() => import('../../pages/Settings')),
-    roles: ['admin', 'operator'],
+    roles: ['admin', 'operator',"manager"],
   },
   {
     title: 'Оператор',
@@ -109,7 +115,7 @@ export const getMenuData: MenuData = [
     icon: icon08,
     iconActive: icon08Active,
     component: lazyLoad(() => import('../../pages/Operator')),
-    roles: ['admin', 'operator'],
+    roles: ['admin', 'operator',"manager"],
   },
   {
     title: 'Регистратор',
@@ -118,7 +124,7 @@ export const getMenuData: MenuData = [
     icon: icon09,
     iconActive: icon09Active,
     component: lazyLoad(() => import('../../pages/Registration')),
-    roles: ['admin', 'operator'],
+    roles: ['admin', 'operator',"manager"],
   },
   {
     title: 'Бухгалтерия',
@@ -127,6 +133,25 @@ export const getMenuData: MenuData = [
     icon: icon10,
     iconActive: icon10Active,
     component: lazyLoad(() => import('../../pages/Accountant')),
-    roles: ['admin', 'operator'],
+    roles: ['admin', 'operator',"manager"],
+  },
+  {
+    title: 'Новые водители',
+    key: 'drivers',
+    path: '/drivers',
+    icon: icon11,
+    iconActive: icon11Active,
+    component: lazyLoad(() => import('../../pages/Drivers')),
+    roles: ["moderator",],
+    elements:driversMenu
+  },
+  {
+    title: 'Заявки',
+    key: 'request',
+    path: '/request',
+    icon: icon12,
+    iconActive: icon12Active,
+    component: lazyLoad(() => import('../../pages/Request')),
+    roles: ["moderator",],
   },
 ];
