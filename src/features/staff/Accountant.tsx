@@ -5,11 +5,14 @@ import EmptyCard from '../../ui/EmptyCard';
 import { useStaffList } from '../authentication/useStaffList';
 import StaffContentCard from '../tracks/StaffContentCard';
 import CreateStaffDataModal from './CreateStaffDataModal';
+import UpdateStaffDataModal from './UpdateStaffDataModal';
+import { useStaff } from './useStaff';
 function Accountant() {
   const [isOpenEditModal, setOpenEditModal] = useState(false);
   const [currentDataId, setCurrentDataId] = useState('');
-  const { data, isLoading } = useStaffList('moderator');
+  const { data, isLoading } = useStaffList('accountant');
   const [isOpenCreateModal, setOpenCreateModal] = useState(false);
+  const { retrieveData, isLoadingData } = useStaff(currentDataId);
   const openModal = () => {
     setOpenCreateModal(true);
   };
@@ -46,10 +49,17 @@ function Accountant() {
           </div>
         </div>
       </div>
+      <UpdateStaffDataModal
+        pagename="accountant"
+        retrieveData={retrieveData}
+        isOpenModal={isOpenEditModal}
+        isLoadingData={isLoadingData}
+        onCloseModal={() => setOpenEditModal(false)}
+      />
       <CreateStaffDataModal
         isOpenModal={isOpenCreateModal}
         onCloseModal={() => setOpenCreateModal(false)}
-        isStatus="manager"
+        isStatus="accountant"
       />
     </div>
   );

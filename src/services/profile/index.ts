@@ -65,6 +65,23 @@ class Profile {
     }
   }
 
+  async updateStaff({ ...payload }): Promise<LoginResponse> {
+    try {
+      const { data } = await this.$api.patch<LoginResponse>(
+        `/staff/update/${payload.id}`,
+        {
+          ...payload,
+        },
+      );
+      return data;
+    } catch (error) {
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      throw new Error(
+        axiosError.response?.data?.message || 'An unknown error occurred',
+      );
+    }
+  }
+
   async getStaffList(staff_status: string, search: string) {
     try {
       return (
@@ -106,11 +123,11 @@ class Profile {
   }
 
   // Post: /staff/
-  async createStaff(data:StaffType) {
+  async createStaff(data: StaffType) {
     console.log(data);
-    
+
     try {
-      return (await this.$api.post(`/${data.status}/create/`,data)).data;
+      return (await this.$api.post(`/${data.status}/create/`, data)).data;
     } catch (error) {
       const axiosError = error as AxiosError<ApiErrorResponse>;
       throw new Error(

@@ -2,9 +2,9 @@
 /* eslint-disable react/prop-types */
 import { useQueryClient } from '@tanstack/react-query';
 import { Button, Input, message, Typography } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Modal from '../../ui/Modal';
-import { useTrackUpdate } from '../tracks/useTrackUpdate';
+import { useStaffUpdate } from './useStaffUpdate';
 
 function UpdateStaffDataModal({
   pagename,
@@ -17,53 +17,41 @@ function UpdateStaffDataModal({
   const [fullName, setFullName] = useState('');
   console.log(pagename, retrieveData);
 
-  const [trackData, setTrackData] = useState({
+  const [staffData, setStaffData] = useState({
     id: retrieveData?.id,
-    status_contract: retrieveData?.status_contract,
-    companyName: retrieveData?.company?.name,
-    fullName: retrieveData?.driver?.full_name,
-    phoneNumber: retrieveData?.driver?.phone_number,
-    carModel: retrieveData?.driver?.car_data?.car_model,
+    username: retrieveData?.username || '',
+    password: retrieveData?.password || '',
+    first_name: retrieveData?.first_name,
+    last_name: retrieveData?.last_name,
+    surname: retrieveData?.surname || '',
+    image: retrieveData?.image || '',
+    phone_number: retrieveData?.phone_number,
+    staff_status: retrieveData?.staff_status,
+    last_activity: new Date(),
   });
 
-  const { updateTrack, isLoadingUpdate } = useTrackUpdate();
+  useEffect(() => {
+    if (retrieveData && !isLoadingData) {
+      setStaffData((prev) => ({
+        ...prev,
+        ...retrieveData,
+        image: retrieveData?.image || '',
+      }));
+    }
+  }, [retrieveData, isLoadingData]);
 
-  // useEffect(() => {
-  //   setTrackData({
-  //     id: retrieveData?.id,
-  //     status_contract: retrieveData?.status_contract,
-  //     companyName: retrieveData?.company.name,
-  //     fullName: retrieveData?.driver.full_name,
-  //     phoneNumber: retrieveData?.driver.phone_number,
-  //     carModel: retrieveData?.driver.car_data.car_model,
-  //   });
-  //   setFullName(retrieveData?.driver.full_name);
-  // }, [retrieveData]);
+  const { updateStaff, isLoadingUpdate } = useStaffUpdate();
 
   const handleSaveUpdate = () => {
-    const model = {
-      id: retrieveData.id,
-      company: {
-        name: trackData.companyName,
-        id: retrieveData.company?.id,
-      },
-      driver: {
-        full_name: trackData.fullName,
-        phone_number: trackData.phoneNumber,
-        id: retrieveData.driver?.id,
-        car_data: {
-          car_model: trackData.carModel,
-        },
-      },
-      status_contract: trackData.status_contract,
-    };
-    updateTrack(
+    const model = { ...staffData, id: retrieveData?.id };
+    console.log(model);
+    updateStaff(
       { ...model },
       {
         onSuccess: (data) => {
-          queryClient.setQueryData(['trackUpdate'], data);
-          queryClient.invalidateQueries({ queryKey: ['tracks'] });
-          message.success('Track updated successfully');
+          queryClient.setQueryData(['staffUpdate'], data);
+          queryClient.invalidateQueries({ queryKey: ['staff'] });
+          message.success('Staff updated successfully');
           onCloseModal();
         },
       },
@@ -86,9 +74,9 @@ function UpdateStaffDataModal({
             </Typography.Title>
             <Input
               style={{ width: '100%', float: 'inline-end', height: 40 }}
-              value={trackData.fullName}
-              onChange={({ target: { value: fullName } }) =>
-                setTrackData((prev) => ({ ...prev, fullName }))
+              value={staffData.last_name}
+              onChange={({ target: { value: last_name } }) =>
+                setStaffData((prev) => ({ ...prev, last_name }))
               }
             />
           </div>
@@ -96,7 +84,10 @@ function UpdateStaffDataModal({
             <Typography.Title level={5}>Имя</Typography.Title>
             <Input
               style={{ width: '100%', float: 'inline-end', height: 40 }}
-              defaultValue=""
+              value={staffData.first_name}
+              onChange={({ target: { value: first_name } }) =>
+                setStaffData((prev) => ({ ...prev, first_name }))
+              }
             />
           </div>
         </div>
@@ -107,9 +98,9 @@ function UpdateStaffDataModal({
             </Typography.Title>
             <Input
               style={{ width: '100%', float: 'inline-end', height: 40 }}
-              value={trackData.fullName}
-              onChange={({ target: { value: fullName } }) =>
-                setTrackData((prev) => ({ ...prev, fullName }))
+              value={staffData.username}
+              onChange={({ target: { value: username } }) =>
+                setStaffData((prev) => ({ ...prev, username }))
               }
             />
           </div>
@@ -117,7 +108,10 @@ function UpdateStaffDataModal({
             <Typography.Title level={5}>Пароль</Typography.Title>
             <Input
               style={{ width: '100%', float: 'inline-end', height: 40 }}
-              defaultValue=""
+              value={staffData.password}
+              onChange={({ target: { value: password } }) =>
+                setStaffData((prev) => ({ ...prev, password }))
+              }
             />
           </div>
         </div>
@@ -126,9 +120,9 @@ function UpdateStaffDataModal({
             <Typography.Title level={5}>Номер телефона</Typography.Title>
             <Input
               style={{ width: '100%', float: 'inline-end', height: 40 }}
-              value={trackData.phoneNumber}
-              onChange={({ target: { value: phoneNumber } }) =>
-                setTrackData((prev) => ({ ...prev, phoneNumber }))
+              value={staffData.phone_number}
+              onChange={({ target: { value: phone_number } }) =>
+                setStaffData((prev) => ({ ...prev, phone_number }))
               }
             />
           </div>

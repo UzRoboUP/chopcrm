@@ -201,7 +201,6 @@ function MainNav() {
     <nav className="sidebar__nav">
       <NavList>
         {filteredMenu.map(({ key, path, icon, title, iconActive }) => {
-          console.log(key);
           if (key === 'stock') {
             return (
               <Menu

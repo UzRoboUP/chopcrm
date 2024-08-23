@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import Profile from '../../services/profile';
 import { useSearchParams } from 'react-router-dom';
+import Profile from '../../services/profile';
 
 export function useStaffList(staff_status: string) {
   const [searchParams] = useSearchParams();
@@ -11,8 +11,8 @@ export function useStaffList(staff_status: string) {
     isError,
     isFetching,
   } = useQuery({
-    queryKey: ['staffList',search],
-    queryFn: () => Profile.getStaffList(staff_status as string,search),
+    queryKey: ['staffList', search, staff_status],
+    queryFn: () => Profile.getStaffList(staff_status as string, search),
     enabled: !!staff_status,
     retry: 1,
   });

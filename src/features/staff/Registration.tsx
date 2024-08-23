@@ -5,18 +5,25 @@ import EmptyCard from '../../ui/EmptyCard';
 import { useStaffList } from '../authentication/useStaffList';
 import OperatorContentCard from '../tracks/StaffContentCard';
 import CreateStaffDataModal from './CreateStaffDataModal';
+import UpdateStaffDataModal from './UpdateStaffDataModal';
+import { useStaff } from './useStaff';
 function Registration() {
   const [isOpenEditModal, setOpenEditModal] = useState(false);
   const [currentDataId, setCurrentDataId] = useState('');
   const { data, isLoading } = useStaffList('moderator');
   const [isOpenCreateModal, setOpenCreateModal] = useState(false);
+  const { retrieveData, isLoadingData } = useStaff(currentDataId);
   const openModal = () => {
     setOpenCreateModal(true);
   };
   return (
     <div className="content">
       <div className="content__header">
-        <ContentHeader pagename="Регистраторы"  hasAddButton={true} openModal={openModal}/>
+        <ContentHeader
+          pagename="Регистраторы"
+          hasAddButton={true}
+          openModal={openModal}
+        />
       </div>
       <div className="content__report"></div>
       <div className="content__main">
@@ -41,6 +48,13 @@ function Registration() {
           </div>
         </div>
       </div>
+      <UpdateStaffDataModal
+        pagename="moderator"
+        retrieveData={retrieveData}
+        isOpenModal={isOpenEditModal}
+        isLoadingData={isLoadingData}
+        onCloseModal={() => setOpenEditModal(false)}
+      />
       <CreateStaffDataModal
         isOpenModal={isOpenCreateModal}
         onCloseModal={() => setOpenCreateModal(false)}
