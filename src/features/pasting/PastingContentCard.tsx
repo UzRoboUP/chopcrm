@@ -11,11 +11,16 @@ export type ContentCardProps = {
   item: { id: string };
   pagename: PageNameType;
   onEdit: () => void;
+  onOpenModal: () => void;
 };
 
-function PastingContentCard({ item, pagename, onEdit }: ContentCardProps) {
+function PastingContentCard({
+  item,
+  pagename,
+  onOpenModal,
+  onEdit,
+}: ContentCardProps) {
   const queryClient = useQueryClient();
-  console.log('pasting: ', item);
 
   const [isOpenMenu, setOpenMenu] = useState(false);
   const [popconfirmOpen, setPopconfirmOpen] = useState(false);
@@ -171,12 +176,12 @@ function PastingContentCard({ item, pagename, onEdit }: ContentCardProps) {
             {['notified', 'confirmed', 'pending'].includes(
               item.status_pasting,
             ) && (
-              <button className="card__bottom--btn">
+              <button className="card__bottom--btn" onClick={onOpenModal}>
                 <span className="ml-5">Посмотреть</span>
               </button>
             )}
             {item.status_pasting === 'photo_report_rejected' && (
-              <button className="card__bottom--btn">
+              <button className="card__bottom--btn" onClick={onOpenModal}>
                 <svg
                   width="20"
                   height="20"
@@ -199,7 +204,7 @@ function PastingContentCard({ item, pagename, onEdit }: ContentCardProps) {
               </button>
             )}
             {item.status_pasting === 'non-assigned' && (
-              <button className="card__bottom--btn">
+              <button className="card__bottom--btn" onClick={onOpenModal}>
                 <svg
                   width="20"
                   height="20"
