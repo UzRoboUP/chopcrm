@@ -78,7 +78,6 @@ function MainNav() {
   const filteredMenu = getMenuData.filter((item) => {
     return item.roles.some((role) => userData?.staff_status?.includes(role));
   });
-
   const onClick: MenuProps['onClick'] = (e) => {
     console.log('clicked: ', e);
   };
@@ -135,7 +134,7 @@ function MainNav() {
       {
         key: '101',
         label: (
-          <StyledNavLink to={`/drivers`}>
+          <StyledNavLink to={`/drivers/drafts`}>
             {({ isActive }) => (
               <>
                 <img src={isActive ? iconActive : icon} alt="Icon" />
@@ -145,8 +144,23 @@ function MainNav() {
           </StyledNavLink>
         ),
         children: [
-          { key: '1', label: (<span className="sidebar__nav-sub-link">Черновики</span>) },
-          { key: '2', label:(<span className="sidebar__nav-sub-link">Проверка</span>) },
+          {
+            key: '1',
+            // className:"active-client-company",
+            label: (
+              <NavLink to={'/drivers/drafts'}>
+                <span className="sidebar__nav-sub-link">Черновики</span>
+              </NavLink>
+            ),
+          },
+          {
+            key: '2',
+            label: (
+              <NavLink to={'/drivers/checkout'}>
+                <span className="sidebar__nav-sub-link">Проверка</span>
+              </NavLink>
+            ),
+          },
         ],
       },
     ];
@@ -157,7 +171,7 @@ function MainNav() {
       {
         key: '102',
         label: (
-          <StyledNavLink to={`/request`}>
+          <StyledNavLink to={`/request/client`}>
             {({ isActive }) => (
               <>
                 <img src={isActive ? iconActive : icon} alt="Icon" />
@@ -167,9 +181,30 @@ function MainNav() {
           </StyledNavLink>
         ),
         children: [
-          { key: '1', label:(<span className="sidebar__nav-sub-link"> Заявки клиентов</span>) },
-          { key: '2', label:(<span className="sidebar__nav-sub-link">Заявки водителей</span>) },
-          { key: '3', label: (<span className="sidebar__nav-sub-link">Создать компанию</span>) },
+          {
+            key: '1',
+            label: (
+              <NavLink to={'/request/client'}>
+                <span className="sidebar__nav-sub-link">Заявки клиентов</span>
+              </NavLink>
+            ),
+          },
+          {
+            key: '2',
+            label: (
+              <NavLink to={'/request/driver'}>
+                <span className="sidebar__nav-sub-link">Заявки водителей</span>
+              </NavLink>
+            ),
+          },
+          {
+            key: '3',
+            label: (
+              <NavLink to={'/request/company'}>
+                <span className="sidebar__nav-sub-link">Создать компанию</span>
+              </NavLink>
+            ),
+          },
         ],
       },
     ];

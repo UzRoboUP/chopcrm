@@ -23,7 +23,7 @@ import icon11 from '/img/sidebar/11.svg';
 import icon11Active from '/img/sidebar/11_a.svg';
 import icon12 from '/img/sidebar/12.svg';
 import icon12Active from '/img/sidebar/12_a.svg';
-import { MenuNestedData, driversMenu } from './nestedElements';
+import { MenuNestedData, driversMenu, requestMenu } from './nestedElements';
 
 export const lazyLoad = (
   importFunc: () => Promise<{ default: ComponentType<unknown> }>,
@@ -153,5 +153,6 @@ export const getMenuData: MenuData = [
     iconActive: icon12Active,
     component: lazyLoad(() => import('../../pages/Request')),
     roles: ["moderator",],
+    elements:requestMenu
   },
 ];

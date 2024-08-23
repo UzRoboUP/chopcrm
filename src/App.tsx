@@ -46,16 +46,14 @@ function App() {
                       }
                     >
                       {menu?.elements &&
-                        menu?.elements.map((item) =>{
-                          console.log(item);
-                          
-                          return  (
+                        menu?.elements.map((item) => {
+                          return (
                             <Route
                               key={item.path}
                               path={item.path}
                               element={createElement(item.el)}
                             />
-                          )
+                          );
                         })}
                     </Route>
                   );
