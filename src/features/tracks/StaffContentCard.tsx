@@ -78,8 +78,8 @@ function StaffContentCard({ item, pagename, onEdit }: ContentCardProps) {
       label: (
         <Popconfirm
           placement="top"
-          title="Are you sure to delete this item?"
-          description="Delete the item"
+          title="Вы уверены, что хотите удалить этот элемент?"
+          description="Удалить элемент"
           okText={'Yes'}
           cancelText="No"
           open={popconfirmOpen}
