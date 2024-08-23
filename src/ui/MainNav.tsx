@@ -181,6 +181,7 @@ function MainNav() {
           </StyledNavLink>
         ),
         children: [
+          [
           {
             key: '1',
             label: (
@@ -205,6 +206,7 @@ function MainNav() {
               </NavLink>
             ),
           },
+        ],
         ],
       },
     ];

@@ -53,6 +53,7 @@ class Pastings {
 
   // UPDATE: /pasting/update/:id/
   async updatePasting({ ...payload }) {
+    console.log('pa', payload);
     try {
       const response = await this.$api.put(`/pasting/update/${payload.id}/`, {
         ...payload,

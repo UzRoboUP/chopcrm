@@ -8,17 +8,48 @@ import EmptyCard from '../../ui/EmptyCard';
 import Modal from '../../ui/Modal';
 import PastingContentCard from './PastingContentCard';
 import { usePastings } from './usePastings';
+import { useUpdatePasting } from './useUpdatePasting';
 
 function Pasting() {
   const [isOpenModal, setOpenModal] = useState(false);
   const [isOpenEditModal, setOpenEditModal] = useState(false);
   const [currentDataId, setCurrentDataId] = useState('');
+  const [currentData, setCurrentData] = useState({});
   const { data: pastings, isLoading } = usePastings();
+  const { updatePasting, isLoadingUpdate } = useUpdatePasting();
+
+  const [timeDate, setTimeDate] = useState({
+    time: '',
+    date: '',
+  });
 
   dayjs.extend(customParseFormat);
 
   const onChangeTime: TimePickerProps['onChange'] = (time, timeString) => {
     console.log(time, timeString);
+  };
+
+  const onChangeDate: TimePickerProps['onChange'] = (date, dateString) => {
+    console.log(date, dateString);
+  };
+
+  const handleConfirm = () => {
+    const combinedDateTime = `${timeDate.date}T${timeDate.time}:00Z`;
+    const dateObject = new Date(combinedDateTime);
+    updatePasting(
+      {
+        id: currentData?.id,
+        contract: currentData?.contract,
+        status_pasting: currentData?.status_pasting,
+        pasting_time: dateObject.toISOString(),
+      },
+      {
+        onSuccess() {
+          setOpenModal(false);
+          setCurrentData({});
+        },
+      },
+    );
   };
 
   return (
@@ -30,7 +61,6 @@ function Pasting() {
           hasModel={true}
           hasSaveButton={true}
         />
-        <button onClick={() => setOpenModal(true)}>Open modal</button>
       </div>
       <div className="content__report content__report__container">
         {/* <ReportStatus reportsCount={reportsCount} /> */}
@@ -44,6 +74,10 @@ function Pasting() {
                   key={item.id}
                   item={item}
                   pagename="pasting"
+                  onOpenModal={() => {
+                    setCurrentData(item);
+                    setOpenModal(true);
+                  }}
                   onEdit={() => {
                     setCurrentDataId('');
                     setOpenEditModal(true);
@@ -66,7 +100,7 @@ function Pasting() {
         }}
       >
         <div className="d-flex justify-center mt-20 mb-20">
-          <DatePicker />
+          <DatePicker onChange={onChangeDate} />
           <TimePicker
             className="ml-20"
             defaultValue={dayjs('12:08', 'HH:mm')}
@@ -79,10 +113,17 @@ function Pasting() {
           <button
             className="btn btn-decline"
             onClick={() => setOpenModal(false)}
+            disabled={isLoadingUpdate}
           >
             Отклонить
           </button>
-          <button className="btn btn-confirm">Подтвердить</button>
+          <button
+            disabled={isLoadingUpdate}
+            className="btn btn-confirm"
+            onClick={handleConfirm}
+          >
+            Подтвердить
+          </button>
         </div>
       </Modal>
     </div>

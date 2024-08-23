@@ -42,7 +42,7 @@ function Stocks() {
                 />
               ))
             ) : (
-              <EmptyCard text="tracks" />
+              <EmptyCard text="stock" />
             )}
           </div>
         </div>
