@@ -2,44 +2,58 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { Dropdown, DropdownProps, MenuProps, message, Popconfirm } from 'antd';
 import { useState } from 'react';
-import { STOCK_STATUS } from '../../utils/constants';
+import { CLIENT_COMPANY_STATUS } from '../../utils/constants';
 import { convertTimestamp } from '../../utils/helpers';
-import CreateCommentModal from '../tracks/CreateCommentModal';
-import { useStockDelete } from '../tracks/useStockDelete';
+import { usePastingDelete } from '../pasting/usePastingDelete';
 
-export type PageNameType = 'track' | 'report' | 'lead' | 'stock';
+export type PageNameType =
+  | 'track'
+  | 'report'
+  | 'lead'
+  | 'stock'
+  | 'pasting'
+  | 'company';
 
 export type ContentCardProps = {
   item: { id: string };
+  pagename: PageNameType;
   onEdit: () => void;
+  onOpenModal: () => void;
 };
 
-function StockContentCard({ item, onEdit }: ContentCardProps) {
+function CompanyContentCard({
+  item,
+  pagename,
+  onOpenModal,
+  onEdit,
+}: ContentCardProps) {
   const queryClient = useQueryClient();
+
+  console.log('item', item);
 
   const [isOpenMenu, setOpenMenu] = useState(false);
   const [popconfirmOpen, setPopconfirmOpen] = useState(false);
-  const [isOpenCommentModal, setOpenCommentModal] = useState(false);
-
-  const { deleteStock, isLoadingDelete } = useStockDelete();
+  const { deletePasting, isLoadingDelete } = usePastingDelete();
 
   const handleDelete = () => {
-    deleteStock(item.id, {
+    deletePasting(item.id, {
       onSuccess: (data) => {
-        queryClient.setQueryData(['stockDelete'], data);
-        queryClient.invalidateQueries({ queryKey: ['stocks'] });
-        message.success('Stock deleted successfully');
+        queryClient.setQueryData(['pastingDelete'], data);
+        queryClient.invalidateQueries({ queryKey: ['pastings'] });
+        message.success('Pasting deleted successfully');
       },
     });
   };
+
+  const handleConfirm = () => {};
 
   const itemsMenu: MenuProps['items'] = [
     {
       key: '1',
       label: (
         <p className="d-flex align-center">
-          <img src="/img/card/menu/destination.svg" alt="" />
-          <span className="card__menu--text ml-10">Место нахождения</span>
+          <img src="/img/card/menu/plus.svg" alt="" />
+          <span className="card__menu--text ml-10">Добавить водителей</span>
         </p>
       ),
       className: 'mb-4',
@@ -47,31 +61,11 @@ function StockContentCard({ item, onEdit }: ContentCardProps) {
     {
       key: '2',
       label: (
-        <p
-          onClick={() => {
-            setOpenMenu(false);
-            setOpenCommentModal(true);
-          }}
-          className="d-flex align-center"
-        >
-          <img src="/img/card/menu/comment.svg" alt="" />
-          <span className="card__menu--text ml-10">Оставить коментарий</span>
-        </p>
-      ),
-      className: 'mb-4',
-    },
-    {
-      key: '3',
-      label: (
-        <p
-          onClick={() => {
-            onEdit();
-            setOpenMenu(false);
-          }}
-          className="d-flex align-center"
-        >
-          <img src="/img/card/menu/edit.svg" alt="" />
-          <span className="card__menu--text ml-10">Изменить профиль</span>
+        <p className="d-flex align-center">
+          <img src="/img/card/menu/d-check.svg" alt="" />
+          <span className="card__menu--text ml-10">
+            Просмотреть всех водителей
+          </span>
         </p>
       ),
       className: 'mb-4',
@@ -127,18 +121,15 @@ function StockContentCard({ item, onEdit }: ContentCardProps) {
           <div className="card__header">
             <div className="card__user">
               <p className="card__user--avatar">
-                <img src="/img/card/empty-avatar.svg" alt="avatar" />
+                <img
+                  src={item.image ? item.image : '/img/card/empty-avatar.svg'}
+                  alt="avatar"
+                />
               </p>
               <div className="card__user--info">
                 <p className="name">
-                  {item?.contract_data.driver_data?.full_name}
+                  {item?.contract_data?.driver_data?.full_name}
                 </p>
-                {item?.rate && (
-                  <p className="rate">
-                    <span>{item.rate}</span>
-                    <img src="/img/card/star.svg" alt="rate" />
-                  </p>
-                )}
               </div>
             </div>
             <Dropdown
@@ -162,20 +153,20 @@ function StockContentCard({ item, onEdit }: ContentCardProps) {
           <div className="card__items">
             <div className="card__item">
               <div className="card__item--label">
-                <img src="/img/card/phone.svg" alt="" />
-                <span>Телефон</span>
-              </div>
-              <div className="card__item--value">
-                {item?.contract_data.driver_data?.phone_number}
-              </div>
-            </div>
-            <div className="card__item">
-              <div className="card__item--label">
                 <img src="/img/card/car.svg" alt="" />
                 <span>Тип машины</span>
               </div>
               <div className="card__item--value">
-                {item?.contract_data.driver_data?.car_data_get.car_model}
+                {item?.contract_data?.driver_data?.car_data?.car_model}
+              </div>
+            </div>
+            <div className="card__item">
+              <div className="card__item--label">
+                <img style={{ height: 22 }} src="/img/card/date.svg" alt="" />
+                <span>Дата регистрации</span>
+              </div>
+              <div className="card__item--value">
+                {convertTimestamp(item?.created_at)}
               </div>
             </div>
             <div className="card__item">
@@ -183,25 +174,25 @@ function StockContentCard({ item, onEdit }: ContentCardProps) {
                 <img src="/img/card/book.svg" alt="" />
                 <span>Компания</span>
               </div>
-              <div className="card__item--value">
-                {item?.contract_data?.company_data?.name}
-              </div>
+              <div className="card__item--value">{item?.name}</div>
             </div>
             <div className="card__item">
               <div className="card__item--label">
-                <img src="/img/card/date.svg" alt="" />
-                <span>Активность водителя</span>
+                <img
+                  style={{ height: 22 }}
+                  src="/img/card/menu/location-b.svg"
+                  alt=""
+                />
+                <span>Место проведение</span>
               </div>
-              <div className="card__item--value">
-                {convertTimestamp(item.updated_at)}
-              </div>
+              <div className="card__item--value">{item?.location || '-'}</div>
             </div>
-            <div className="card__item card__item--comment">
+            <div className="card__item">
               <div className="card__item--label">
-                <img src="/img/card/comment.svg" alt="" />
-                <span>Комментарий</span>
+                <img style={{ height: 22 }} src="/img/card/target.svg" alt="" />
+                <span>Тариф</span>
               </div>
-              <div className="card__item--value">{item?.stock_comment}</div>
+              <div className="card__item--value">{item?.tariff || '-'}</div>
             </div>
             <div className="card__item mb-0">
               <div className="card__item--label">
@@ -211,24 +202,37 @@ function StockContentCard({ item, onEdit }: ContentCardProps) {
               <div
                 className="card__item--value card__item--value-status"
                 style={{
-                  backgroundColor: STOCK_STATUS[item.status_stock]?.color,
+                  backgroundColor:
+                    CLIENT_COMPANY_STATUS[item.status_client_company]?.color,
                 }}
               >
                 <span className="dot-live mr-5"></span>
-                {STOCK_STATUS[item.status_stock]?.value}
+                {CLIENT_COMPANY_STATUS[item.status_client_company]?.value}
               </div>
+            </div>
+          </div>
+          <div className="card__bottom">
+            <div className="d-flex justify-center">
+              <button
+                className="btn btn-decline"
+                // onClick={() => setOpenModal(false)}
+                // disabled={isLoadingUpdate}
+              >
+                Отклонить
+              </button>
+              <button
+                // disabled={isLoadingUpdate}
+                className="btn btn-confirm"
+                onClick={handleConfirm}
+              >
+                Подтвердить
+              </button>
             </div>
           </div>
         </div>
       </div>
-      <CreateCommentModal
-        pagename="stock"
-        onCloseModal={() => setOpenCommentModal(false)}
-        isOpenModal={isOpenCommentModal}
-        retrieveData={item}
-      />
     </>
   );
 }
 
-export default StockContentCard;
+export default CompanyContentCard;

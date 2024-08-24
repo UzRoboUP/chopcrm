@@ -15,7 +15,6 @@ function UpdateStaffDataModal({
 }) {
   const queryClient = useQueryClient();
   const [fullName, setFullName] = useState('');
-  console.log(pagename, retrieveData);
 
   const [staffData, setStaffData] = useState({
     id: retrieveData?.id,

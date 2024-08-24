@@ -51,17 +51,15 @@ function CreateCommentModal({
         comment_purpose = 'staff';
         to_whom = retrieveData.id;
         break;
-      default:
-        throw new Error('Something got wrong');
     }
 
     if (['moderator', 'accountant', 'operator', 'manager'].includes(pagename)) {
       createStaffComment(
         {
           comment,
-          comment_purpose,
+          comment_purpose: 'staff',
           by_whom: currentUser?.id as string,
-          to_whom,
+          to_whom: retrieveData.id,
         },
         {
           onSuccess: (data) => {

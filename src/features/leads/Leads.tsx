@@ -34,7 +34,7 @@ function Leads() {
                 />
               ))
             ) : (
-              <EmptyCard text="tracks" />
+              <EmptyCard text="leads" />
             )}
           </div>
         </div>

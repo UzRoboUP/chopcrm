@@ -119,10 +119,12 @@ function ReportContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <p className="name">
                   {item?.contract_data?.driver_data?.full_name}
                 </p>
-                <p className="rate">
-                  <span>4.5</span>
-                  <img src="/img/card/star.svg" alt="rate" />
-                </p>
+                {item?.rate && (
+                  <p className="rate">
+                    <span>{item.rate}</span>
+                    <img src="/img/card/star.svg" alt="rate" />
+                  </p>
+                )}
               </div>
             </div>
             <Dropdown

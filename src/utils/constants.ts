@@ -72,5 +72,16 @@ export const PASTING_STATUS = {
   },
 } as const;
 
+export const CLIENT_COMPANY_STATUS = {
+  'not-processed': {
+    color: '#FF9500',
+    value: 'В процессе одобрение',
+  },
+  processed: {
+    color: '#007AFF',
+    value: 'Одобренные',
+  },
+} as const;
+
 // photo_report_sent - photo_report_sent
 // photo_report_rejected - photo_report_rejected
