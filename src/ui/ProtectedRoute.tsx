@@ -25,10 +25,13 @@ function ProtectedRoute({
   const { isLoadingUser, isFetching, userData } = useUser();
   const navigate = useNavigate();
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
-  
 
+  useEffect(() => {
+    if (userData && userData.staff_status == 'moderator') {
+      navigate('/drivers/drafts');
+    }
+  }, [userData]);
 
-   
   useEffect(() => {
     if (!userData && !isAuthenticated && !isFetching) {
       return navigate('/login');

@@ -1,16 +1,13 @@
 import ContentHeader from "../../ui/ContentHeader";
 
 
-export default function Checkout() {
-  console.log("test");
-  
+export default function CustomerRequests() {
   return (
     <div className="content">
     <div className="content__header">
       <ContentHeader
-        pagename="Проверка"
-        hasBrand={true}
-        hasModel={true}
+        pagename="Заявки клиентов"
+        hasPhone={true}
       />
     </div>
     <div className="content__report"></div>
