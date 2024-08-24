@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { CLIENT_COMPANY_STATUS } from '../../utils/constants';
 import { convertTimestamp } from '../../utils/helpers';
 import { usePastingDelete } from '../pasting/usePastingDelete';
+import { useUpdateCompany } from './useUpdateCompany';
 
 export type PageNameType =
   | 'track'
@@ -34,6 +35,7 @@ function CompanyContentCard({
   const [isOpenMenu, setOpenMenu] = useState(false);
   const [popconfirmOpen, setPopconfirmOpen] = useState(false);
   const { deletePasting, isLoadingDelete } = usePastingDelete();
+  const { updateCompany, isLoadingUpdate } = useUpdateCompany();
 
   const handleDelete = () => {
     deletePasting(item.id, {
@@ -45,7 +47,21 @@ function CompanyContentCard({
     });
   };
 
-  const handleConfirm = () => {};
+  const handleConfirm = (status_client_company: string) => {
+    updateCompany(
+      {
+        id: item?.id,
+        status_client_company,
+      },
+      {
+        onSuccess: (data) => {
+          queryClient.setQueryData(['companyUpdate'], data);
+          queryClient.invalidateQueries({ queryKey: ['companies'] });
+          message.success('Company updated successfully');
+        },
+      },
+    );
+  };
 
   const itemsMenu: MenuProps['items'] = [
     {
@@ -215,15 +231,15 @@ function CompanyContentCard({
             <div className="d-flex justify-center">
               <button
                 className="btn btn-decline"
-                // onClick={() => setOpenModal(false)}
-                // disabled={isLoadingUpdate}
+                disabled={isLoadingUpdate}
+                onClick={() => handleConfirm('not-processed')}
               >
                 Отклонить
               </button>
               <button
-                // disabled={isLoadingUpdate}
+                disabled={isLoadingUpdate}
                 className="btn btn-confirm"
-                onClick={handleConfirm}
+                onClick={() => handleConfirm('processed')}
               >
                 Подтвердить
               </button>

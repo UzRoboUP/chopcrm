@@ -5,6 +5,7 @@ import ContentHeader from '../../ui/ContentHeader';
 import EmptyCard from '../../ui/EmptyCard';
 import Modal from '../../ui/Modal';
 import ReportStatus from '../../ui/ReportStatus';
+import Spinner from '../../ui/Spinner';
 import ReportContentCard from './ReportContentCard';
 import { useReports } from './useReports';
 
@@ -13,6 +14,31 @@ function Reports() {
   const [isOpenEditModal, setOpenEditModal] = useState(false);
   const [currentDataId, setCurrentDataId] = useState('');
   const { reports, isLoading, reportsCount } = useReports();
+
+  const renderReports = () => {
+    if (isLoading) {
+      return <Spinner />;
+    }
+
+    const reportItems = reports?.results || [];
+
+    if (reportItems.length > 0) {
+      return reportItems.map((item: { id: string }) => (
+        <ReportContentCard
+          key={item.id}
+          item={item}
+          pagename="report"
+          onEdit={() => {
+            setCurrentDataId('');
+            setOpenEditModal(true);
+            setTimeout(() => setCurrentDataId(item.id), 0);
+          }}
+        />
+      ));
+    }
+
+    return <EmptyCard text="tracks" />;
+  };
 
   return (
     <div className="content">
@@ -23,31 +49,13 @@ function Reports() {
           hasModel={true}
           hasSaveButton={true}
         />
-        <button onClick={() => setOpenModal(true)}>Open modal</button>
       </div>
       <div className="content__report content__report__container">
         <ReportStatus reportsCount={reportsCount} />
       </div>
       <div className="content__main">
         <div className="content__cards">
-          <div className="content__row">
-            {reports?.results?.length > 0 ? (
-              (reports?.results || []).map((item: { id: string }) => (
-                <ReportContentCard
-                  key={item.id}
-                  item={item}
-                  pagename="report"
-                  onEdit={() => {
-                    setCurrentDataId('');
-                    setOpenEditModal(true);
-                    setTimeout(() => setCurrentDataId(item.id), 0);
-                  }}
-                />
-              ))
-            ) : (
-              <EmptyCard text="tracks" />
-            )}
-          </div>
+          <div className="content__row">{renderReports()}</div>
         </div>
       </div>
       <Modal

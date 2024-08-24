@@ -24,6 +24,8 @@ import icon11 from '/img/sidebar/11.svg';
 import icon11Active from '/img/sidebar/11_a.svg';
 import icon12 from '/img/sidebar/12.svg';
 import icon12Active from '/img/sidebar/12_a.svg';
+import icon13 from '/img/sidebar/13.svg';
+import icon13Active from '/img/sidebar/13_a.svg';
 
 export const lazyLoad = (
   importFunc: () => Promise<{ default: ComponentType<unknown> }>,
