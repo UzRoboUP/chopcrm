@@ -45,10 +45,7 @@ function Companies() {
     <div className="content">
       <div className="content__header">
         <ContentHeader
-          pagename="Отчетность"
-          hasBrand={true}
-          hasModel={true}
-          hasSaveButton={true}
+          pagename="Компании"
         />
       </div>
       <div className="content__report content__report__container">
