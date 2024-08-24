@@ -9,6 +9,7 @@ import Modal from '../../ui/Modal';
 import PastingContentCard from './PastingContentCard';
 import { usePastings } from './usePastings';
 import { useUpdatePasting } from './useUpdatePasting';
+import PostingStatus from '../../ui/PostingStatus';
 
 function Pasting() {
   const [isOpenModal, setOpenModal] = useState(false);
@@ -56,14 +57,12 @@ function Pasting() {
     <div className="content">
       <div className="content__header">
         <ContentHeader
-          pagename="Отчетность"
-          hasBrand={true}
-          hasModel={true}
-          hasSaveButton={true}
+          pagename="Обклейка"
+          hasHistory={true}
         />
       </div>
       <div className="content__report content__report__container">
-        {/* <ReportStatus reportsCount={reportsCount} /> */}
+      <PostingStatus/>
       </div>
       <div className="content__main">
         <div className="content__cards">

@@ -1,6 +1,5 @@
 import { DatePicker, DatePickerProps, Dropdown, Input, Space } from 'antd';
 import left from '../../public/img/page-header/left-chevron.svg';
-import download from '../../public/img/page-header/download.svg';
 import { DownOutlined } from '@ant-design/icons';
 import FormBox from './FormBox';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -11,6 +10,8 @@ import { useCompany } from '../features/company/useCompany';
 import { useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import plus from '../../public/img/plus.svg';
+import history from '../../public/img/history.svg';
+import ExportButton from './ExportButton';
 // import { useEffect } from 'react';
 export default function ContentHeader({
   pagename,
@@ -23,6 +24,7 @@ export default function ContentHeader({
   hasTask = false,
   hasAddButton = false,
   taskText = '',
+  hasHistory = false,
   openModal,
 }: {
   pagename: string;
@@ -35,6 +37,7 @@ export default function ContentHeader({
   hasTask?: boolean;
   taskText?: string;
   hasAddButton?: boolean;
+  hasHistory?: boolean;
   openModal?: () => void;
 }) {
   const navigate = useNavigate();
@@ -71,12 +74,8 @@ export default function ContentHeader({
     setSearchParams(params);
   };
 
-  // useEffect(() => {
-  //   if (!params.has('car_brand')) {
-  //     params.delete('car_model');
-  //     setSearchParams(params);
-  //   }
-  // }, [searchParams]);
+  
+
 
   return (
     <div className="content__header__content d-flex align-center justify-between ">
@@ -206,22 +205,17 @@ export default function ContentHeader({
           )}
         </div>
       </div>
-      {hasSaveButton && (
-        <button className="export-btn">
-          <img
-            className="pointer"
-            width="20px"
-            height="20px"
-            src={download}
-            alt=""
-          />
-          <span>Экспорт</span>
-        </button>
-      )}
+      {hasSaveButton && <ExportButton />}
       {hasAddButton && (
         <button className="header__add__btn" onClick={openModal}>
           <img src={plus} alt="" />
           <span>Добавить</span>
+        </button>
+      )}
+      {hasHistory && (
+        <button className="header__add__btn history__btn" onClick={openModal}>
+          <img src={history} alt="" />
+          <span>Архив оклеек</span>
         </button>
       )}
     </div>

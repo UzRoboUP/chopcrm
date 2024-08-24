@@ -17,7 +17,6 @@ export type ContentCardProps = {
 
 function ReportContentCard({ item, pagename, onEdit }: ContentCardProps) {
   const queryClient = useQueryClient();
-  console.log('report: ', item);
 
   const [isOpenMenu, setOpenMenu] = useState(false);
   const [popconfirmOpen, setPopconfirmOpen] = useState(false);
