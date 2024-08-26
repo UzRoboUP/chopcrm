@@ -6,6 +6,7 @@ import { usePastings } from '../pasting/usePastings';
 import { useUpdatePasting } from '../pasting/useUpdatePasting';
 import CompanyContentCard from './CompanyContentCard';
 import { useCompanies } from './useCompanies';
+import CompanyStatus from '../../ui/CompanyStatus';
 
 function Companies() {
   const [isOpenModal, setOpenModal] = useState(false);
@@ -14,8 +15,6 @@ function Companies() {
   const [currentData, setCurrentData] = useState({});
   const { data: companies, isLoading } = useCompanies();
   const { updatePasting, isLoadingUpdate } = useUpdatePasting();
-
-  console.log('companies', companies);
 
   const [timeDate, setTimeDate] = useState({
     time: '',
@@ -44,12 +43,10 @@ function Companies() {
   return (
     <div className="content">
       <div className="content__header">
-        <ContentHeader
-          pagename="Компании"
-        />
+        <ContentHeader pagename="Компании" hasAddButton />
       </div>
       <div className="content__report content__report__container">
-        {/* <ReportStatus reportsCount={reportsCount} /> */}
+        <CompanyStatus reportsCount={companies?.number_report_status} />
       </div>
       <div className="content__main">
         <div className="content__cards">

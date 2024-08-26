@@ -13,9 +13,13 @@ class Company {
   }
 
   // GET: /Company/list/
-  async getCompany() {
+  async getCompany(url: string) {
     try {
-      return (await this.$api.get('/client-company/list/')).data;
+      return (
+        await this.$api.get(
+          url ? `/client-company/list/?${url}` : '/client-company/list/',
+        )
+      ).data;
     } catch (error) {
       const axiosError = error as AxiosError<ApiErrorResponse>;
       throw new Error(

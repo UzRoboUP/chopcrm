@@ -18,6 +18,7 @@ function Pasting() {
   const [currentData, setCurrentData] = useState({});
   const { data: pastings, isLoading } = usePastings();
   const { updatePasting, isLoadingUpdate } = useUpdatePasting();
+console.log(pastings);
 
   const [timeDate, setTimeDate] = useState({
     time: '',
@@ -56,19 +57,16 @@ function Pasting() {
   return (
     <div className="content">
       <div className="content__header">
-        <ContentHeader
-          pagename="Обклейка"
-          hasHistory={true}
-        />
+        <ContentHeader pagename="Обклейка" hasHistory={true} />
       </div>
       <div className="content__report content__report__container">
-      <PostingStatus/>
+        <PostingStatus reportsCount={pastings?.number_report_status} />
       </div>
       <div className="content__main">
         <div className="content__cards">
           <div className="content__row">
-            {pastings?.results?.length > 0 ? (
-              (pastings?.results || []).map((item: { id: string }) => (
+            {pastings?.pastings.results?.length > 0 ? (
+              (pastings?.pastings?.results || []).map((item: { id: string }) => (
                 <PastingContentCard
                   key={item.id}
                   item={item}
