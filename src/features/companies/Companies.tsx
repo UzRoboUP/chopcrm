@@ -7,9 +7,11 @@ import { useUpdatePasting } from '../pasting/useUpdatePasting';
 import CompanyContentCard from './CompanyContentCard';
 import { useCompanies } from './useCompanies';
 import CompanyStatus from '../../ui/CompanyStatus';
+import CreateСompanyModal from './CreateСompanyModal';
 
 function Companies() {
   const [isOpenModal, setOpenModal] = useState(false);
+  const [isOpenCompanyModal, setOpenCompanyModal] = useState(false);
   const [isOpenEditModal, setOpenEditModal] = useState(false);
   const [currentDataId, setCurrentDataId] = useState('');
   const [currentData, setCurrentData] = useState({});
@@ -43,7 +45,11 @@ function Companies() {
   return (
     <div className="content">
       <div className="content__header">
-        <ContentHeader pagename="Компании" hasAddButton />
+        <ContentHeader
+          pagename="Компании"
+          hasAddButton
+          openModal={() => setOpenCompanyModal(true)}
+        />
       </div>
       <div className="content__report content__report__container">
         <CompanyStatus reportsCount={companies?.number_report_status} />
@@ -76,41 +82,11 @@ function Companies() {
           </div>
         </div>
       </div>
-      {/* <Modal
-        title={<h2>Назначить об клейку </h2>}
-        width="middle"
-        open={isOpenModal}
-        onCancel={() => {
-          setOpenModal(false);
-        }}
-      >
-        <div className="d-flex justify-center mt-20 mb-20">
-          <DatePicker onChange={onChangeDate} />
-          <TimePicker
-            className="ml-20"
-            defaultValue={dayjs('12:08', 'HH:mm')}
-            format={'HH:mm'}
-            showNow
-            onChange={onChangeTime}
-          />
-        </div>
-        <div className="d-flex justify-center">
-          <button
-            className="btn btn-decline"
-            onClick={() => setOpenModal(false)}
-            disabled={isLoadingUpdate}
-          >
-            Отклонить
-          </button>
-          <button
-            disabled={isLoadingUpdate}
-            className="btn btn-confirm"
-            onClick={handleConfirm}
-          >
-            Подтвердить
-          </button>
-        </div>
-      </Modal> */}
+
+      <CreateСompanyModal
+        isOpenModal={isOpenCompanyModal}
+        onCloseModal={() => setOpenCompanyModal(false)}
+      />
     </div>
   );
 }

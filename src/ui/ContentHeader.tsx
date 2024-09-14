@@ -25,6 +25,7 @@ export default function ContentHeader({
   hasAddButton = false,
   taskText = '',
   hasHistory = false,
+  openTaskModal,
   openModal,
 }: {
   pagename: string;
@@ -39,6 +40,7 @@ export default function ContentHeader({
   hasAddButton?: boolean;
   hasHistory?: boolean;
   openModal?: () => void;
+  openTaskModal?:()=>void
 }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -200,6 +202,7 @@ export default function ContentHeader({
 
           {hasTask && (
             <>
+              <button className='stock__task__btn' onClick={openTaskModal}>Все задания</button>
               <div className="stock__task">{taskText}</div>
             </>
           )}

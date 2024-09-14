@@ -5,22 +5,30 @@ import EmptyCard from '../../ui/EmptyCard';
 import StockStatus from '../../ui/StockStatus';
 import StockContentCard from './StockContentCard';
 import { useStocks } from './useStocks';
-
+import StockTaskModal from './StockTaskModal';
+import { useContext } from 'react';
+import { StockTaskContext } from '../../context/StockTaskContext';
 function Stocks() {
   const [isOpenModal, setOpenModal] = useState(false);
   const [isOpenEditModal, setOpenEditModal] = useState(false);
   const [currentDataId, setCurrentDataId] = useState('');
   const { data, isLoading } = useStocks();
+  const {stockTaskText} = useContext(StockTaskContext)
+  const closeModal=()=>{
+    setOpenModal(false)
+  }
+  
 
   return (
     <div className="content">
       <div className="content__header">
         <ContentHeader
+          openTaskModal={()=>setOpenModal(true)}
           pagename="Акции"
           hasBrand={true}
           hasModel={true}
           hasTask={true}
-          taskText="Задание: Проехать с улицы Алишер навои до улицы фараби 15:00 - 16:00 20.05.2024"
+          taskText={stockTaskText}
         />
       </div>
       <div className="content__report content__report__container">
@@ -47,6 +55,7 @@ function Stocks() {
           </div>
         </div>
       </div>
+      <StockTaskModal isOpenModal={isOpenModal} onCloseModal={closeModal} />
     </div>
   );
 }

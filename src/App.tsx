@@ -12,6 +12,7 @@ import { getMenuData } from './services/menu/index.ts';
 import GlobalStyles from './styles/GlobalStyles';
 import AppLayout from './ui/AppLayout.tsx';
 import ProtectedRoute from './ui/ProtectedRoute.tsx';
+import StockTaskProvider from './context/StockTaskContext.tsx';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -28,41 +29,43 @@ function App() {
         <ReactQueryDevtools initialIsOpen={true} />
         <GlobalStyles />
         <BrowserRouter>
-          <BreadcrumbProvider>
-            <Routes>
-              <Route path="/" element={<AppLayout />}>
-                <Route index element={<Navigate replace to="analytics" />} />
-                {getMenuData.map((menu) => {
-                  return (
-                    <Route
-                      key={menu.key}
-                      path={menu.path}
-                      element={
-                        <Suspense fallback={<Skeleton active />}>
-                          <ProtectedRoute roles={menu.roles}>
-                            {createElement(menu.component)}
-                          </ProtectedRoute>
-                        </Suspense>
-                      }
-                    >
-                      {menu?.elements &&
-                        menu?.elements.map((item) => {
-                          return (
-                            <Route
-                              key={item.path}
-                              path={item.path}
-                              element={createElement(item.el)}
-                            />
-                          );
-                        })}
-                    </Route>
-                  );
-                })}
-              </Route>
-              <Route path="login" element={<Login />} />
-              <Route path="*" element={<PageNotFound />} />
-            </Routes>
-          </BreadcrumbProvider>
+          <StockTaskProvider>
+            <BreadcrumbProvider>
+              <Routes>
+                <Route path="/" element={<AppLayout />}>
+                  <Route index element={<Navigate replace to="analytics" />} />
+                  {getMenuData.map((menu) => {
+                    return (
+                      <Route
+                        key={menu.key}
+                        path={menu.path}
+                        element={
+                          <Suspense fallback={<Skeleton active />}>
+                            <ProtectedRoute roles={menu.roles}>
+                              {createElement(menu.component)}
+                            </ProtectedRoute>
+                          </Suspense>
+                        }
+                      >
+                        {menu?.elements &&
+                          menu?.elements.map((item) => {
+                            return (
+                              <Route
+                                key={item.path}
+                                path={item.path}
+                                element={createElement(item.el)}
+                              />
+                            );
+                          })}
+                      </Route>
+                    );
+                  })}
+                </Route>
+                <Route path="login" element={<Login />} />
+                <Route path="*" element={<PageNotFound />} />
+              </Routes>
+            </BreadcrumbProvider>
+          </StockTaskProvider>
         </BrowserRouter>
       </QueryClientProvider>
     </DarkModeProvider>

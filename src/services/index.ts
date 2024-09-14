@@ -15,7 +15,7 @@ class Api {
   // GET: /client-company/list/
   async getClientCompany() {
     try {
-      return (await this.$api.get('/stock-task/list/')).data;
+      return (await this.$api.get('/client-company/task-list/')).data;
     } catch (error) {
       const axiosError = error as AxiosError<ApiErrorResponse>;
       throw new Error(

@@ -20,3 +20,29 @@
     background: #30b0c7;
   }
 }
+.task__modal__title{
+font-size: 24px;
+font-weight: 700;
+line-height: 13px;
+text-align: center;
+ padding-bottom: 40px;
+ color: #000;
+}
+.task__modal__row{
+  max-height: 392px;
+  overflow-y: auto;
+}
+.task__modal__item{
+  max-width: 503px;
+  margin: 0 auto;
+font-size: 16px;
+font-weight: 500;
+line-height: 20px;
+letter-spacing: 0.02em;
+text-align: left;
+ margin-bottom: 20px;
+ cursor: pointer;
+}
+.task__modal__item:hover{
+ opacity: 0.8;
+}

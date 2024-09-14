@@ -14,7 +14,7 @@ function Header() {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    const socket = new WebSocket(`ws://crmapi.leetcode.uz/ws/chat/message/`);
+    const socket = new WebSocket(`wss://crmapi.leetcode.uz/ws/chat/message/`);
 
     // When the connection is opened
     socket.onopen = () => {
