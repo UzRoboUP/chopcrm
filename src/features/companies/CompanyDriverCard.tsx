@@ -2,34 +2,32 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { Dropdown, DropdownProps, MenuProps, message, Popconfirm } from 'antd';
 import { useState } from 'react';
-import CreateCommentModal from './CreateCommentModal';
-import { useTrackDelete } from './useTrackDelete';
-import DriverLicenseModal from './DriverLicenseModal';
+import { useDriverDelete } from '../driver/useDriverDelete';
+import DriverCreateButton from '../../ui/DriverCreateButton';
+import { useParams } from 'react-router-dom';
 
 export type PageNameType = 'track' | 'report' | 'lead' | 'stock';
 
 export type ContentCardProps = {
   item: { id: string };
   pagename: PageNameType;
-  onEdit: () => void;
 };
 
-function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
+function CompanyDriverCard({ item, pagename }: ContentCardProps) {
+  const params = useParams()
   const queryClient = useQueryClient();
 
   const [isOpenMenu, setOpenMenu] = useState(false);
   const [popconfirmOpen, setPopconfirmOpen] = useState(false);
-  const [isOpenCommentModal, setOpenCommentModal] = useState(false);
-  const [isOpenLicenseModal, setOpenLicenseModal] = useState(false);
 
-  const { deleteTrack, isLoadingDelete } = useTrackDelete();
+  const { deleteDriver, isLoadingDelete } = useDriverDelete();
 
   const handleDelete = () => {
-    deleteTrack(item.id, {
+    deleteDriver(item.id, {
       onSuccess: (data) => {
         queryClient.setQueryData(['trackDelete'], data);
-        queryClient.invalidateQueries({ queryKey: ['tracks'] });
-        message.success('Track deleted successfully');
+        queryClient.invalidateQueries({ queryKey: ['drivers'] });
+        message.success('Driver deleted successfully');
       },
     });
   };
@@ -38,45 +36,18 @@ function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
     {
       key: '1',
       label: (
-        <p className="d-flex align-center">
-          <img src="/img/card/menu/destination.svg" alt="" />
-          <span className="card__menu--text ml-10">Место нахождения</span>
-        </p>
-      ),
-      className: 'mb-4',
-    },
-    {
-      key: '2',
-      label: (
-        <p
-          onClick={() => {
-            setOpenMenu(false);
-            setOpenCommentModal(true);
-          }}
+        <a
+          href="https://cdn.leetcode.uz/chop-cdn/media/ypx/qabul.xlsx"
           className="d-flex align-center"
+          download={true}
         >
-          <img src="/img/card/menu/comment.svg" alt="" />
-          <span className="card__menu--text ml-10">Оставить коментарий</span>
-        </p>
+          <img src="/img/card/menu/download.svg" alt="" />
+          <span className="card__menu--text ml-10">Скачать договор</span>
+        </a>
       ),
       className: 'mb-4',
     },
-    {
-      key: '3',
-      label: (
-        <p
-          onClick={() => {
-            onEdit();
-            setOpenMenu(false);
-          }}
-          className="d-flex align-center"
-        >
-          <img src="/img/card/menu/edit.svg" alt="" />
-          <span className="card__menu--text ml-10">Изменить профиль</span>
-        </p>
-      ),
-      className: 'mb-4',
-    },
+
     {
       key: '4',
       label: (
@@ -112,24 +83,6 @@ function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
         </Popconfirm>
       ),
       className: 'card__menu--label-delete',
-    },
-    {
-      key: '5',
-      label: (
-        <p
-          onClick={() => {
-            setOpenMenu(false);
-            setOpenLicenseModal(true);
-          }}
-          className="d-flex align-center"
-        >
-          <img src="/img/card/menu/plus.svg" alt="" />
-          <span className="card__menu--text ml-10">
-            Добавить разрешение СБДД
-          </span>
-        </p>
-      ),
-      className: 'mb-4',
     },
   ];
 
@@ -187,23 +140,23 @@ function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <span>Тип машины</span>
               </div>
               <div className="card__item--value">
-                {item?.car_data.car_model}
+                {item?.car_data?.car_model}
               </div>
             </div>
-            <div className="card__item">
+            {/* <div className="card__item">
               <div className="card__item--label">
                 <img src="/img/card/rating.svg" alt="" />
                 <span>Рейтинг</span>
               </div>
               <div className="card__item--value">{item?.rate || '-'}</div>
-            </div>
-            <div className="card__item">
+            </div> */}
+            {/* <div className="card__item">
               <div className="card__item--label">
                 <img src="/img/card/book.svg" alt="" />
                 <span>Компания</span>
               </div>
               <div className="card__item--value">{item?.company?.name}</div>
-            </div>
+            </div> */}
             <div className="card__item card__item--comment">
               <div className="card__item--label">
                 <img src="/img/card/comment.svg" alt="" />
@@ -213,22 +166,14 @@ function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 {item?.comment || 'без комментариев'}
               </div>
             </div>
+            <div className="card__footer">
+              <DriverCreateButton driverId={item?.id}  companyId={params?.id}/>
+            </div>
           </div>
         </div>
       </div>
-      <CreateCommentModal
-        pagename={pagename}
-        onCloseModal={() => setOpenCommentModal(false)}
-        isOpenModal={isOpenCommentModal}
-        retrieveData={item}
-      />
-      <DriverLicenseModal
-        onCloseModal={() => setOpenLicenseModal(false)}
-        isOpenModal={isOpenLicenseModal}
-        id={item.id}
-      />
     </>
   );
 }
 
-export default TrackContentCard;
+export default CompanyDriverCard;

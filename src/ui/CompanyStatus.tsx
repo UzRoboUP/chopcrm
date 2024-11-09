@@ -4,41 +4,41 @@ export default function CompanyStatus({
   reportsCount,
 }: {
   reportsCount: {
-    non_confirmed: string;
-    confirmed: string;
+    approved: string;
+    completed: string;
     in_process: string;
-    processed: string;
+    active: string;
   }[];
 }) {
   return (
     <>
       <StatusCard
         text="Активные"
-        count={reportsCount?.[1]?.confirmed}
+        count={reportsCount?.[0]?.active}
         color="#30B0C7"
-        param="confirmed"
-        paramStatus="status_client_company"
+        param="active"
+        paramStatus="company_status"
       />
       <StatusCard
         text="В процессе  одобрение"
-        count={reportsCount?.[2]?.in_process}
+        count={reportsCount?.[1]?.in_process}
         color="#FF9500"
-        param="in-process"
-        paramStatus="status_client_company"
+        param="in_process"
+        paramStatus="company_status"
       />
       <StatusCard
         text="Одобренные"
-        count={reportsCount?.[3]?.processed}
+        count={reportsCount?.[2]?.approved}
         color="#007AFF"
-        param="processed"
-        paramStatus="status_client_company"
+        param="approved"
+        paramStatus="company_status"
       />
       <StatusCard
         text="Отклоненные"
-        count={reportsCount?.[0]?.non_confirmed}
+        count={reportsCount?.[3]?.completed}
         color="#FF0000"
-        param="non-confirmed"
-        paramStatus="status_client_company"
+        param="completed"
+        paramStatus="company_status"
       />
     </>
   );

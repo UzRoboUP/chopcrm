@@ -22,6 +22,5 @@ export function useUser() {
   if (userData && !isLoadingUser) {
     dispatch(setCredentials(userData));
   }
-
   return { isLoadingUser, isFetching, userData, error: isError };
 }

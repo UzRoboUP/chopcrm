@@ -9,7 +9,6 @@ export function useUpdateCompany() {
     mutationFn: ({ ...payload }) => Company.updateCompany({ ...payload }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['companies'] });
-      message.success('Company updated successfully');
     },
     onError: (err) => {
       console.log('ERROR', err);
@@ -22,3 +21,24 @@ export function useUpdateCompany() {
     isLoadingUpdate,
   };
 }
+
+export function useUpdateCompanyStatus() {
+  const queryClient = useQueryClient();
+
+  const { mutate: updateCompanySatus, isPending: isLoadingUpdateStatus } = useMutation({
+    mutationFn: ({ ...payload }:{id:string,company_status:string}) => Company.updateCompanyStatus({ ...payload }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['companies'] });
+    },
+    onError: (err) => {
+      console.log('ERROR', err);
+      message.error('Something went wrong');
+    },
+  });
+
+  return {
+    updateCompanySatus,
+    isLoadingUpdateStatus,
+  };
+}
+

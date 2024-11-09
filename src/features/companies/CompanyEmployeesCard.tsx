@@ -2,11 +2,10 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { Dropdown, DropdownProps, MenuProps, message, Popconfirm } from 'antd';
 import { useState } from 'react';
-import CreateCommentModal from './CreateCommentModal';
-import { useTrackDelete } from './useTrackDelete';
-import DriverLicenseModal from './DriverLicenseModal';
+import CreateCommentModal from '../tracks/CreateCommentModal';
+import { useTrackDelete } from '../tracks/useTrackDelete';
 
-export type PageNameType = 'track' | 'report' | 'lead' | 'stock';
+export type PageNameType = 'track' | 'report' | 'lead' | 'stock'|'company'|'employee';
 
 export type ContentCardProps = {
   item: { id: string };
@@ -14,13 +13,12 @@ export type ContentCardProps = {
   onEdit: () => void;
 };
 
-function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
+function CompanyEmployeesCard({ item, pagename, onEdit }: ContentCardProps) {
   const queryClient = useQueryClient();
 
   const [isOpenMenu, setOpenMenu] = useState(false);
   const [popconfirmOpen, setPopconfirmOpen] = useState(false);
   const [isOpenCommentModal, setOpenCommentModal] = useState(false);
-  const [isOpenLicenseModal, setOpenLicenseModal] = useState(false);
 
   const { deleteTrack, isLoadingDelete } = useTrackDelete();
 
@@ -113,24 +111,6 @@ function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
       ),
       className: 'card__menu--label-delete',
     },
-    {
-      key: '5',
-      label: (
-        <p
-          onClick={() => {
-            setOpenMenu(false);
-            setOpenLicenseModal(true);
-          }}
-          className="d-flex align-center"
-        >
-          <img src="/img/card/menu/plus.svg" alt="" />
-          <span className="card__menu--text ml-10">
-            Добавить разрешение СБДД
-          </span>
-        </p>
-      ),
-      className: 'mb-4',
-    },
   ];
 
   const handleOpenMenu: DropdownProps['onOpenChange'] = (nextOpen, info) => {
@@ -149,7 +129,7 @@ function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <img src="/img/card/empty-avatar.svg" alt="avatar" />
               </p>
               <div className="card__user--info">
-                <p className="name">{item?.full_name}</p>
+                <p className="name">{item?.driver?.full_name}</p>
                 <p className="rate">
                   <span>Сегодня 12:40</span>
                 </p>
@@ -179,7 +159,7 @@ function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <img src="/img/card/phone.svg" alt="" />
                 <span>Телефон</span>
               </div>
-              <div className="card__item--value">{item?.phone_number}</div>
+              <div className="card__item--value">{item?.driver?.phone_number}</div>
             </div>
             <div className="card__item">
               <div className="card__item--label">
@@ -187,7 +167,7 @@ function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <span>Тип машины</span>
               </div>
               <div className="card__item--value">
-                {item?.car_data.car_model}
+                {item?.driver?.car_data?.car_model}
               </div>
             </div>
             <div className="card__item">
@@ -195,7 +175,7 @@ function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <img src="/img/card/rating.svg" alt="" />
                 <span>Рейтинг</span>
               </div>
-              <div className="card__item--value">{item?.rate || '-'}</div>
+              <div className="card__item--value">{item?.rate?.rate_avg || '-'}</div>
             </div>
             <div className="card__item">
               <div className="card__item--label">
@@ -222,13 +202,8 @@ function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
         isOpenModal={isOpenCommentModal}
         retrieveData={item}
       />
-      <DriverLicenseModal
-        onCloseModal={() => setOpenLicenseModal(false)}
-        isOpenModal={isOpenLicenseModal}
-        id={item.id}
-      />
     </>
   );
 }
 
-export default TrackContentCard;
+export default CompanyEmployeesCard;

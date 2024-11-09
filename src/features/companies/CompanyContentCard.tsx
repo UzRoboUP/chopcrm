@@ -4,8 +4,10 @@ import { Dropdown, DropdownProps, MenuProps, message, Popconfirm } from 'antd';
 import { useState } from 'react';
 import { CLIENT_COMPANY_STATUS } from '../../utils/constants';
 import { convertTimestamp } from '../../utils/helpers';
-import { usePastingDelete } from '../pasting/usePastingDelete';
-import { useUpdateCompany } from './useUpdateCompany';
+import { useUpdateCompany, useUpdateCompanyStatus } from './useUpdateCompany';
+import { Link } from 'react-router-dom';
+import CreateCommentModal from '../tracks/CreateCommentModal';
+import { useCompanyDelete } from './useCompanyDelete';
 
 export type PageNameType =
   | 'track'
@@ -31,27 +33,28 @@ function CompanyContentCard({
   const queryClient = useQueryClient();
 
   console.log('item', item);
-
+  const [isOpenCommentModal, setOpenCommentModal] = useState(false);
   const [isOpenMenu, setOpenMenu] = useState(false);
   const [popconfirmOpen, setPopconfirmOpen] = useState(false);
-  const { deletePasting, isLoadingDelete } = usePastingDelete();
-  const { updateCompany, isLoadingUpdate } = useUpdateCompany();
+  const { deleteCompany, isLoadingDelete } = useCompanyDelete();
+  const { updateCompanySatus, isLoadingUpdateStatus } =
+    useUpdateCompanyStatus();
 
   const handleDelete = () => {
-    deletePasting(item.id, {
+    deleteCompany(item.id, {
       onSuccess: (data) => {
-        queryClient.setQueryData(['pastingDelete'], data);
-        queryClient.invalidateQueries({ queryKey: ['pastings'] });
-        message.success('Pasting deleted successfully');
+        queryClient.setQueryData(['companyDelete'], data);
+        queryClient.invalidateQueries({ queryKey: ['companies'] });
+        message.success('Company deleted successfully');
       },
     });
   };
 
-  const handleConfirm = (status_client_company: string) => {
-    updateCompany(
+  const handleConfirm = (company_status: string) => {
+    updateCompanySatus(
       {
         id: item?.id,
-        status_client_company,
+        company_status,
       },
       {
         onSuccess: (data) => {
@@ -63,66 +66,162 @@ function CompanyContentCard({
     );
   };
 
-  const itemsMenu: MenuProps['items'] = [
-    {
-      key: '1',
-      label: (
-        <p className="d-flex align-center">
-          <img src="/img/card/menu/plus.svg" alt="" />
-          <span className="card__menu--text ml-10">Добавить водителей</span>
-        </p>
-      ),
-      className: 'mb-4',
-    },
-    {
-      key: '2',
-      label: (
-        <p className="d-flex align-center">
-          <img src="/img/card/menu/d-check.svg" alt="" />
-          <span className="card__menu--text ml-10">
-            Просмотреть всех водителей
-          </span>
-        </p>
-      ),
-      className: 'mb-4',
-    },
-    {
-      key: '4',
-      label: (
-        <Popconfirm
-          placement="top"
-          title="Вы уверены, что хотите удалить этот элемент?"
-          description="Удалить элемент"
-          okText={'Yes'}
-          cancelText="No"
-          open={popconfirmOpen}
-          onConfirm={handleDelete}
-          okButtonProps={{
-            loading: isLoadingDelete,
-            disabled: isLoadingDelete,
-          }}
-          cancelButtonProps={{
-            disabled: isLoadingDelete,
-          }}
-          onCancel={() => setPopconfirmOpen(false)}
-        >
-          <p
-            onClick={() => setPopconfirmOpen(true)}
-            className="d-flex align-center card__menu--label card__menu--label-delete"
-          >
-            <img src="/img/card/menu/delete.svg" alt="" />
-            <span
-              className="card__menu--text ml-10"
-              style={{ color: '#FF2D55' }}
+  const itemsMenu: MenuProps['items'] = ['approved', 'active'].includes(
+    item.company_status,
+  )
+    ? [
+        {
+          key: '1',
+          label: (
+            <Link
+              to={`/companies/${item?.name}/${item.id}/drivers`}
+              className="d-flex align-center"
             >
-              Удалить из списка
-            </span>
-          </p>
-        </Popconfirm>
-      ),
-      className: 'card__menu--label-delete',
-    },
-  ];
+              <img src="/img/card/menu/plus.svg" alt="" />
+              <span className="card__menu--text ml-10">Добавить водителей</span>
+            </Link>
+          ),
+          className: 'mb-4',
+        },
+        {
+          key: '2',
+          label: (
+            <p className="d-flex align-center">
+              <img src="/img/card/menu/d-check.svg" alt="" />
+              <span className="card__menu--text ml-10">Просмотреть</span>
+            </p>
+          ),
+          className: 'mb-4',
+        },
+        {
+          key: '3',
+          label: (
+            <Link
+              to={`/companies/${item?.name}/${item.id}/employees`}
+              className="d-flex align-center"
+            >
+              <img src="/img/card/menu/car.svg" alt="" />
+              <span className="card__menu--text ml-10">Водители</span>
+            </Link>
+          ),
+          className: 'mb-4',
+        },
+        {
+          key: '4',
+          label: (
+            <p
+              onClick={() => {
+                setOpenMenu(false);
+                setOpenCommentModal(true);
+              }}
+              className="d-flex align-center"
+            >
+              <img src="/img/card/menu/comment.svg" alt="" />
+              <span className="card__menu--text ml-10">
+                Оставить коментарий
+              </span>
+            </p>
+          ),
+          className: 'mb-4',
+        },
+        {
+          key: '5',
+          label: (
+            <Popconfirm
+              placement="top"
+              title="Вы уверены, что хотите удалить этот элемент?"
+              description="Удалить элемент"
+              okText={'Yes'}
+              cancelText="No"
+              open={popconfirmOpen}
+              onConfirm={handleDelete}
+              okButtonProps={{
+                loading: isLoadingDelete,
+                disabled: isLoadingDelete,
+              }}
+              cancelButtonProps={{
+                disabled: isLoadingDelete,
+              }}
+              onCancel={() => setPopconfirmOpen(false)}
+            >
+              <p
+                onClick={() => setPopconfirmOpen(true)}
+                className="d-flex align-center card__menu--label card__menu--label-delete"
+              >
+                <img src="/img/card/menu/delete.svg" alt="" />
+                <span
+                  className="card__menu--text ml-10"
+                  style={{ color: '#FF2D55' }}
+                >
+                  Удалить из списка
+                </span>
+              </p>
+            </Popconfirm>
+          ),
+          className: 'card__menu--label-delete',
+        },
+      ]
+    : [
+        {
+          key: '1',
+          label: (
+            <Link
+              to={`/companies/${item?.name}/${item.id}/drivers`}
+              className="d-flex align-center"
+            >
+              <img src="/img/card/menu/plus.svg" alt="" />
+              <span className="card__menu--text ml-10">Добавить водителей</span>
+            </Link>
+          ),
+          className: 'mb-4',
+        },
+        {
+          key: '2',
+          label: (
+            <p className="d-flex align-center">
+              <img src="/img/card/menu/d-check.svg" alt="" />
+              <span className="card__menu--text ml-10">Просмотреть</span>
+            </p>
+          ),
+          className: 'mb-4',
+        },
+        {
+          key: '4',
+          label: (
+            <Popconfirm
+              placement="top"
+              title="Вы уверены, что хотите удалить этот элемент?"
+              description="Удалить элемент"
+              okText={'Yes'}
+              cancelText="No"
+              open={popconfirmOpen}
+              onConfirm={handleDelete}
+              okButtonProps={{
+                loading: isLoadingDelete,
+                disabled: isLoadingDelete,
+              }}
+              cancelButtonProps={{
+                disabled: isLoadingDelete,
+              }}
+              onCancel={() => setPopconfirmOpen(false)}
+            >
+              <p
+                onClick={() => setPopconfirmOpen(true)}
+                className="d-flex align-center card__menu--label card__menu--label-delete"
+              >
+                <img src="/img/card/menu/delete.svg" alt="" />
+                <span
+                  className="card__menu--text ml-10"
+                  style={{ color: '#FF2D55' }}
+                >
+                  Удалить из списка
+                </span>
+              </p>
+            </Popconfirm>
+          ),
+          className: 'card__menu--label-delete',
+        },
+      ];
 
   const handleOpenMenu: DropdownProps['onOpenChange'] = (nextOpen, info) => {
     if (info.source === 'trigger' || nextOpen) {
@@ -140,6 +239,8 @@ function CompanyContentCard({
                 <img
                   src={item.image ? item.image : '/img/card/empty-avatar.svg'}
                   alt="avatar"
+                  width={50}
+                  height={50}
                 />
               </p>
               <div className="card__user--info">
@@ -201,7 +302,7 @@ function CompanyContentCard({
                 />
                 <span>Место проведение</span>
               </div>
-              <div className="card__item--value">{item?.location || '-'}</div>
+              <div className="card__item--value">{item?.address || '-'}</div>
             </div>
             <div className="card__item">
               <div className="card__item--label">
@@ -219,34 +320,55 @@ function CompanyContentCard({
                 className="card__item--value card__item--value-status"
                 style={{
                   backgroundColor:
-                    CLIENT_COMPANY_STATUS[item.status_client_company]?.color,
+                    CLIENT_COMPANY_STATUS[item.company_status]?.color,
                 }}
               >
                 <span className="dot-live mr-5"></span>
-                {CLIENT_COMPANY_STATUS[item.status_client_company]?.value}
+                {CLIENT_COMPANY_STATUS[item.company_status]?.value}
               </div>
             </div>
+            {['approved', 'active'].includes(item.company_status) && (
+              <>
+                <div className="card__item card__item--comment">
+                  <div className="card__item--label">
+                    <img src="/img/card/comment.svg" alt="" />
+                    <span>Комментарий</span>
+                  </div>
+                  <div className="card__item--value">
+                    {item?.client_company_comment || 'без комментариев'}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
           <div className="card__bottom">
-            <div className="d-flex justify-center">
-              <button
-                className="btn btn-decline"
-                disabled={isLoadingUpdate}
-                onClick={() => handleConfirm('not-processed')}
-              >
-                Отклонить
-              </button>
-              <button
-                disabled={isLoadingUpdate}
-                className="btn btn-confirm"
-                onClick={() => handleConfirm('processed')}
-              >
-                Подтвердить
-              </button>
-            </div>
+            {item.company_status == 'in_process' && (
+              <div className="d-flex justify-center">
+                <button
+                  className="btn btn-decline"
+                  disabled={isLoadingUpdateStatus}
+                  onClick={() => handleConfirm('completed')}
+                >
+                  Отклонить
+                </button>
+                <button
+                  disabled={isLoadingUpdateStatus}
+                  className="btn btn-confirm"
+                  onClick={() => handleConfirm('approved')}
+                >
+                  Подтвердить
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
+      <CreateCommentModal
+        pagename={pagename}
+        onCloseModal={() => setOpenCommentModal(false)}
+        isOpenModal={isOpenCommentModal}
+        retrieveData={item}
+      />
     </>
   );
 }

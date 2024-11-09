@@ -14,14 +14,14 @@ function Leads() {
   return (
     <div className="content">
       <div className="content__header">
-        <ContentHeader pagename="Лиды" hasSaveButton={true} hasDate={true} />
+        <ContentHeader pagename="Лиды"  hasDate={true} />
       </div>
       <div className="content__report"></div>
       <div className="content__main">
         <div className="content__cards">
           <div className="content__row">
-            {data?.results?.length > 0 ? (
-              (data?.results || []).map((item: { id: string }) => (
+            {data?.leads?.results?.length > 0 ? (
+              (data?.leads?.results || []).map((item: { id: string }) => (
                 <LeadContentCard
                   key={item.id}
                   item={item}

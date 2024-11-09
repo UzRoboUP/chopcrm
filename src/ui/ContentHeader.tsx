@@ -6,7 +6,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import HeaderRadioGroup from './HeaderRadioGroup';
 import { useBrand } from '../features/brand/useBrand';
 import { useModel } from '../features/model/useModel';
-import { useCompany } from '../features/company/useCompany';
+import { useCompanies } from '../features/companies/useCompanies';
 import { useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import plus from '../../public/img/plus.svg';
@@ -49,7 +49,8 @@ export default function ContentHeader({
 
   const { brand } = useBrand(hasBrand);
   const { model } = useModel(params.get('car_brand'));
-  const { company } = useCompany(hasCompany);
+  const { data } = useCompanies();
+    
 
   const onChange = (data: {
     id: string;
@@ -172,7 +173,7 @@ export default function ContentHeader({
                   <HeaderRadioGroup
                     defaultValue={searchParams.get('company__name')}
                     name="name"
-                    menu={company}
+                    menu={data}
                     onChange={onChange}
                     searchParam="company__name"
                   />

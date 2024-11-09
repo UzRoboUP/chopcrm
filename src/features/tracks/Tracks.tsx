@@ -22,6 +22,7 @@ function Tracks() {
           hasModel={true}
           hasCompany={true}
           hasPhone={true}
+          hasDate={true}
         />
       </div>
       <div className="content__report"></div>

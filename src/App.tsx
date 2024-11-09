@@ -13,6 +13,8 @@ import GlobalStyles from './styles/GlobalStyles';
 import AppLayout from './ui/AppLayout.tsx';
 import ProtectedRoute from './ui/ProtectedRoute.tsx';
 import StockTaskProvider from './context/StockTaskContext.tsx';
+import CompanyDrivers from './pages/CompanyDrivers.tsx';
+import CompanyEmployees from './pages/CompanyEmployees.tsx';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -41,25 +43,28 @@ function App() {
                         path={menu.path}
                         element={
                           <Suspense fallback={<Skeleton active />}>
-                            <ProtectedRoute roles={menu.roles}>
+                            <ProtectedRoute roles={menu.roles}  >
                               {createElement(menu.component)}
                             </ProtectedRoute>
                           </Suspense>
                         }
                       >
-                        {menu?.elements &&
-                          menu?.elements.map((item) => {
-                            return (
-                              <Route
-                                key={item.path}
-                                path={item.path}
-                                element={createElement(item.el)}
-                              />
-                            );
-                          })}
+                        {menu.elements?.map((item) => (
+                          <Route
+                            key={item.path}
+                            path={item.path}
+                            element={
+                              <Suspense fallback={<Skeleton active />}>
+                                {createElement(item.el)}
+                              </Suspense>
+                            }
+                          />
+                        ))}
                       </Route>
                     );
                   })}
+                  <Route path='companies/:name/:id/drivers' element={<CompanyDrivers/>}/>
+                  <Route path='companies/:name/:id/employees' element={<CompanyEmployees/>}/>
                 </Route>
                 <Route path="login" element={<Login />} />
                 <Route path="*" element={<PageNotFound />} />

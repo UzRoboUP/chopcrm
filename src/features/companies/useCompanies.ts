@@ -5,13 +5,13 @@ import { useSearchParams } from 'react-router-dom';
 export function useCompanies() {
   const [params] = useSearchParams();
   const url = new URLSearchParams(params.toString());
-  const status_client_company = params.get('status_client_company') || '';
+  const company_status = params.get('company_status') || '';
   const {
     isPending: isLoading,
     data,
     isError,
   } = useQuery({
-    queryKey: ['companies',status_client_company],
+    queryKey: ['companies',company_status],
     queryFn: () => Company.getCompany(url),
     retry: 1,
   });

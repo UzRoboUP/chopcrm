@@ -126,7 +126,7 @@ function LeadContentCard({ item, pagename }: ContentCardProps) {
         </div>
       </div>
       <CreateCommentModal
-        pagename="lead"
+        pagename="leads"
         onCloseModal={() => setOpenCommentModal(false)}
         isOpenModal={isOpenCommentModal}
         retrieveData={item}

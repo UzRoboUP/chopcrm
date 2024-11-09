@@ -21,7 +21,9 @@ function CreateStaffDataModal({
   const { createStaff, isPending } = useCreateStaff();
 
   const handleSaveCreate = (e: StaffType) => {
-    e.status = isStatus;
+   
+    
+    e.status = isStatus; 
     createStaff(e, {
       onSuccess: () => {
         onCloseModal();
