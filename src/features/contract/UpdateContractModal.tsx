@@ -3,77 +3,67 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Button, Input, message, Select, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import Modal from '../../ui/Modal';
-import { useTrackUpdate } from '../tracks/useTrackUpdate';
 import { useCompanies } from '../companies/useCompanies';
+import { useModels } from '../model/useModel';
+import { useContractUpdate } from './useContractUpdate';
 
 function UpdateContractModal({
   retrieveData,
   isLoadingData,
   isOpenModal,
   onCloseModal,
+}: {
+  isLoadingData: boolean;
+  isOpenModal: boolean;
+  onCloseModal: () => void;
 }) {
   const queryClient = useQueryClient();
-  const [fullName, setFullName] = useState('');
-  
 
-  const [trackData, setTrackData] = useState({
+  const [contractData, setContractData] = useState({
     id: retrieveData?.id,
-    status_contract: retrieveData?.status_contract,
     companyId: retrieveData?.company?.id,
-    fullName: retrieveData?.full_name,
+    driverId: retrieveData?.driver?.id,
+    fullName: retrieveData?.driver?.driver,
     phoneNumber: retrieveData?.phone_number,
-    carModel: retrieveData?.car_data.car_model,
+    carModel: retrieveData?.car_data?.car_model,
   });
 
-  const { updateTrack, isLoadingUpdate } = useTrackUpdate();
+  const { updateContract, isLoadingUpdate } = useContractUpdate();
   const { data } = useCompanies();
-  console.log(data);
+  const { model } = useModels(isOpenModal);
 
   useEffect(() => {
-    setTrackData({
+    setContractData({
       id: retrieveData?.id,
-      status_contract: retrieveData?.status_contract,
-      companyId: retrieveData?.id,
-      fullName: retrieveData?.full_name,
-      phoneNumber: retrieveData?.phone_number,
-      carModel: retrieveData?.car_data.car_model,
+      driverId: retrieveData?.driver?.id,
+      companyId: retrieveData?.company?.id,
+      fullName: retrieveData?.driver?.full_name,
+      phoneNumber: retrieveData?.driver?.phone_number,
+      carModel: retrieveData?.driver?.car_data?.car_model,
     });
-    setFullName(retrieveData?.full_name);
   }, [retrieveData]);
 
   const handleSaveUpdate = () => {
-    const model = retrieveData?.company
-      ? {
-          id: retrieveData.id,
-          company: trackData.companyId,
-          driver: {
-            full_name: trackData.fullName,
-            // phone_number: trackData.phoneNumber,
-            // id: retrieveData?.id,
-            car_data: {
-              car_model: trackData.carModel,
-              // id: retrieveData?.car_data?.id,
-            },
-          },
-          // status_contract: trackData.status_contract,
-        }
-      : {
-          id: retrieveData.id,
-          full_name: trackData.fullName,
-          phone_number: trackData.phoneNumber,
-          car_data: {
-            car_model: trackData.carModel,
-          },
-          status_contract: trackData.status_contract,
-        };
+    const model = {
+      id: retrieveData.id,
+      company: contractData.companyId,
+      driver: {
+        // id: contractData.driverId,
+        full_name: contractData.fullName,
+        phone_number: contractData.phoneNumber,
+        car_data: {
+          car_model: contractData.carModel,
+        },
+      },
+    };
 
-    updateTrack(
+    updateContract(
       { ...model },
       {
         onSuccess: (data) => {
-          queryClient.setQueryData(['trackUpdate'], data);
-          queryClient.invalidateQueries({ queryKey: ['tracks'] });
-          message.success('Track updated successfully');
+          queryClient.setQueryData(['contractUpdate'], data);
+          queryClient.invalidateQueries({ queryKey: ['employees'] });
+          message.success('Contract updated successfully');
           onCloseModal();
         },
       },
@@ -82,96 +72,120 @@ function UpdateContractModal({
 
   return (
     <Modal
-      title={`Update: ${fullName}`}
-      width="middle"
+      title={''}
+      width="large"
       open={isOpenModal}
       loading={isLoadingData}
       onCancel={onCloseModal}
       closeIcon={true}
     >
       <div className="mt-20">
-        <div className="d-flex justify-between mb-5">
-          <Typography.Title level={5}>ФИО *</Typography.Title>
-          <Input
-            style={{ width: 225, float: 'inline-end', height: 30 }}
-            value={trackData.fullName}
-            onChange={({ target: { value: fullName } }) =>
-              setTrackData((prev) => ({ ...prev, fullName }))
-            }
-          />
+        <div className="d-flex gap-20 mb-5 w-100">
+          <div className="w-100">
+            <Typography.Title level={5}>ФИО</Typography.Title>
+            <Input
+              style={{ float: 'inline-end', height: 40 }}
+              value={contractData.fullName}
+              onChange={({ target: { value: fullName } }) =>
+                setContractData((prev) => ({ ...prev, fullName }))
+              }
+            />
+          </div>
+          <div className="w-100 mb-5">
+            <Typography.Title level={5}>Номер телефона </Typography.Title>
+            <Input
+              style={{ float: 'inline-end', height: 40 }}
+              value={contractData.phoneNumber}
+              onChange={({ target: { value: phoneNumber } }) =>
+                setContractData((prev) => ({ ...prev, phoneNumber }))
+              }
+            />
+          </div>
         </div>
-        {/* <div className="d-flex justify-between mb-5">
-          <Typography.Title level={5}>Имя *</Typography.Title>
-          <Input
-            style={{ width: 225, float: 'inline-end', height: 30 }}
-            defaultValue=""
-          />
-        </div> */}
-        <div className="d-flex justify-between mb-5">
-          <Typography.Title level={5}>Номер телефона</Typography.Title>
-          <Input
-            style={{ width: 225, float: 'inline-end', height: 30 }}
-            value={trackData.phoneNumber}
-            onChange={({ target: { value: phoneNumber } }) =>
-              setTrackData((prev) => ({ ...prev, phoneNumber }))
-            }
-          />
-        </div>
-        <div className="d-flex justify-between mb-5">
-          <Typography.Title level={5}>Тип машины</Typography.Title>
 
-          <Input
-            style={{ width: 225, float: 'inline-end', height: 30 }}
-            value={trackData.carModel}
-            onChange={({ target: { value: carModel } }) =>
-              setTrackData((prev) => ({ ...prev, carModel }))
-            }
-          />
-        </div>
-        <div className="d-flex justify-between">
-          <Typography.Title level={5}>Компания</Typography.Title>
-          <Select
-            style={{ width: 225, float: 'inline-end', height: 30 }}
-            showSearch
-            // defaultValue={trackData.companyId}
-            placeholder="Select a person"
-            optionFilterProp="label"
-            onChange={(e)=>{
-              setTrackData((prev) => ({ ...prev, companyId:e }))
-            } }
-            // onSearch={onSearch}
-            options={
-              data?.client_company_list?.results == 0
-                ? []
-                : data?.client_company_list?.results?.map(
-                    (item: { name: string; id: string }) => {
+        <div className="d-flex gap-20 mb-5">
+          <div className="w-100">
+            <Typography.Title level={5}>Тип машины</Typography.Title>
+
+            <Select
+              style={{ width: '100%', float: 'inline-end', height: 40 }}
+              showSearch
+              defaultValue={contractData?.carModel}
+              value={contractData?.carModel}
+              placeholder="Тип машины"
+              optionFilterProp="label"
+              onChange={(e) => {
+                setContractData((prev) => ({ ...prev, carModel: e }));
+              }}
+              options={
+                model?.length == 0
+                  ? []
+                  : model?.map((item: { model: string; id: string }) => {
                       return {
-                        value: item?.id,
-                        label: item?.name,
+                        value: item?.model,
+                        label: item?.model,
                       };
-                    },
-                  )
-            }
-          />
-          {/* <Input
-            style={{ width: 225, float: 'inline-end', height: 30 }}
-            value={trackData.companyId}
-            onChange={({ target: { value: companyId } }) =>
-              setTrackData((prev) => ({ ...prev, companyId }))
-            }
-          /> */}
+                    })
+              }
+            />
+          </div>
+          <div className="w-100">
+            <Typography.Title level={5}>Компания</Typography.Title>
+            <Select
+              style={{ width: '100%', float: 'inline-end', height: 40 }}
+              showSearch
+              defaultValue={contractData.companyId}
+              value={contractData.companyId}
+              placeholder="Компания"
+              optionFilterProp="label"
+              onChange={(e) => {
+                setContractData((prev) => ({ ...prev, companyId: e }));
+              }}
+              // onSearch={onSearch}
+              options={
+                data?.client_company_list?.results == 0
+                  ? []
+                  : data?.client_company_list?.results?.map(
+                      (item: { name: string; id: string }) => {
+                        return {
+                          value: item?.id,
+                          label: item?.name,
+                        };
+                      },
+                    )
+              }
+            />
+          </div>
         </div>
-        <div className="mt-20 d-flex justify-center">
-          <Button
-            disabled={isLoadingUpdate}
-            loading={isLoadingUpdate}
-            onClick={handleSaveUpdate}
-            type="primary"
-            className=""
-            style={{ backgroundColor: '#21529C', width: 225 }}
-          >
-            Сохранить
-          </Button>
+        <div className="d-flex gap-20">
+          <div className="w-100 d-flex justify-center align-end mt-20">
+            <Button
+              disabled={isLoadingUpdate}
+              onClick={() => onCloseModal()}
+              style={{
+                backgroundColor: 'transparent',
+                border: '1px solid #21529C',
+                width: '25%',
+                height: 40,
+                color: 'black',
+              }}
+            >
+              Отменить
+            </Button>
+            <Button
+              // disabled={isPending}
+              onClick={handleSaveUpdate}
+              disabled={isLoadingUpdate}
+              loading={isLoadingUpdate}
+              type="primary"
+              className="ml-10"
+              htmlType="submit"
+              style={{ backgroundColor: '#21529C', width: '25%', height: 40 }}
+            >
+              Сохранить
+              {/* {isPending ? 'Загрузка...' : 'Сохранить'} */}
+            </Button>
+          </div>
         </div>
       </div>
     </Modal>

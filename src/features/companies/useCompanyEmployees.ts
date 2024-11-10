@@ -11,7 +11,7 @@ export function useCompanyEmployees() {
 
   const {
     isPending: isLoading,
-    data,
+    data:contractData,
     isError,
   } = useQuery({
     queryKey: ['employees'],
@@ -19,5 +19,5 @@ export function useCompanyEmployees() {
     retry: 1,
   });
 
-  return { isLoading, data, error: isError };
+  return { isLoading, contractData, error: isError };
 }

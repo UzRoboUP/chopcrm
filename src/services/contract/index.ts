@@ -12,41 +12,65 @@ class Contract {
     this.$api = apiClient;
   }
 
-  // // GET: /leads/list/
-  // async getLeads(url: URLSearchParams) {
-  //   try {
-  //     return (await this.$api.get(url ? `/leads/list?${url}` : '/leads/list'))
-  //       .data;
-  //   } catch (error) {
-  //     const axiosError = error as AxiosError<ApiErrorResponse>;
-  //     throw new Error(
-  //       axiosError.response?.data?.message || 'An unknown error occurred',
-  //     );
-  //   }
-  // }
-
-    // POST: /contract/create/
-    async createContract({ ...payload }) {
-    
-      try {
-        const response = await this.$api.post(`/contract/create`, {
-          ...payload,
-        });
-        if (response && response.data) {
-          return response.data;
-        } else {
-          throw new Error('The API response did not contain any data.');
-        }
-      } catch (error) {
-        console.log('ERR', error);
-        const axiosError = error as AxiosError<ApiErrorResponse>;
-        throw new Error(
-          axiosError.response?.data?.message || 'An unknown error occurred',
-        );
+  // POST: /contract/create/
+  async createContract({ ...payload }) {
+    try {
+      const response = await this.$api.post(`/contract/create`, {
+        ...payload,
+      });
+      if (response && response.data) {
+        return response.data;
+      } else {
+        throw new Error('The API response did not contain any data.');
       }
+    } catch (error) {
+      console.log('ERR', error);
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      throw new Error(
+        axiosError.response?.data?.message || 'An unknown error occurred',
+      );
     }
+  }
 
-    
+  // GET: /tracking/retrieve/:id
+  async getContract(id: string) {
+    try {
+      const { data } = await this.$api.get(`/contract/retrieve/${id}`);
+      return data;
+    } catch (error) {
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      throw new Error(
+        axiosError.response?.data?.message || 'An unknown error occurred',
+      );
+    }
+  }
+
+  // UPDATE: //update/:id/
+  async updateContract({ ...payload }) {
+    const reqBody = { ...payload };
+    delete reqBody.id;
+    try {
+      const response = await this.$api.patch(
+        `/contract/update/${payload.id}/`,
+        {
+          ...reqBody,
+        },
+      );
+      if (response && response.data) {
+        return response.data;
+      } else {
+        throw new Error('The API response did not contain any data.');
+      }
+    } catch (error) {
+      console.log('ERR', error);
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      throw new Error(
+        axiosError.response?.data?.message ||
+          'Водитель с таким phone number уже существует.',
+      );
+    }
+  }
+
   // DELETE: /tracking/delete/:id/
   async deleteContract(id: string) {
     try {
@@ -59,8 +83,6 @@ class Contract {
       );
     }
   }
-
-  
 }
 
 export default new Contract();

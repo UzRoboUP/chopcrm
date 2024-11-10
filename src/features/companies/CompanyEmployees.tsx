@@ -5,12 +5,14 @@ import CompanyEmployeesCard from './CompanyEmployeesCard';
 import EmptyCard from '../../ui/EmptyCard';
 import UpdateContractModal from '../contract/UpdateContractModal';
 import { useState } from 'react';
+import { useContract } from '../contract/useContract';
 
 export default function CompanyEmployees() {
   const params = useParams();
-  const { data,isLoading } = useCompanyEmployees();
+  const [currentDataId, setCurrentDataId] = useState('');
+  const { contractData } = useCompanyEmployees();
   const [isOpenEditModal, setOpenEditModal] = useState(false);
-
+  const {retrieveData,isLoadingData}= useContract(currentDataId)
   return (
 
     <>
@@ -22,16 +24,16 @@ export default function CompanyEmployees() {
       <div className="content__main">
         <div className="content__cards">
           <div className="content__row">
-            {data?.results?.length > 0 ? (
-              (data?.results || []).map((item: { id: string }) => (
+            {contractData?.results?.length > 0 ? (
+              (contractData?.results || []).map((item: { id: string }) => (
                 <CompanyEmployeesCard
                   key={item.id}
                   item={item}
                   pagename={'employee'}
                   onEdit={() => {
-                    // setCurrentDataId('');
+                    setCurrentDataId('');
                     setOpenEditModal(true);
-                    // setTimeout(() => setCurrentDataId(item.id), 0);
+                    setTimeout(() => setCurrentDataId(item.id), 0);
                   }}
                 />
               ))
@@ -45,9 +47,9 @@ export default function CompanyEmployees() {
         
 
     <UpdateContractModal
-      retrieveData={data}
+      retrieveData={retrieveData}
       isOpenModal={isOpenEditModal}
-      isLoadingData={isLoading}
+      isLoadingData={isLoadingData}
       onCloseModal={() => setOpenEditModal(false)}
     />
     </>

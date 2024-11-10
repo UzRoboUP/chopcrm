@@ -30,6 +30,7 @@ class Company {
 
   // GET: /Company/list/
   async getCompanyEmployees(params: { company: string|undefined }) {
+    
     try {
       return (
         await this.$api.get('/contract/one-company/list/', { params: params })
