@@ -3,14 +3,18 @@ import { useParams } from 'react-router-dom';
 import { useCompanyEmployees } from './useCompanyEmployees';
 import CompanyEmployeesCard from './CompanyEmployeesCard';
 import EmptyCard from '../../ui/EmptyCard';
+import UpdateContractModal from '../contract/UpdateContractModal';
+import { useState } from 'react';
 
 export default function CompanyEmployees() {
   const params = useParams();
-  const { data } = useCompanyEmployees();
-  console.log(data);
+  const { data,isLoading } = useCompanyEmployees();
+  const [isOpenEditModal, setOpenEditModal] = useState(false);
 
   return (
-    <div className="content">
+
+    <>
+     <div className="content">
       <div className="content__header">
         <ContentHeader pagename={'Компании (' + params.name + ')'}  />
       </div>
@@ -26,7 +30,7 @@ export default function CompanyEmployees() {
                   pagename={'employee'}
                   onEdit={() => {
                     // setCurrentDataId('');
-                    // setOpenEditModal(true);
+                    setOpenEditModal(true);
                     // setTimeout(() => setCurrentDataId(item.id), 0);
                   }}
                 />
@@ -38,5 +42,16 @@ export default function CompanyEmployees() {
         </div>
       </div>
     </div>
+        
+
+    <UpdateContractModal
+      retrieveData={data}
+      isOpenModal={isOpenEditModal}
+      isLoadingData={isLoading}
+      onCloseModal={() => setOpenEditModal(false)}
+    />
+    </>
+   
+    
   );
 }

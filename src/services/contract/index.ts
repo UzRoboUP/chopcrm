@@ -46,6 +46,20 @@ class Contract {
       }
     }
 
+    
+  // DELETE: /tracking/delete/:id/
+  async deleteContract(id: string) {
+    try {
+      const { data } = await this.$api.delete(`/contract/delete/${id}/`);
+      return data;
+    } catch (error) {
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      throw new Error(
+        axiosError.response?.data?.message || 'An unknown error occurred',
+      );
+    }
+  }
+
   
 }
 

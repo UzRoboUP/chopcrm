@@ -3,7 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Dropdown, DropdownProps, MenuProps, message, Popconfirm } from 'antd';
 import { useState } from 'react';
 import CreateCommentModal from '../tracks/CreateCommentModal';
-import { useTrackDelete } from '../tracks/useTrackDelete';
+import { useDeleteContract } from '../contract/useDeleteContract';
 
 export type PageNameType = 'track' | 'report' | 'lead' | 'stock'|'company'|'employee';
 
@@ -20,14 +20,14 @@ function CompanyEmployeesCard({ item, pagename, onEdit }: ContentCardProps) {
   const [popconfirmOpen, setPopconfirmOpen] = useState(false);
   const [isOpenCommentModal, setOpenCommentModal] = useState(false);
 
-  const { deleteTrack, isLoadingDelete } = useTrackDelete();
+  const { deleteContract, isLoadingDelete } = useDeleteContract();
 
   const handleDelete = () => {
-    deleteTrack(item.id, {
+    deleteContract(item.id, {
       onSuccess: (data) => {
-        queryClient.setQueryData(['trackDelete'], data);
-        queryClient.invalidateQueries({ queryKey: ['tracks'] });
-        message.success('Track deleted successfully');
+        queryClient.setQueryData(['contractDelete'], data);
+        queryClient.invalidateQueries({ queryKey: ['employees'] });
+        message.success('Contract deleted successfully');
       },
     });
   };
