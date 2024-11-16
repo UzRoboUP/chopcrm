@@ -71,6 +71,8 @@ function MainNav() {
 
   const { clientCompanies } = useClientCompanies();
 
+  console.log('clientCompanies', clientCompanies);
+
   if (!userData) {
     return null;
   }
@@ -98,32 +100,34 @@ function MainNav() {
             )}
           </StyledNavLink>
         ),
-        children: (clientCompanies || []).map((company, index) => ({
-          key: index + 1,
-          className:
-            searchParams.get('company_id') === company?.company_data.id
-              ? 'active-client-company'
-              : '',
-          label: (
-            <p
-              key={company.id}
-              onClick={() => {
-                navigate(`stock?company_id=${company?.company_data.id}`);
-              }}
-              className="d-flex align-center justify-center"
-            >
-              <img
-                width="38"
-                height="14"
-                src={company?.company_data.image}
-                alt={company?.company_data.image || 'no-image'}
-              />
-              <span className="sidebar__nav-sub-link">
-                {company?.company_data.name}
-              </span>
-            </p>
-          ),
-        })),
+        children: (clientCompanies?.stock.results ?? []).map(
+          (company, index) => ({
+            key: index + 1,
+            className:
+              searchParams.get('company_id') === company?.company_data.id
+                ? 'active-client-company'
+                : '',
+            label: (
+              <p
+                key={company.id}
+                onClick={() => {
+                  navigate(`stock?company_id=${company?.company_data.id}`);
+                }}
+                className="d-flex align-center justify-center"
+              >
+                <img
+                  width="38"
+                  height="14"
+                  src={company?.company_data.image}
+                  alt={company?.company_data.image || 'no-image'}
+                />
+                <span className="sidebar__nav-sub-link">
+                  {company?.company_data.name}
+                </span>
+              </p>
+            ),
+          }),
+        ),
       },
     ];
     return items;

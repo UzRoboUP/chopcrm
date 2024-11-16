@@ -1,17 +1,17 @@
-import { DatePicker, DatePickerProps, Dropdown, Input, Space } from 'antd';
-import left from '../../public/img/page-header/left-chevron.svg';
 import { DownOutlined } from '@ant-design/icons';
-import FormBox from './FormBox';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import HeaderRadioGroup from './HeaderRadioGroup';
-import { useBrand } from '../features/brand/useBrand';
-import { useModel } from '../features/model/useModel';
-import { useCompany } from '../features/company/useCompany';
 import { useQueryClient } from '@tanstack/react-query';
+import { DatePicker, DatePickerProps, Dropdown, Input, Space } from 'antd';
 import dayjs from 'dayjs';
-import plus from '../../public/img/plus.svg';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import history from '../../public/img/history.svg';
+import left from '../../public/img/page-header/left-chevron.svg';
+import plus from '../../public/img/plus.svg';
+import { useBrand } from '../features/brand/useBrand';
+import { useCompany } from '../features/company/useCompany';
+import { useModel } from '../features/model/useModel';
 import ExportButton from './ExportButton';
+import FormBox from './FormBox';
+import HeaderRadioGroup from './HeaderRadioGroup';
 // import { useEffect } from 'react';
 export default function ContentHeader({
   pagename,
@@ -73,9 +73,6 @@ export default function ContentHeader({
     params.set('created_at__gt', dateString as unknown as string);
     setSearchParams(params);
   };
-
-  
-
 
   return (
     <div className="content__header__content d-flex align-center justify-between ">
