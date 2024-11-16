@@ -1,0 +1,179 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useQueryClient } from '@tanstack/react-query';
+import { Dropdown, DropdownProps, MenuProps, message, Popconfirm } from 'antd';
+import { useState } from 'react';
+import { useDriverDelete } from '../driver/useDriverDelete';
+import DriverCreateButton from '../../ui/DriverCreateButton';
+import { useParams } from 'react-router-dom';
+
+export type PageNameType = 'track' | 'report' | 'lead' | 'stock';
+
+export type ContentCardProps = {
+  item: { id: string };
+  pagename: PageNameType;
+};
+
+function CompanyDriverCard({ item, pagename }: ContentCardProps) {
+  const params = useParams()
+  const queryClient = useQueryClient();
+
+  const [isOpenMenu, setOpenMenu] = useState(false);
+  const [popconfirmOpen, setPopconfirmOpen] = useState(false);
+
+  const { deleteDriver, isLoadingDelete } = useDriverDelete();
+
+  const handleDelete = () => {
+    deleteDriver(item.id, {
+      onSuccess: (data) => {
+        queryClient.setQueryData(['trackDelete'], data);
+        queryClient.invalidateQueries({ queryKey: ['drivers'] });
+        message.success('Driver deleted successfully');
+      },
+    });
+  };
+
+  const itemsMenu: MenuProps['items'] = [
+    {
+      key: '1',
+      label: (
+        <a
+          href="https://cdn.leetcode.uz/chop-cdn/media/ypx/qabul.xlsx"
+          className="d-flex align-center"
+          download={true}
+        >
+          <img src="/img/card/menu/download.svg" alt="" />
+          <span className="card__menu--text ml-10">Скачать договор</span>
+        </a>
+      ),
+      className: 'mb-4',
+    },
+
+    {
+      key: '4',
+      label: (
+        <Popconfirm
+          placement="top"
+          title="Вы уверены, что хотите удалить этот элемент?"
+          description="Удалить элемент"
+          okText={'Yes'}
+          cancelText="No"
+          open={popconfirmOpen}
+          onConfirm={handleDelete}
+          okButtonProps={{
+            loading: isLoadingDelete,
+            disabled: isLoadingDelete,
+          }}
+          cancelButtonProps={{
+            disabled: isLoadingDelete,
+          }}
+          onCancel={() => setPopconfirmOpen(false)}
+        >
+          <p
+            onClick={() => setPopconfirmOpen(true)}
+            className="d-flex align-center card__menu--label card__menu--label-delete"
+          >
+            <img src="/img/card/menu/delete.svg" alt="" />
+            <span
+              className="card__menu--text ml-10"
+              style={{ color: '#FF2D55' }}
+            >
+              Удалить из списка
+            </span>
+          </p>
+        </Popconfirm>
+      ),
+      className: 'card__menu--label-delete',
+    },
+  ];
+
+  const handleOpenMenu: DropdownProps['onOpenChange'] = (nextOpen, info) => {
+    if (info.source === 'trigger' || nextOpen) {
+      setOpenMenu(nextOpen);
+    }
+  };
+
+  return (
+    <>
+      <div className="content__col">
+        <div className="content__card card">
+          <div className="card__header">
+            <div className="card__user">
+              <p className="card__user--avatar">
+                <img src="/img/card/empty-avatar.svg" alt="avatar" />
+              </p>
+              <div className="card__user--info">
+                <p className="name">{item?.full_name}</p>
+                <p className="rate">
+                  <span>Сегодня 12:40</span>
+                </p>
+              </div>
+            </div>
+            <Dropdown
+              menu={{
+                items: itemsMenu,
+                selectable: false,
+                defaultSelectedKeys: [''],
+              }}
+              placement="bottom"
+              trigger={['click']}
+              arrow={{ pointAtCenter: true }}
+              open={isOpenMenu}
+              onOpenChange={handleOpenMenu}
+              className="drawer-header__settings"
+            >
+              <div className="card__dots cursor-pointer">
+                <img src="/img/card/dots.svg" alt="dots" />
+              </div>
+            </Dropdown>
+          </div>
+          <div className="card__items">
+            <div className="card__item">
+              <div className="card__item--label">
+                <img src="/img/card/phone.svg" alt="" />
+                <span>Телефон</span>
+              </div>
+              <div className="card__item--value">{item?.phone_number}</div>
+            </div>
+            <div className="card__item">
+              <div className="card__item--label">
+                <img src="/img/card/car.svg" alt="" />
+                <span>Тип машины</span>
+              </div>
+              <div className="card__item--value">
+                {item?.car_data?.car_model}
+              </div>
+            </div>
+            {/* <div className="card__item">
+              <div className="card__item--label">
+                <img src="/img/card/rating.svg" alt="" />
+                <span>Рейтинг</span>
+              </div>
+              <div className="card__item--value">{item?.rate || '-'}</div>
+            </div> */}
+            {/* <div className="card__item">
+              <div className="card__item--label">
+                <img src="/img/card/book.svg" alt="" />
+                <span>Компания</span>
+              </div>
+              <div className="card__item--value">{item?.company?.name}</div>
+            </div> */}
+            <div className="card__item card__item--comment">
+              <div className="card__item--label">
+                <img src="/img/card/comment.svg" alt="" />
+                <span>Комментарий</span>
+              </div>
+              <div className="card__item--value">
+                {item?.comment || 'без комментариев'}
+              </div>
+            </div>
+            <div className="card__footer">
+              <DriverCreateButton driverId={item?.id}  companyId={params?.id}/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export default CompanyDriverCard;

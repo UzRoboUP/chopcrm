@@ -91,6 +91,13 @@ export const getMenuData: MenuData = [
     iconActive: icon13Active,
     component: lazyLoad(() => import('../../pages/Companies')),
     roles: ['admin', 'operator', 'manager'],
+    // elements: [
+    //   {
+    //     title: '',
+    //     path: 'drivers', 
+    //     el: lazyLoad(() => import('../../pages/CompanyDrivers')),
+    //   },
+    // ],
   },
   {
     title: 'Акции',

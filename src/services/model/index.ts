@@ -23,6 +23,19 @@ class Model {
       );
     }
   }
+
+   // GET: /model/list/
+   async getModelList() {
+    try {
+      return (await this.$api.get(`/car-model/list/`)).data;
+    } catch (error) {
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      throw new Error(
+        axiosError.response?.data?.message || 'An unknown error occurred',
+      );
+    }
+  }
+
 }
 
 export default new Model();

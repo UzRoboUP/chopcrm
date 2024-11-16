@@ -28,6 +28,20 @@ class Leads {
     }
   }
 
+  async getStocksTask(id:string) {
+    try {
+      return (
+        await this.$api.get(`/stock-task/list/?company_id=${id}`, {
+        })
+      ).data;
+    } catch (error) {
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      throw new Error(
+        axiosError.response?.data?.message || 'An unknown error occurred',
+      );
+    }
+  }
+
   // // TODO
   // // GET: /reporting/retrieve/:id
   // async getLead(id: string) {

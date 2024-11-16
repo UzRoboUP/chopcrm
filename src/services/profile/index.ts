@@ -124,7 +124,6 @@ class Profile {
 
   // Post: /staff/
   async createStaff(data: StaffType) {
-    console.log(data);
 
     try {
       return (await this.$api.post(`/${data.status}/create/`, data)).data;

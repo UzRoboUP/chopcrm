@@ -6,16 +6,17 @@ import { usePastings } from '../pasting/usePastings';
 import { useUpdatePasting } from '../pasting/useUpdatePasting';
 import CompanyContentCard from './CompanyContentCard';
 import { useCompanies } from './useCompanies';
+import CompanyStatus from '../../ui/CompanyStatus';
+import CreateСompanyModal from './CreateСompanyModal';
 
 function Companies() {
   const [isOpenModal, setOpenModal] = useState(false);
+  const [isOpenCompanyModal, setOpenCompanyModal] = useState(false);
   const [isOpenEditModal, setOpenEditModal] = useState(false);
   const [currentDataId, setCurrentDataId] = useState('');
   const [currentData, setCurrentData] = useState({});
   const { data: companies, isLoading } = useCompanies();
   const { updatePasting, isLoadingUpdate } = useUpdatePasting();
-
-  console.log('companies', companies);
 
   const [timeDate, setTimeDate] = useState({
     time: '',
@@ -45,14 +46,13 @@ function Companies() {
     <div className="content">
       <div className="content__header">
         <ContentHeader
-          pagename="Отчетность"
-          hasBrand={true}
-          hasModel={true}
-          hasSaveButton={true}
+          pagename="Компании"
+          hasAddButton
+          openModal={() => setOpenCompanyModal(true)}
         />
       </div>
       <div className="content__report content__report__container">
-        {/* <ReportStatus reportsCount={reportsCount} /> */}
+        <CompanyStatus reportsCount={companies?.number_report_status} />
       </div>
       <div className="content__main">
         <div className="content__cards">
@@ -82,41 +82,11 @@ function Companies() {
           </div>
         </div>
       </div>
-      {/* <Modal
-        title={<h2>Назначить об клейку </h2>}
-        width="middle"
-        open={isOpenModal}
-        onCancel={() => {
-          setOpenModal(false);
-        }}
-      >
-        <div className="d-flex justify-center mt-20 mb-20">
-          <DatePicker onChange={onChangeDate} />
-          <TimePicker
-            className="ml-20"
-            defaultValue={dayjs('12:08', 'HH:mm')}
-            format={'HH:mm'}
-            showNow
-            onChange={onChangeTime}
-          />
-        </div>
-        <div className="d-flex justify-center">
-          <button
-            className="btn btn-decline"
-            onClick={() => setOpenModal(false)}
-            disabled={isLoadingUpdate}
-          >
-            Отклонить
-          </button>
-          <button
-            disabled={isLoadingUpdate}
-            className="btn btn-confirm"
-            onClick={handleConfirm}
-          >
-            Подтвердить
-          </button>
-        </div>
-      </Modal> */}
+
+      <CreateСompanyModal
+        isOpenModal={isOpenCompanyModal}
+        onCloseModal={() => setOpenCompanyModal(false)}
+      />
     </div>
   );
 }

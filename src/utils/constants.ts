@@ -73,13 +73,21 @@ export const PASTING_STATUS = {
 } as const;
 
 export const CLIENT_COMPANY_STATUS = {
-  'not-processed': {
+  in_process: {
     color: '#FF9500',
     value: 'В процессе одобрение',
   },
-  processed: {
+  approved: {
     color: '#007AFF',
     value: 'Одобренные',
+  },
+  active: {
+    color: '#30B0C7',
+    value: 'Активные',
+  },
+  completed: {
+    color: '#FF2800',
+    value: 'Отклоненные',
   },
 } as const;
 

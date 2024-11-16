@@ -4,6 +4,7 @@ import { Dropdown, DropdownProps, MenuProps, message, Popconfirm } from 'antd';
 import { useState } from 'react';
 import CreateCommentModal from './CreateCommentModal';
 import { useTrackDelete } from './useTrackDelete';
+import DriverLicenseModal from './DriverLicenseModal';
 
 export type PageNameType = 'track' | 'report' | 'lead' | 'stock';
 
@@ -19,6 +20,7 @@ function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
   const [isOpenMenu, setOpenMenu] = useState(false);
   const [popconfirmOpen, setPopconfirmOpen] = useState(false);
   const [isOpenCommentModal, setOpenCommentModal] = useState(false);
+  const [isOpenLicenseModal, setOpenLicenseModal] = useState(false);
 
   const { deleteTrack, isLoadingDelete } = useTrackDelete();
 
@@ -111,6 +113,24 @@ function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
       ),
       className: 'card__menu--label-delete',
     },
+    {
+      key: '5',
+      label: (
+        <p
+          onClick={() => {
+            setOpenMenu(false);
+            setOpenLicenseModal(true);
+          }}
+          className="d-flex align-center"
+        >
+          <img src="/img/card/menu/plus.svg" alt="" />
+          <span className="card__menu--text ml-10">
+            Добавить разрешение СБДД
+          </span>
+        </p>
+      ),
+      className: 'mb-4',
+    },
   ];
 
   const handleOpenMenu: DropdownProps['onOpenChange'] = (nextOpen, info) => {
@@ -129,7 +149,7 @@ function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <img src="/img/card/empty-avatar.svg" alt="avatar" />
               </p>
               <div className="card__user--info">
-                <p className="name">{item?.driver.full_name}</p>
+                <p className="name">{item?.full_name}</p>
                 <p className="rate">
                   <span>Сегодня 12:40</span>
                 </p>
@@ -159,9 +179,7 @@ function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <img src="/img/card/phone.svg" alt="" />
                 <span>Телефон</span>
               </div>
-              <div className="card__item--value">
-                {item?.driver.phone_number}
-              </div>
+              <div className="card__item--value">{item?.phone_number}</div>
             </div>
             <div className="card__item">
               <div className="card__item--label">
@@ -169,7 +187,7 @@ function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <span>Тип машины</span>
               </div>
               <div className="card__item--value">
-                {item?.driver.car_data.car_model}
+                {item?.car_data.car_model}
               </div>
             </div>
             <div className="card__item">
@@ -177,16 +195,14 @@ function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <img src="/img/card/rating.svg" alt="" />
                 <span>Рейтинг</span>
               </div>
-              <div className="card__item--value">
-                {item?.rate.rate_avg || '-'}
-              </div>
+              <div className="card__item--value">{item?.rate || '-'}</div>
             </div>
             <div className="card__item">
               <div className="card__item--label">
                 <img src="/img/card/book.svg" alt="" />
                 <span>Компания</span>
               </div>
-              <div className="card__item--value">{item.company.name}</div>
+              <div className="card__item--value">{item?.company?.name}</div>
             </div>
             <div className="card__item card__item--comment">
               <div className="card__item--label">
@@ -194,7 +210,7 @@ function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <span>Комментарий</span>
               </div>
               <div className="card__item--value">
-                {item?.contract_comment || 'без комментариев'}
+                {item?.comment || 'без комментариев'}
               </div>
             </div>
           </div>
@@ -205,6 +221,11 @@ function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
         onCloseModal={() => setOpenCommentModal(false)}
         isOpenModal={isOpenCommentModal}
         retrieveData={item}
+      />
+      <DriverLicenseModal
+        onCloseModal={() => setOpenLicenseModal(false)}
+        isOpenModal={isOpenLicenseModal}
+        id={item.id}
       />
     </>
   );

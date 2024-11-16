@@ -7,7 +7,7 @@ import history from '../../public/img/history.svg';
 import left from '../../public/img/page-header/left-chevron.svg';
 import plus from '../../public/img/plus.svg';
 import { useBrand } from '../features/brand/useBrand';
-import { useCompany } from '../features/company/useCompany';
+import { useCompanies } from '../features/companies/useCompanies';
 import { useModel } from '../features/model/useModel';
 import ExportButton from './ExportButton';
 import FormBox from './FormBox';
@@ -25,6 +25,7 @@ export default function ContentHeader({
   hasAddButton = false,
   taskText = '',
   hasHistory = false,
+  openTaskModal,
   openModal,
 }: {
   pagename: string;
@@ -39,6 +40,7 @@ export default function ContentHeader({
   hasAddButton?: boolean;
   hasHistory?: boolean;
   openModal?: () => void;
+  openTaskModal?: () => void;
 }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -47,7 +49,7 @@ export default function ContentHeader({
 
   const { brand } = useBrand(hasBrand);
   const { model } = useModel(params.get('car_brand'));
-  const { company } = useCompany(hasCompany);
+  const { data } = useCompanies();
 
   const onChange = (data: {
     id: string;
@@ -167,7 +169,7 @@ export default function ContentHeader({
                   <HeaderRadioGroup
                     defaultValue={searchParams.get('company__name')}
                     name="name"
-                    menu={company}
+                    menu={data}
                     onChange={onChange}
                     searchParam="company__name"
                   />
@@ -197,6 +199,9 @@ export default function ContentHeader({
 
           {hasTask && (
             <>
+              <button className="stock__task__btn" onClick={openTaskModal}>
+                Все задания
+              </button>
               <div className="stock__task">{taskText}</div>
             </>
           )}
