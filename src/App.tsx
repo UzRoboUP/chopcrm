@@ -15,6 +15,7 @@ import ProtectedRoute from './ui/ProtectedRoute.tsx';
 import StockTaskProvider from './context/StockTaskContext.tsx';
 import CompanyDrivers from './pages/CompanyDrivers.tsx';
 import CompanyEmployees from './pages/CompanyEmployees.tsx';
+import { RateProvider } from './context/RadeContext.tsx';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,7 +28,8 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <DarkModeProvider>
-      <QueryClientProvider client={queryClient}>
+        <RateProvider>
+          <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={true} />
         <GlobalStyles />
         <BrowserRouter>
@@ -72,7 +74,9 @@ function App() {
             </BreadcrumbProvider>
           </StockTaskProvider>
         </BrowserRouter>
-      </QueryClientProvider>
+      </QueryClientProvider> 
+        </RateProvider>
+     
     </DarkModeProvider>
   );
 }

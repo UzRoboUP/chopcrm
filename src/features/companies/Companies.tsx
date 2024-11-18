@@ -1,47 +1,29 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ContentHeader from '../../ui/ContentHeader';
 import EmptyCard from '../../ui/EmptyCard';
-import { usePastings } from '../pasting/usePastings';
-import { useUpdatePasting } from '../pasting/useUpdatePasting';
 import CompanyContentCard from './CompanyContentCard';
 import { useCompanies } from './useCompanies';
 import CompanyStatus from '../../ui/CompanyStatus';
 import CreateСompanyModal from './CreateСompanyModal';
-
+import { Rate } from '../../context/RadeContext';
+export type companyType = {
+  address: string;
+  total_cars_number: string;
+  contract_finish_time: string;
+  name: string;
+  tarif_list: Rate[];
+  phone_number: string;
+};
 function Companies() {
-  const [isOpenModal, setOpenModal] = useState(false);
   const [isOpenCompanyModal, setOpenCompanyModal] = useState(false);
-  const [isOpenEditModal, setOpenEditModal] = useState(false);
-  const [currentDataId, setCurrentDataId] = useState('');
-  const [currentData, setCurrentData] = useState({});
-  const { data: companies, isLoading } = useCompanies();
-  const { updatePasting, isLoadingUpdate } = useUpdatePasting();
-
-  const [timeDate, setTimeDate] = useState({
-    time: '',
-    date: '',
-  });
-
-  const handleConfirm = () => {
-    const combinedDateTime = `${timeDate.date}T${timeDate.time}:00Z`;
-    const dateObject = new Date(combinedDateTime);
-    updatePasting(
-      {
-        id: currentData?.id,
-        contract: currentData?.contract,
-        status_pasting: currentData?.status_pasting,
-        pasting_time: dateObject.toISOString(),
-      },
-      {
-        onSuccess() {
-          setOpenModal(false);
-          setCurrentData({});
-        },
-      },
-    );
-  };
-
+  const { data: companies } = useCompanies();
+  const [companyData, setCompanyData] = useState<companyType | null>();
+  useEffect(() => {
+    if (!isOpenCompanyModal) {
+      setCompanyData(null);
+    }
+  }, [isOpenCompanyModal]);
   return (
     <div className="content">
       <div className="content__header">
@@ -64,14 +46,9 @@ function Companies() {
                     key={item.id}
                     item={item}
                     pagename="company"
-                    onOpenModal={() => {
-                      setCurrentData(item);
-                      setOpenModal(true);
-                    }}
-                    onEdit={() => {
-                      setCurrentDataId('');
-                      setOpenEditModal(true);
-                      setTimeout(() => setCurrentDataId(item.id), 0);
+                    showCompanyData={() => {
+                      setOpenCompanyModal(true);
+                      setCompanyData(item as unknown as companyType);
                     }}
                   />
                 ),
@@ -84,6 +61,7 @@ function Companies() {
       </div>
 
       <CreateСompanyModal
+        companyData={companyData}
         isOpenModal={isOpenCompanyModal}
         onCloseModal={() => setOpenCompanyModal(false)}
       />

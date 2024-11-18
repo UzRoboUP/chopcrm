@@ -29,8 +29,7 @@ class Company {
   }
 
   // GET: /Company/list/
-  async getCompanyEmployees(params: { company: string|undefined }) {
-    
+  async getCompanyEmployees(params: { company: string | undefined }) {
     try {
       return (
         await this.$api.get('/contract/one-company/list/', { params: params })
@@ -76,27 +75,38 @@ class Company {
       );
     }
   }
-  
-    // POST: /comment/create/
-    async createComment({ ...payload }) {
-    
-      try {
-        const response = await this.$api.post(`/comment-client-company/create/`, {
-          ...payload,
-        });
-        if (response && response.data) {
-          return response.data;
-        } else {
-          throw new Error('The API response did not contain any data.');
-        }
-      } catch (error) {
-        console.log('ERR', error);
-        const axiosError = error as AxiosError<ApiErrorResponse>;
-        throw new Error(
-          axiosError.response?.data?.message || 'An unknown error occurred',
-        );
+
+  // POST: /comment/create/
+  async createComment({ ...payload }) {
+    try {
+      const response = await this.$api.post(`/comment-client-company/create/`, {
+        ...payload,
+      });
+      if (response && response.data) {
+        return response.data;
+      } else {
+        throw new Error('The API response did not contain any data.');
       }
+    } catch (error) {
+      console.log('ERR', error);
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      throw new Error(
+        axiosError.response?.data?.message || 'An unknown error occurred',
+      );
     }
+  }
+
+  async createCompany(data: FormData) {
+    try {
+      return (await this.$api.post('/client-company/create/', data)).data;
+    } catch (error) {
+      console.log('ERR', error);
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      throw new Error(
+        axiosError.response?.data?.message || 'An unknown error occurred',
+      );
+    }
+  }
 
   // UPDATE: /client-company/update/:id/
   async updateCompanyStatus({ ...payload }) {
@@ -112,6 +122,18 @@ class Company {
       } else {
         throw new Error('The API response did not contain any data.');
       }
+    } catch (error) {
+      console.log('ERR', error);
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      throw new Error(
+        axiosError.response?.data?.message || 'An unknown error occurred',
+      );
+    }
+  }
+
+  async createCompanyLogo(data: FormData) {
+    try {
+      return (await this.$api.post('/client-company/create/logo/', data)).data;
     } catch (error) {
       console.log('ERR', error);
       const axiosError = error as AxiosError<ApiErrorResponse>;
