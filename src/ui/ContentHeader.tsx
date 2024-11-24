@@ -1,14 +1,26 @@
 import { DownOutlined } from '@ant-design/icons';
-import { useQueryClient } from '@tanstack/react-query';
-import { DatePicker, DatePickerProps, Dropdown, Input, Space } from 'antd';
-import dayjs from 'dayjs';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import history from '../../public/img/history.svg';
+import {
+  DatePicker,
+  DatePickerProps,
+  Dropdown,
+  Input,
+  message,
+  Space,
+  Spin,
+} from 'antd';
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom';
 import left from '../../public/img/page-header/left-chevron.svg';
-import plus from '../../public/img/plus.svg';
+import { useStockDriversContext } from '../context/StockDriverContext';
 import { useBrand } from '../features/brand/useBrand';
 import { useCompanies } from '../features/companies/useCompanies';
 import { useModel } from '../features/model/useModel';
+import { useCreateStockDrivers } from '../features/stocks/useCreateStockDrivers';
+import { STOCK_STATUS__TYPE } from '../utils/constants';
 import ExportButton from './ExportButton';
 import FormBox from './FormBox';
 import HeaderRadioGroup from './HeaderRadioGroup';
@@ -21,11 +33,12 @@ export default function ContentHeader({
   hasPhone = false,
   hasSaveButton = false,
   hasDate = false,
-  hasTask = false,
   hasAddButton = false,
   taskText = '',
   hasHistory = false,
-  openTaskModal,
+  hasStock = false,
+  hasAddStockDriverButton = false,
+  hasTasksBackLink = false,
   openModal,
 }: {
   pagename: string;
@@ -35,14 +48,17 @@ export default function ContentHeader({
   hasPhone?: boolean;
   hasSaveButton?: boolean;
   hasDate?: boolean;
-  hasTask?: boolean;
   taskText?: string;
   hasAddButton?: boolean;
   hasHistory?: boolean;
+  hasStock?: boolean;
+  hasAddStockDriverButton?: boolean;
+  hasTasksBackLink?: boolean;
   openModal?: () => void;
   openTaskModal?: () => void;
 }) {
   const navigate = useNavigate();
+  const param = useParams();
   const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
   const params = new URLSearchParams(searchParams.toString());
@@ -50,7 +66,8 @@ export default function ContentHeader({
   const { brand } = useBrand(hasBrand);
   const { model } = useModel(params.get('car_brand'));
   const { data } = useCompanies();
-
+  const { stockDrivers, clearStockDriver } = useStockDriversContext();
+  const { createStockDriver, isLoadingContract } = useCreateStockDrivers();
   const onChange = (data: {
     id: string;
     name: string;
@@ -74,6 +91,16 @@ export default function ContentHeader({
   const onChangeDate: DatePickerProps['onChange'] = (date, dateString) => {
     params.set('created_at__gt', dateString as unknown as string);
     setSearchParams(params);
+  };
+
+  const createStockDriverHandler = () => {
+    createStockDriver(stockDrivers, {
+      onSuccess: () => {
+        message.success(`${stockDrivers.length} водителям отправлено успешно`);
+        clearStockDriver();
+        queryClient.invalidateQueries('employees');
+      },
+    });
   };
 
   return (
@@ -101,6 +128,35 @@ export default function ContentHeader({
                   : null
               }
             />
+          )}
+          {hasStock && (
+            <FormBox title="Вид акции">
+              <Dropdown
+                trigger={['click']}
+                dropdownRender={() => (
+                  <HeaderRadioGroup
+                    defaultValue={searchParams.get('stock_type')}
+                    menu={[
+                      { id: '1', name: 'parking', label: 'Парковка' },
+                      { id: '2', name: 'direction', label: 'Проезд' },
+                      { id: '3', name: 'wish', label: 'Другие' },
+                    ]}
+                    name="name"
+                    onChange={onChange}
+                    searchParam="stock_type"
+                  />
+                )}
+              >
+                <a onClick={(e) => e.preventDefault()}>
+                  <Space>
+                    {searchParams.get('stock_type')
+                      ? STOCK_STATUS__TYPE[searchParams.get('stock_type')].value
+                      : 'Выберите'}
+                    <DownOutlined />
+                  </Space>
+                </a>
+              </Dropdown>
+            </FormBox>
           )}
           {hasBrand && (
             <FormBox title="Марка">
@@ -197,15 +253,38 @@ export default function ContentHeader({
             </FormBox>
           )}
 
-          {hasTask && (
+          {hasTasksBackLink && (
             <>
-              <button className="stock__task__btn" onClick={openTaskModal}>
+              <Link
+                to={`/stock?company_id=${param.id}`}
+                className="stock__task__btn"
+              >
                 Все задания
-              </button>
+              </Link>
               <div className="stock__task">{taskText}</div>
             </>
           )}
         </div>
+        {hasAddStockDriverButton && (
+          <button
+            onClick={createStockDriverHandler}
+            disabled={
+              stockDrivers.length > 0 || isLoadingContract ? false : true
+            }
+            style={{
+              backgroundColor: stockDrivers.length > 0 ? '#30B0C7' : '#7F8788',
+            }}
+            className="card__footer--btn"
+          >
+            {isLoadingContract ? (
+              <>
+                <Spin size="small" /> Отправить всем
+              </>
+            ) : (
+              'Отправить всем'
+            )}
+          </button>
+        )}
       </div>
       {hasSaveButton && <ExportButton />}
       {hasAddButton && (

@@ -1,4 +1,8 @@
 export const STOCK_STATUS = {
+  in_process: {
+    color: '#FF9500',
+    value: 'В ожидании',
+  },
   pending: {
     color: '#FF9500',
     value: 'В ожидании',
@@ -10,6 +14,22 @@ export const STOCK_STATUS = {
   confirmed: {
     color: '#30B0C7',
     value: 'Подтвержден',
+  },
+  completed: {
+    color: 'rgb(255, 149, 0)',
+    value: 'Завершенные',
+  },
+} as const;
+
+export const STOCK_STATUS__TYPE = {
+  parking: {
+    value: 'Парковка',
+  },
+  direction: {
+    value: 'Проезд',
+  },
+  wish: {
+    value: 'Другие',
   },
 } as const;
 

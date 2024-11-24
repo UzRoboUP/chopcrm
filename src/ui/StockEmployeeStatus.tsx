@@ -1,10 +1,10 @@
 import StatusCard from './StatusCard';
 
-export default function STOCK_STATUS({
+export default function StockEmployeeStatus({
   reportsCount,
 }: {
   reportsCount: {
-    completed: string;
+    pending: string;
     rejected: string;
     confirmed: string;
   }[];
@@ -16,21 +16,21 @@ export default function STOCK_STATUS({
         count={reportsCount?.[0]?.confirmed}
         color="#30B0C7"
         param="confirmed"
-        paramStatus="stock_task_status"
+        paramStatus="status_stock"
       />
       <StatusCard
         text="Отклонен"
         count={reportsCount?.[2]?.rejected}
         color="#FF2800"
         param="rejected"
-        paramStatus="stock_task_status"
+        paramStatus="status_stock"
       />
       <StatusCard
         text="Завершенные "
-        count={reportsCount?.[3]?.completed}
+        count={reportsCount?.[1]?.pending}
         color="#FF9500"
-        param="completed"
-        paramStatus="stock_task_status"
+        param="pending"
+        paramStatus="status_stock"
       />
     </>
   );

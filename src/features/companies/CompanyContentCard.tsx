@@ -4,7 +4,7 @@ import { Dropdown, DropdownProps, MenuProps, message, Popconfirm } from 'antd';
 import { useState } from 'react';
 import { CLIENT_COMPANY_STATUS } from '../../utils/constants';
 import { convertTimestamp } from '../../utils/helpers';
-import { useUpdateCompany, useUpdateCompanyStatus } from './useUpdateCompany';
+import { useUpdateCompanyStatus } from './useUpdateCompany';
 import { Link } from 'react-router-dom';
 import CreateCommentModal from '../tracks/CreateCommentModal';
 import { useCompanyDelete } from './useCompanyDelete';
@@ -20,19 +20,16 @@ export type PageNameType =
 export type ContentCardProps = {
   item: { id: string };
   pagename: PageNameType;
-  onEdit: () => void;
-  onOpenModal: () => void;
+  showCompanyData: () => void;
 };
 
 function CompanyContentCard({
   item,
   pagename,
-  onOpenModal,
-  onEdit,
+  showCompanyData,
 }: ContentCardProps) {
   const queryClient = useQueryClient();
 
-  console.log('item', item);
   const [isOpenCommentModal, setOpenCommentModal] = useState(false);
   const [isOpenMenu, setOpenMenu] = useState(false);
   const [popconfirmOpen, setPopconfirmOpen] = useState(false);
@@ -67,7 +64,7 @@ function CompanyContentCard({
   };
 
   const itemsMenu: MenuProps['items'] = ['approved', 'active'].includes(
-    item.company_status,
+    item?.company_status,
   )
     ? [
         {
@@ -86,7 +83,13 @@ function CompanyContentCard({
         {
           key: '2',
           label: (
-            <p className="d-flex align-center">
+            <p
+              className="d-flex align-center"
+              onClick={() => {
+                showCompanyData();
+                setOpenMenu(false);
+              }}
+            >
               <img src="/img/card/menu/d-check.svg" alt="" />
               <span className="card__menu--text ml-10">Просмотреть</span>
             </p>
@@ -178,7 +181,13 @@ function CompanyContentCard({
         {
           key: '2',
           label: (
-            <p className="d-flex align-center">
+            <p
+              className="d-flex align-center"
+              onClick={() => {
+                showCompanyData();
+                setOpenMenu(false);
+              }}
+            >
               <img src="/img/card/menu/d-check.svg" alt="" />
               <span className="card__menu--text ml-10">Просмотреть</span>
             </p>
@@ -273,9 +282,7 @@ function CompanyContentCard({
                 <img src="/img/card/car.svg" alt="" />
                 <span>Тип машины</span>
               </div>
-              <div className="card__item--value">
-                {item?.contract_data?.driver_data?.car_data?.car_model}
-              </div>
+              <div className="card__item--value">...</div>
             </div>
             <div className="card__item">
               <div className="card__item--label">
@@ -309,7 +316,13 @@ function CompanyContentCard({
                 <img style={{ height: 22 }} src="/img/card/target.svg" alt="" />
                 <span>Тариф</span>
               </div>
-              <div className="card__item--value">{item?.tariff || '-'}</div>
+              <div className="card__item--value">
+                {item?.tarif_list?.map((item, index) => (
+                  <div key={index}>
+                    <span>{item?.tarif_name}</span> <br />
+                  </div>
+                ))}
+              </div>
             </div>
             <div className="card__item mb-0">
               <div className="card__item--label">
@@ -327,7 +340,7 @@ function CompanyContentCard({
                 {CLIENT_COMPANY_STATUS[item.company_status]?.value}
               </div>
             </div>
-            {['approved', 'active'].includes(item.company_status) && (
+            {['approved', 'active'].includes(item?.company_status) && (
               <>
                 <div className="card__item card__item--comment">
                   <div className="card__item--label">

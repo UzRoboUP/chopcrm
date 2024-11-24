@@ -4,48 +4,42 @@ import ContentHeader from '../../ui/ContentHeader';
 import EmptyCard from '../../ui/EmptyCard';
 import StockStatus from '../../ui/StockStatus';
 import StockContentCard from './StockContentCard';
-import { useStocks } from './useStocks';
-import StockTaskModal from './StockTaskModal';
-import { useContext } from 'react';
-import { StockTaskContext } from '../../context/StockTaskContext';
+import { useStocksTask } from './useStocksTask';
+// import StockTaskModal from './StockTaskModal';
 function Stocks() {
-  const [isOpenModal, setOpenModal] = useState(false);
+  // const [isOpenModal, setOpenModal] = useState(false);
   const [isOpenEditModal, setOpenEditModal] = useState(false);
-  const [currentDataId, setCurrentDataId] = useState('');
-  const { data, isLoading } = useStocks();
-  const {stockTaskText} = useContext(StockTaskContext)
-  const closeModal=()=>{
-    setOpenModal(false)
-  }
-  
+  // const [currentDataId, setCurrentDataId] = useState('');
+  const { data, isLoading } = useStocksTask();
+  // const closeModal = () => {
+  //   setOpenModal(false);
+  // };
 
   return (
     <div className="content">
       <div className="content__header">
         <ContentHeader
-          openTaskModal={()=>setOpenModal(true)}
+          hasAddButton
+          hasStock
+          // openTaskModal={() => setOpenModal(true)}
           pagename="Акции"
-          hasBrand={true}
-          hasModel={true}
-          hasTask={true}
-          taskText={stockTaskText}
         />
       </div>
       <div className="content__report content__report__container">
-        <StockStatus reportsCount={data?.number_stock_status} />
+        <StockStatus reportsCount={data?.number_stock_task_status} />
       </div>
       <div className="content__main">
         <div className="content__cards">
           <div className="content__row">
-            {data?.results?.length > 0 ? (
-              (data?.results || []).map((item: { id: string }) => (
+            {data?.stock?.length > 0 ? (
+              (data?.stock || []).map((item: { id: string }) => (
                 <StockContentCard
                   key={item.id}
                   item={item}
                   onEdit={() => {
-                    setCurrentDataId('');
+                    // setCurrentDataId('');
                     setOpenEditModal(true);
-                    setTimeout(() => setCurrentDataId(item.id), 0);
+                    // setTimeout(() => setCurrentDataId(item.id), 0);
                   }}
                 />
               ))
@@ -55,7 +49,7 @@ function Stocks() {
           </div>
         </div>
       </div>
-      <StockTaskModal isOpenModal={isOpenModal} onCloseModal={closeModal} />
+      {/* <StockTaskModal isOpenModal={isOpenModal} onCloseModal={closeModal} /> */}
     </div>
   );
 }

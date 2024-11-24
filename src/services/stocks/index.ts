@@ -1,5 +1,6 @@
 import { AxiosError } from 'axios';
 import apiClient from '../axios';
+import { stockDriverType } from '../../context/StockDriverContext';
 
 type ApiErrorResponse = {
   message: string;
@@ -13,10 +14,10 @@ class Leads {
   }
 
   // GET: /leads/list/
-  async getStocks({ ...params }) {
+  async getStocksTask({ ...params }) {
     try {
       return (
-        await this.$api.get('/stock/list', {
+        await this.$api.get('/stock-task/list/', {
           params: { ...params },
         })
       ).data;
@@ -28,13 +29,36 @@ class Leads {
     }
   }
 
-  async getStocksTask(id:string) {
+  async getStocks({ ...params }) {
     try {
       return (
-        await this.$api.get(`/stock-task/list/?company_id=${id}`, {
+        await this.$api.get(`/stock/list/`, {
+          params: { ...params },
         })
       ).data;
     } catch (error) {
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      throw new Error(
+        axiosError.response?.data?.message || 'An unknown error occurred',
+      );
+    }
+  }
+
+  async updateStockStatus({ ...payload }) {
+    try {
+      const response = await this.$api.patch(
+        `/stock-task/status/update/${payload.id}`,
+        {
+          ...payload,
+        },
+      );
+      if (response && response.data) {
+        return response.data;
+      } else {
+        throw new Error('The API response did not contain any data.');
+      }
+    } catch (error) {
+      console.log('ERR', error);
       const axiosError = error as AxiosError<ApiErrorResponse>;
       throw new Error(
         axiosError.response?.data?.message || 'An unknown error occurred',
@@ -58,7 +82,7 @@ class Leads {
   // DELETE: /stock/delete/:id/
   async deleteStock(id: string) {
     try {
-      return (await this.$api.delete(`/stock/delete/${id}/`)).data;
+      return (await this.$api.delete(`/stock-task/delete/${id}/`)).data;
     } catch (error) {
       const axiosError = error as AxiosError<ApiErrorResponse>;
       throw new Error(
@@ -66,6 +90,59 @@ class Leads {
       );
     }
   }
+
+  // POST: /comment/create/
+  async createComment({ ...payload }) {
+    try {
+      const response = await this.$api.post(`/comment-stock-task/create/`, {
+        ...payload,
+      });
+      if (response && response.data) {
+        return response.data;
+      } else {
+        throw new Error('The API response did not contain any data.');
+      }
+    } catch (error) {
+      console.log('ERR', error);
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      throw new Error(
+        axiosError.response?.data?.message || 'An unknown error occurred',
+      );
+    }
+  }
+
+  async createStockDrivers(payload: stockDriverType[]) {
+    console.log(payload);
+
+    try {
+      const response = await this.$api.post(`/stock/bulk-create`, payload);
+      if (response && response.data) {
+        return response.data;
+      } else {
+        throw new Error('The API response did not contain any data.');
+      }
+    } catch (error) {
+      console.log('ERR', error);
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      throw new Error(
+        axiosError.response?.data?.message || 'An unknown error occurred',
+      );
+    }
+  }
+
+    // DELETE: /tracking/delete/:id/
+    async deleteStockEmployee(id: string) {
+      try {
+        const { data } = await this.$api.delete(`/stock/delete/${id}/`);
+        return data;
+      } catch (error) {
+        const axiosError = error as AxiosError<ApiErrorResponse>;
+        throw new Error(
+          axiosError.response?.data?.message || 'An unknown error occurred',
+        );
+      }
+    }
+  
 
   // // UPDATE: /reporting/update/:id/
   // async updateLead({ ...payload }) {

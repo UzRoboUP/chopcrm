@@ -12,9 +12,12 @@ import { getMenuData } from './services/menu/index.ts';
 import GlobalStyles from './styles/GlobalStyles';
 import AppLayout from './ui/AppLayout.tsx';
 import ProtectedRoute from './ui/ProtectedRoute.tsx';
-import StockTaskProvider from './context/StockTaskContext.tsx';
+import { StockDriverProvider } from './context/StockDriverContext.tsx';
 import CompanyDrivers from './pages/CompanyDrivers.tsx';
 import CompanyEmployees from './pages/CompanyEmployees.tsx';
+import { RateProvider } from './context/RadeContext.tsx';
+import StockDrivers from './pages/StockDrivers.tsx';
+import StockEmployees from './pages/StockEmployees.tsx';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,52 +30,71 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <DarkModeProvider>
-      <QueryClientProvider client={queryClient}>
-        <ReactQueryDevtools initialIsOpen={true} />
-        <GlobalStyles />
-        <BrowserRouter>
-          <StockTaskProvider>
-            <BreadcrumbProvider>
-              <Routes>
-                <Route path="/" element={<AppLayout />}>
-                  <Route index element={<Navigate replace to="analytics" />} />
-                  {getMenuData.map((menu) => {
-                    return (
-                      <Route
-                        key={menu.key}
-                        path={menu.path}
-                        element={
-                          <Suspense fallback={<Skeleton active />}>
-                            <ProtectedRoute roles={menu.roles}  >
-                              {createElement(menu.component)}
-                            </ProtectedRoute>
-                          </Suspense>
-                        }
-                      >
-                        {menu.elements?.map((item) => (
-                          <Route
-                            key={item.path}
-                            path={item.path}
-                            element={
-                              <Suspense fallback={<Skeleton active />}>
-                                {createElement(item.el)}
-                              </Suspense>
-                            }
-                          />
-                        ))}
-                      </Route>
-                    );
-                  })}
-                  <Route path='companies/:name/:id/drivers' element={<CompanyDrivers/>}/>
-                  <Route path='companies/:name/:id/employees' element={<CompanyEmployees/>}/>
-                </Route>
-                <Route path="login" element={<Login />} />
-                <Route path="*" element={<PageNotFound />} />
-              </Routes>
-            </BreadcrumbProvider>
-          </StockTaskProvider>
-        </BrowserRouter>
-      </QueryClientProvider>
+      <RateProvider>
+        <QueryClientProvider client={queryClient}>
+          <ReactQueryDevtools initialIsOpen={true} />
+          <GlobalStyles />
+          <BrowserRouter>
+            <StockDriverProvider>
+              <BreadcrumbProvider>
+                <Routes>
+                  <Route path="/" element={<AppLayout />}>
+                    <Route
+                      index
+                      element={<Navigate replace to="analytics" />}
+                    />
+                    {getMenuData.map((menu) => {
+                      return (
+                        <Route
+                          key={menu.key}
+                          path={menu.path}
+                          element={
+                            <Suspense fallback={<Skeleton active />}>
+                              <ProtectedRoute roles={menu.roles}>
+                                {createElement(menu.component)}
+                              </ProtectedRoute>
+                            </Suspense>
+                          }
+                        >
+                          {menu.elements?.map((item) => (
+                            <Route
+                              key={item.path}
+                              path={item.path}
+                              element={
+                                <Suspense fallback={<Skeleton active />}>
+                                  {createElement(item.el)}
+                                </Suspense>
+                              }
+                            />
+                          ))}
+                        </Route>
+                      );
+                    })}
+                    <Route
+                      path="companies/:name/:id/drivers"
+                      element={<CompanyDrivers />}
+                    />
+                    <Route
+                      path="companies/:name/:id/employees"
+                      element={<CompanyEmployees />}
+                    />
+                    <Route
+                      path="stock/:name/:id/drivers/:task_id"
+                      element={<StockDrivers />}
+                    />
+                    <Route
+                      path="stock/:name/:id/employees/:task_id"
+                      element={<StockEmployees />}
+                    />
+                  </Route>
+                  <Route path="login" element={<Login />} />
+                  <Route path="*" element={<PageNotFound />} />
+                </Routes>
+              </BreadcrumbProvider>
+            </StockDriverProvider>
+          </BrowserRouter>
+        </QueryClientProvider>
+      </RateProvider>
     </DarkModeProvider>
   );
 }
