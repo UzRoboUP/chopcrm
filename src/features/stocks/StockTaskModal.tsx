@@ -1,9 +1,9 @@
 import { Button, Form } from 'antd';
+import { useContext } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { StockTaskContext } from '../../context/StockTaskContext';
 import Modal from '../../ui/Modal';
 import { useStockTask } from './useStocktask';
-import { useSearchParams } from 'react-router-dom';
-import { useContext } from 'react';
-import { StockTaskContext } from '../../context/StockTaskContext';
 export type StaffType = {
   username: string;
   password: string;
@@ -41,7 +41,7 @@ function StockTaskModal({
         <div className="mt-20" style={{ padding: '0px 20px' }}>
           <h1 className="task__modal__title">Все задания</h1>
           <div className="task__modal__row">
-            {tasks &&
+            {tasks?.lenght &&
               tasks.map((item: { id: string; task: string }) => (
                 <div
                   key={item?.id}

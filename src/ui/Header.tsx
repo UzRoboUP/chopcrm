@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Dropdown, DropdownProps, Input } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useUser } from '../features/authentication/useUser';
 
@@ -16,35 +16,35 @@ function Header() {
   useEffect(() => {
     const socket = new WebSocket(`wss://crmapi.leetcode.uz/ws/chat/message/`);
 
-  //   // When the connection is opened
-  //   socket.onopen = () => {
-  //     console.log('Connected to the WebSocket server');
-  //     setIsConnected(true);
-  //   };
+    //   // When the connection is opened
+    //   socket.onopen = () => {
+    //     console.log('Connected to the WebSocket server');
+    //     setIsConnected(true);
+    //   };
 
-  //   // When a message is received from the server
-  //   socket.onmessage = (event) => {
-  //     const data = JSON.parse(event.data);
-  //     console.log('WSDATA: ', data);
+    //   // When a message is received from the server
+    //   socket.onmessage = (event) => {
+    //     const data = JSON.parse(event.data);
+    //     console.log('WSDATA: ', data);
 
-  //     /* eslint-disable no-debugger */
-  //     debugger;
-  //     if (data.type === 'notification') {
-  //       setNotifications((prev) => [...prev, data.message]);
-  //     }
-  //   };
+    //     /* eslint-disable no-debugger */
+    //     debugger;
+    //     if (data.type === 'notification') {
+    //       setNotifications((prev) => [...prev, data.message]);
+    //     }
+    //   };
 
-  //   // When the connection is closed
-  //   socket.onclose = () => {
-  //     console.log('Disconnected from the WebSocket server');
-  //     setIsConnected(false);
-  //   };
+    //   // When the connection is closed
+    //   socket.onclose = () => {
+    //     console.log('Disconnected from the WebSocket server');
+    //     setIsConnected(false);
+    //   };
 
-  //   // Clean up when the component is unmounted
-  //   return () => {
-  //     socket.close();
-  //   };
-  // }, []);
+    //   // Clean up when the component is unmounted
+    //   return () => {
+    //     socket.close();
+    //   };
+  }, []);
 
   const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     param.set('search', e.target.value);
@@ -68,6 +68,7 @@ function Header() {
       setOpenNotification(nextOpen);
     }
   };
+
   return (
     <div className="header">
       <div className="header__container">
