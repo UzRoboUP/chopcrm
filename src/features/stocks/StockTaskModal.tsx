@@ -1,9 +1,9 @@
 import { Button, Form } from 'antd';
 import Modal from '../../ui/Modal';
-import { useStockTask } from './useStocktask';
+import { useStockTask } from './useStock';
 import { useSearchParams } from 'react-router-dom';
-import { useContext } from 'react';
-import { StockTaskContext } from '../../context/StockTaskContext';
+// import { useContext } from 'react';
+// import { StockTaskContext } from '../../context/StockTaskContext';
 export type StaffType = {
   username: string;
   password: string;
@@ -22,9 +22,9 @@ function StockTaskModal({
   const { tasks, isLoading } = useStockTask(isOpenModal);
   const [searchParams, setSearchParams] = useSearchParams();
   const params = new URLSearchParams(searchParams.toString());
-  const { setStockTaskText } = useContext(StockTaskContext);
+  // const { setStockTaskText } = useContext(StockTaskContext);
   const onChange = (a: string, id: string) => {
-    setStockTaskText(a);
+    // setStockTaskText(a);
     params.set('task_id', id);
     setSearchParams(params);
     onCloseModal();

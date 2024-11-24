@@ -9,12 +9,17 @@ import Modal from '../../ui/Modal';
 import { useCreateComment, useCreateStaffComment } from './useCreateComment';
 import { useCreateLeadComment } from '../leads/useCreateLeadComment';
 import { useCreateCompanyComment } from '../companies/useCreateCompanyComment';
+import { useCreateStockComment } from '../stocks/useCreateStockComment';
 
 function CreateCommentModal({
   pagename,
   retrieveData,
   isOpenModal,
   onCloseModal,
+}: {
+  pagename: string;
+  isOpenModal: boolean;
+  onCloseModal: () => void;
 }) {
   const queryClient = useQueryClient();
   const [comment, setComment] = useState('');
@@ -25,6 +30,8 @@ function CreateCommentModal({
   const { createLeadComment, isLoadingLeadComment } = useCreateLeadComment();
   const { createCompanyComment, isLoadingCompanyComment } =
     useCreateCompanyComment();
+
+  const { createStockComment, isLoadingStockComment } = useCreateStockComment();
 
   const handleSave = () => {
     //     ('manager', 'manager'),
@@ -42,7 +49,7 @@ function CreateCommentModal({
         break;
       case 'stock':
         comment_purpose = 'stock';
-        to_whom = retrieveData?.contract_data?.driver_data?.id;
+        to_whom = retrieveData?.id;
         break;
       case 'leads':
         comment_purpose = 'leads';
@@ -125,6 +132,25 @@ function CreateCommentModal({
       return;
     }
 
+    if (['stock'].includes(pagename)) {
+      createStockComment(
+        {
+          comment,
+          by_whom: currentUser?.id as string,
+          to_whom: retrieveData.id,
+        },
+        {
+          onSuccess: (data) => {
+            queryClient.setQueryData(['createCommentStock'], data);
+            queryClient.invalidateQueries({ queryKey: [`stocks`] });
+            message.success('Comment created successfully');
+            onCloseModal();
+          },
+        },
+      );
+      return;
+    }
+
     createComment(
       {
         comment,
@@ -162,7 +188,8 @@ function CreateCommentModal({
               isLoading ||
               isLoadingStaffComment ||
               isLoadingLeadComment ||
-              isLoadingCompanyComment
+              isLoadingCompanyComment ||
+              isLoadingStockComment
             }
             onChange={(e) => setComment(e.target.value)}
           />
@@ -173,13 +200,15 @@ function CreateCommentModal({
               isLoading ||
               isLoadingStaffComment ||
               isLoadingLeadComment ||
-              isLoadingCompanyComment
+              isLoadingCompanyComment ||
+              isLoadingStockComment
             }
             loading={
               isLoading ||
               isLoadingStaffComment ||
               isLoadingLeadComment ||
-              isLoadingCompanyComment
+              isLoadingCompanyComment ||
+              isLoadingStockComment
             }
             onClick={handleSave}
             type="primary"

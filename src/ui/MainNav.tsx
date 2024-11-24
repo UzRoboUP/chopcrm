@@ -12,8 +12,8 @@ import { logout } from '../features/authentication/authSlice';
 import { useUser } from '../features/authentication/useUser';
 import { getMenuData } from '../services/menu';
 import { useAppDispatch } from '../store/hooks';
-import { useContext, useEffect } from 'react';
-import { StockTaskContext } from '../context/StockTaskContext';
+// import { useContext, useEffect } from 'react';
+// import { StockTaskContext } from '../context/StockTaskContext';
 
 const NavList = styled.ul`
   display: flex;
@@ -70,15 +70,14 @@ function MainNav() {
   const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { setStockTaskText } = useContext(StockTaskContext);
+  // const { setStockTaskText } = useContext(StockTaskContext);
   const { clientCompanies } = useClientCompanies();
 
-  useEffect(() => {
-    console.log(clientCompanies);
-    if (clientCompanies) {
-      setStockTaskText(clientCompanies[0]?.latest_task?.task);
-    }
-  }, [clientCompanies]);
+  // useEffect(() => {
+  //   if (clientCompanies) {
+  //     setStockTaskText(clientCompanies[0]?.latest_task?.task);
+  //   }
+  // }, [clientCompanies]);
 
   if (!userData) {
     return null;
@@ -97,7 +96,7 @@ function MainNav() {
         key: '100',
         label: (
           <StyledNavLink
-            to={`stock?company_id=${searchParams.get('company_id') || (clientCompanies && clientCompanies[0]?.id)}&task_id=${searchParams.get('task_id') || (clientCompanies && clientCompanies[0]?.latest_task?.id)}`}
+            to={`stock?company_id=${searchParams.get('company_id') || (clientCompanies && clientCompanies[0]?.id)}`}
           >
             {({ isActive }) => (
               <>
@@ -117,10 +116,8 @@ function MainNav() {
             <p
               key={company.id}
               onClick={() => {
-                setStockTaskText(company?.latest_task?.task);
-                navigate(
-                  `stock?company_id=${company?.id}&task_id=${company?.latest_task?.id}`,
-                );
+                // setStockTaskText(company?.latest_task?.task);
+                navigate(`stock?company_id=${company?.id}`);
               }}
               className="d-flex align-center justify-center"
             >
@@ -129,6 +126,7 @@ function MainNav() {
                 height="14"
                 src={company?.image}
                 alt={company?.image || 'no-image'}
+                style={{ objectFit: 'cover' }}
               />
               <span className="sidebar__nav-sub-link">{company?.name}</span>
             </p>
