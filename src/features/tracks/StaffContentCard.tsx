@@ -127,7 +127,7 @@ function StaffContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <img src="/img/card/empty-avatar.svg" alt="avatar" />
               </p>
               <div className="card__user--info">
-                <p className="name">{item?.first_name}</p>
+                <p className="name">{item?.last_name + " " +item?.first_name}</p>
                 <p className="rate">
                   <span>Сегодня 12:40</span>
                 </p>

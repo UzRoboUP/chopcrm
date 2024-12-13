@@ -48,8 +48,11 @@ function CreateCommentModal({
         to_whom = retrieveData?.id;
         break;
       case 'stock':
-        comment_purpose = 'stock';
         to_whom = retrieveData?.id;
+        break;
+      case 'stock-employee':
+        comment_purpose = 'stock';
+        to_whom = retrieveData?.contract?.driver?.id;
         break;
       case 'leads':
         comment_purpose = 'leads';
@@ -57,7 +60,7 @@ function CreateCommentModal({
         break;
       case 'report':
         comment_purpose = 'reporting';
-        to_whom = retrieveData?.contract_data?.driver_data?.id;
+        to_whom = retrieveData?.contract?.driver?.id;
         break;
       case 'company':
         comment_purpose = 'company';
@@ -161,7 +164,16 @@ function CreateCommentModal({
       {
         onSuccess: (data) => {
           queryClient.setQueryData(['createComment'], data);
-          queryClient.invalidateQueries({ queryKey: [`${pagename}s`] });
+          if (pagename == 'stock-employee') {
+            queryClient.invalidateQueries({
+              queryKey: ['stock-list'],
+            });
+          } else {
+            queryClient.invalidateQueries({
+              queryKey: [`${pagename}s`],
+            });
+          }
+
           message.success('Comment created successfully');
           onCloseModal();
         },

@@ -5,15 +5,16 @@ import EmptyCard from '../../ui/EmptyCard';
 import StockStatus from '../../ui/StockStatus';
 import StockContentCard from './StockContentCard';
 import { useStocksTask } from './useStocksTask';
+import { StockModal } from './StockModal';
 // import StockTaskModal from './StockTaskModal';
 function Stocks() {
-  // const [isOpenModal, setOpenModal] = useState(false);
+  const [isOpenModal, setOpenModal] = useState(false);
   const [isOpenEditModal, setOpenEditModal] = useState(false);
   // const [currentDataId, setCurrentDataId] = useState('');
   const { data, isLoading } = useStocksTask();
-  // const closeModal = () => {
-  //   setOpenModal(false);
-  // };
+  const closeModal = () => {
+    setOpenModal(false);
+  };
 
   return (
     <div className="content">
@@ -21,7 +22,7 @@ function Stocks() {
         <ContentHeader
           hasAddButton
           hasStock
-          // openTaskModal={() => setOpenModal(true)}
+          openModal={() => setOpenModal(true)}
           pagename="Акции"
         />
       </div>
@@ -49,6 +50,8 @@ function Stocks() {
           </div>
         </div>
       </div>
+      <StockModal isOpenModal={isOpenModal} onCloseModal={() => closeModal()} />
+
       {/* <StockTaskModal isOpenModal={isOpenModal} onCloseModal={closeModal} /> */}
     </div>
   );

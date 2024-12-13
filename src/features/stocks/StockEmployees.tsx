@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { useContract } from '../contract/useContract';
 import { useStock } from './useStock';
 import StockEmployeeStatus from '../../ui/StockEmployeeStatus';
+import { useStockTaskContext } from '../../context/StockTaskContext';
 
 export default function StockEmployees() {
   const params = useParams();
@@ -14,6 +15,7 @@ export default function StockEmployees() {
   const { tasks } = useStock();
   const [isOpenEditModal, setOpenEditModal] = useState(false);
   const { retrieveData, isLoadingData } = useContract(currentDataId);
+  const { stockTaskText } = useStockTaskContext();
   return (
     <>
       <div className="content">
@@ -23,8 +25,7 @@ export default function StockEmployees() {
             hasBrand={true}
             hasModel={true}
             hasTasksBackLink={true}
-            taskText='Задание: Проехать с улицы Алишер навои
-до улицы фараби 15:00 - 16:00 20.05.2024'
+            taskText={`Задание: ${stockTaskText}`}
           />
         </div>
         <div className="content__report content__report__container">
@@ -39,7 +40,7 @@ export default function StockEmployees() {
                   <StockEmployeesCard
                     key={item.id}
                     item={item}
-                    pagename={'employee'}
+                    pagename={'stock-employee'}
                     onEdit={() => {
                       setCurrentDataId('');
                       setOpenEditModal(true);

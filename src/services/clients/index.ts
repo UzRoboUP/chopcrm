@@ -13,10 +13,12 @@ class Client {
   }
 
   // GET: /Company/list/
-  async getClients() {
+  async getClients(url: URLSearchParams) {
     try {
       return (
-        await this.$api.get('/client-user/list/' )
+        await this.$api.get(
+          url ? `client-user/list/?${url}` : '/client-user/list/',
+        )
       ).data;
     } catch (error) {
       const axiosError = error as AxiosError<ApiErrorResponse>;
@@ -25,8 +27,6 @@ class Client {
       );
     }
   }
-
-
 }
 
 export default new Client();

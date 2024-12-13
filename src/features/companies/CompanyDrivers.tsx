@@ -12,6 +12,7 @@ export default function CompanyDrivers() {
     <div className="content__header">
       <ContentHeader
         pagename={"Компании (" + params.name + ")"}
+        hasAddCompanyDriverButton
       />
     </div>
    

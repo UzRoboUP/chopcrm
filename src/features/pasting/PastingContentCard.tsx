@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useQueryClient } from '@tanstack/react-query';
-import { Dropdown, DropdownProps, MenuProps, message, Popconfirm } from 'antd';
+import { Dropdown, DropdownProps, MenuProps, message } from 'antd';
 import { useState } from 'react';
 import { PASTING_STATUS } from '../../utils/constants';
-import { usePastingDelete } from './usePastingDelete';
+import PastingAcceptModal from './PastingAcceptModal';
+import { useArchivedUpdatePasting } from './useArchivedUpdatePasting';
+import PastingCommentModal from './PastingCommentModal';
+import { useUpdatePastingPhoto } from './useUpdatePastingPhoto';
 
 export type PageNameType = 'track' | 'report' | 'lead' | 'stock' | 'pasting';
 
@@ -14,74 +17,61 @@ export type ContentCardProps = {
   onOpenModal: () => void;
 };
 
-function PastingContentCard({
-  item,
-  pagename,
-  onOpenModal,
-  onEdit,
-}: ContentCardProps) {
+function PastingContentCard({ item, pagename, onOpenModal }: ContentCardProps) {
   const queryClient = useQueryClient();
 
   const [isOpenMenu, setOpenMenu] = useState(false);
-  const [popconfirmOpen, setPopconfirmOpen] = useState(false);
-  const { deletePasting, isLoadingDelete } = usePastingDelete();
+  const [isOpenModal, setOpenModal] = useState(false);
+  const [isOpenPastingCommentModal, setOpenPastingCommentModal] =
+    useState(false);
+  const { updateArchivedPasting } = useArchivedUpdatePasting();
+  const { updatePastingPhoto, isLoadingUpdatePastingPhoto } =
+    useUpdatePastingPhoto();
 
-  const handleDelete = () => {
-    deletePasting(item.id, {
-      onSuccess: (data) => {
-        queryClient.setQueryData(['pastingDelete'], data);
-        queryClient.invalidateQueries({ queryKey: ['pastings'] });
-        message.success('Pasting deleted successfully');
+  const updatePastingPhotoStatus = (status: string) => {
+    updatePastingPhoto(
+      { id: item.id, status_pasting: status },
+      {
+        onSuccess: () => {
+          setOpenModal(false);
+          setOpenPastingCommentModal(true);
+        },
       },
-    });
+    );
+  };
+
+  const updateArchived = () => {
+    updateArchivedPasting(
+      { is_archived: true, id: item.id },
+      {
+        onSuccess: (data) => {
+          queryClient.setQueryData(['pastingUpdateArchived'], data);
+          queryClient.invalidateQueries({ queryKey: ['pastings'] });
+        },
+      },
+    );
   };
 
   const itemsMenu: MenuProps['items'] = [
     {
       key: '1',
       label: (
-        <p className="d-flex align-center">
-          <img src="/img/card/menu/destination.svg" alt="" />
-          <span className="card__menu--text ml-10">Место нахождения</span>
+        <p className="d-flex align-center" onClick={updateArchived}>
+          <img src="/img/card/menu/plus.svg" alt="" />
+          <span className="card__menu--text ml-10">Добавить в архив</span>
         </p>
       ),
       className: 'mb-4',
     },
     {
-      key: '4',
+      key: '2',
       label: (
-        <Popconfirm
-          placement="top"
-          title="Вы уверены, что хотите удалить этот элемент?"
-          description="Удалить элемент"
-          okText={'Yes'}
-          cancelText="No"
-          open={popconfirmOpen}
-          onConfirm={handleDelete}
-          okButtonProps={{
-            loading: isLoadingDelete,
-            disabled: isLoadingDelete,
-          }}
-          cancelButtonProps={{
-            disabled: isLoadingDelete,
-          }}
-          onCancel={() => setPopconfirmOpen(false)}
-        >
-          <p
-            onClick={() => setPopconfirmOpen(true)}
-            className="d-flex align-center card__menu--label card__menu--label-delete"
-          >
-            <img src="/img/card/menu/delete.svg" alt="" />
-            <span
-              className="card__menu--text ml-10"
-              style={{ color: '#FF2D55' }}
-            >
-              Удалить из списка
-            </span>
-          </p>
-        </Popconfirm>
+        <p className="d-flex align-center">
+          <img src="/img/card/menu/download.svg" alt="" />
+          <span className="card__menu--text ml-10">Скачать договор</span>
+        </p>
       ),
-      className: 'card__menu--label-delete',
+      className: 'mb-4',
     },
   ];
 
@@ -101,12 +91,10 @@ function PastingContentCard({
                 <img src="/img/card/empty-avatar.svg" alt="avatar" />
               </p>
               <div className="card__user--info">
-                <p className="name">
-                  {item?.contract_data?.driver_data?.full_name}
-                </p>
+                <p className="name">{item?.contract?.driver?.full_name}</p>
                 {item?.rate && (
                   <p className="rate">
-                    <span>{item.rate}</span>
+                    <span>{item?.rate.toFixed(1)}</span>
                     <img src="/img/card/star.svg" alt="rate" />
                   </p>
                 )}
@@ -137,7 +125,7 @@ function PastingContentCard({
                 <span>Телефон</span>
               </div>
               <div className="card__item--value">
-                {item?.contract_data?.driver_data?.phone_number}
+                {item?.contract?.driver?.phone_number}
               </div>
             </div>
             <div className="card__item">
@@ -146,7 +134,7 @@ function PastingContentCard({
                 <span>Тип машины</span>
               </div>
               <div className="card__item--value">
-                {item?.contract_data?.driver_data?.car_data?.car_model}
+                {item?.contract?.driver?.car_data?.car_model}
               </div>
             </div>
             <div className="card__item">
@@ -175,15 +163,23 @@ function PastingContentCard({
             </div>
           </div>
           <div className="card__bottom">
-            {['notified', 'confirmed', 'pending'].includes(
-              item.status_pasting,
-            ) && (
-              <button className="card__bottom--btn" onClick={onOpenModal}>
+            {[
+              'photo_report_sent',
+              'confirmed',
+              'photo_report_rejected',
+            ].includes(item.status_pasting) && (
+              <button
+                className="card__bottom--btn"
+                onClick={() => setOpenModal(true)}
+              >
                 <span className="ml-5">Посмотреть</span>
               </button>
             )}
-            {item.status_pasting === 'photo_report_rejected' && (
-              <button className="card__bottom--btn" onClick={onOpenModal}>
+            {item.status_pasting === 'pending' && (
+              <a
+                href={`tel:${item?.contract?.driver?.phone_number}`}
+                className="card__bottom--btn"
+              >
                 <svg
                   width="20"
                   height="20"
@@ -203,9 +199,9 @@ function PastingContentCard({
                 </svg>
 
                 <span className="ml-5">Позвонить</span>
-              </button>
+              </a>
             )}
-            {item.status_pasting === 'non-assigned' && (
+            {item.status_pasting === 'not_assigned' && (
               <button className="card__bottom--btn" onClick={onOpenModal}>
                 <svg
                   width="20"
@@ -242,6 +238,21 @@ function PastingContentCard({
           </div>
         </div>
       </div>
+      <PastingAcceptModal
+        updatePastingPhotoStatus={updatePastingPhotoStatus}
+        isLoading={isLoadingUpdatePastingPhoto}
+        photo_control={item?.photo_control}
+        status={item?.status_pasting}
+        driverName={item?.contract?.driver?.full_name}
+        open={isOpenModal}
+        onClose={() => setOpenModal(false)}
+      />
+      <PastingCommentModal
+        driverId={item?.contract?.driver?.id}
+        id={item.id}
+        open={isOpenPastingCommentModal}
+        onClose={() => setOpenPastingCommentModal(false)}
+      />
     </>
   );
 }

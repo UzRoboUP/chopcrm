@@ -26,7 +26,7 @@ function UpdateDataModal({
 
   const { updateTrack, isLoadingUpdate } = useTrackUpdate();
   const { data } = useCompanies();
-  console.log(data);
+  // const {} =
 
   useEffect(() => {
     setTrackData({

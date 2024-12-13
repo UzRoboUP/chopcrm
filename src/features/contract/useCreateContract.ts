@@ -1,26 +1,22 @@
 import { useMutation } from '@tanstack/react-query';
 import { message } from 'antd';
 import Contract from '../../services/contract';
-type CreateContractProps = {
-  company: string | undefined;
-  driver: string;
-  status_contract: string;
-  contract_duration: number;
-};
+import { companyDriverType } from '../../context/CompanyDriverContext';
+
 
 export function useCreateContract() {
   const {
     mutate: createContract,
-    isPending: isLoadingContract,
+    isPending: isLoadingContractDriver,
     isError: error,
   } = useMutation({
-    mutationFn: ({ ...payload }: CreateContractProps) =>
-        Contract.createContract({ ...payload }),
+    mutationFn: (payload: companyDriverType[]) =>
+        Contract.createContract(payload),
     onError: (err) => message.error(err.message),
   });
   return {
     createContract,
-    isLoadingContract,
+    isLoadingContractDriver,
     error,
   };
 }

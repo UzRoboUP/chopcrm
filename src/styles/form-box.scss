@@ -8,6 +8,9 @@
   justify-content: space-between;
   gap: 8px;
   background-color: #fff;
+  @media screen and (max-width:1400px) {
+    padding: 5px 10px;
+  }
   &__title {
     font-family: $fontfamily;
     font-size: 14px;
@@ -15,6 +18,10 @@
     line-height: 20px;
     text-align: left;
     color: #9ca3af;
+    @media screen and (max-width:1400px) {
+      font-size: 12px;
+      line-height: 14px;
+    }
   }
   input {
     width: 140px;
@@ -42,11 +49,16 @@
     cursor: pointer;
     position: relative !important;
     top: -1px !important;
+    @media screen and (max-width:1400px) {
+      font-size: 12px !important;
+      top: -2px !important;
+    }
     svg {
       color: #9ca3af !important;
       position: relative;
       top: 2px !important;
     }
+   
   }
 
   .form-box-check-title {

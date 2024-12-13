@@ -25,6 +25,9 @@
     flex: 0 0 25%;
     width: 25%;
     padding: 0 12px;
+    @media screen and (max-width:1400px) {
+      flex: 0 0 33.3%;
+    }
   }
 }
 .card {
@@ -49,18 +52,29 @@
   &__footer {
     text-align: center;
     position: relative;
-    &-counter-title {
+    &__dropdown-text {
       font-family: Poppins;
       font-size: 12px;
       font-weight: 600;
       line-height: 13px;
       text-align: center;
-      max-width: 190px;
       margin: 0 auto;
-      color: #fff;
-      padding: 4px 30px;
+      color: #555;
       border-radius: 12px;
-      background: #30b0c7;
+      // background-color: #30B0C7;
+      // padding: 3px;
+    }
+    &__dropdown-counter{
+      // color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      justify-content: center;
+      // margin-top: 10px;
+      // margin-bottom: 10px;
+      // background-color: #7F8788;
+      padding: 5px;
+      border-radius: 20px;
     }
     &-counter-btn {
       display: flex;
@@ -94,6 +108,17 @@
     text-align: center;
     color: #fff;
     border-radius: 12px;
+    position: relative;
+  }
+  &__footer__dropdown{
+    background-color: #fff;
+    box-shadow: 0 0 5px;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 35px;
+    padding: 4px;
+    border-radius: 4px
   }
 
   // .card__user
@@ -189,7 +214,10 @@
         justify-content: center;
         align-items: center;
         white-space: inherit;
-        text-align: center;
+        text-align: left;
+        // @media screen and (max-width:1400px) {
+        //   text-align: left;
+        // }
         .dot-live {
           min-width: 5px;
           min-height: 5px;

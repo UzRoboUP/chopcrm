@@ -14,7 +14,6 @@ function UpdateStaffDataModal({
   onCloseModal,
 }) {
   const queryClient = useQueryClient();
-  const [fullName, setFullName] = useState('');
 
   const [staffData, setStaffData] = useState({
     id: retrieveData?.id,
@@ -23,7 +22,7 @@ function UpdateStaffDataModal({
     first_name: retrieveData?.first_name,
     last_name: retrieveData?.last_name,
     surname: retrieveData?.surname || '',
-    image: retrieveData?.image || '',
+    // image: retrieveData?.image || '',
     phone_number: retrieveData?.phone_number,
     staff_status: retrieveData?.staff_status,
     last_activity: new Date(),
@@ -34,7 +33,7 @@ function UpdateStaffDataModal({
       setStaffData((prev) => ({
         ...prev,
         ...retrieveData,
-        image: retrieveData?.image || '',
+        // image: retrieveData?.image || null,
       }));
     }
   }, [retrieveData, isLoadingData]);
@@ -43,13 +42,14 @@ function UpdateStaffDataModal({
 
   const handleSaveUpdate = () => {
     const model = { ...staffData, id: retrieveData?.id };
-    console.log(model);
+    delete model?.image;
+
     updateStaff(
       { ...model },
       {
         onSuccess: (data) => {
           queryClient.setQueryData(['staffUpdate'], data);
-          queryClient.invalidateQueries({ queryKey: ['staff'] });
+          queryClient.invalidateQueries({ queryKey: ['staffList'] });
           message.success('Staff updated successfully');
           onCloseModal();
         },
@@ -107,7 +107,7 @@ function UpdateStaffDataModal({
             <Typography.Title level={5}>Пароль</Typography.Title>
             <Input
               style={{ width: '100%', float: 'inline-end', height: 40 }}
-              value={staffData.password}
+              // value={staffData.password}
               onChange={({ target: { value: password } }) =>
                 setStaffData((prev) => ({ ...prev, password }))
               }

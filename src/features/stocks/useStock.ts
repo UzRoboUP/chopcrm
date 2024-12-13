@@ -8,7 +8,7 @@ export function useStock() {
   const car_brand = params.get('car_brand') || '';
   const car_model = params.get('car_model') || '';
   const status_stock = params.get('status_stock') || '';
-
+ 
   const {
     isPending: isLoadingTask,
     data: tasks,

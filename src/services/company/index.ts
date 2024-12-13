@@ -142,6 +142,18 @@ class Company {
       );
     }
   }
+
+  async getCompanyTarif(id: string) {
+    try {
+      return (await this.$api.get(`/company/tarif/${id}/`)).data;
+    } catch (error) {
+      console.log('ERR', error);
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      throw new Error(
+        axiosError.response?.data?.message || 'An unknown error occurred',
+      );
+    }
+  }
 }
 
 export default new Company();

@@ -1,5 +1,6 @@
 import { AxiosError } from 'axios';
 import apiClient from '../axios';
+import { companyDriverType } from '../../context/CompanyDriverContext';
 
 type ApiErrorResponse = {
   message: string;
@@ -13,11 +14,11 @@ class Contract {
   }
 
   // POST: /contract/create/
-  async createContract({ ...payload }) {
+  async createContract(payload:companyDriverType[]) {
+    console.log(payload,"payload");
+    
     try {
-      const response = await this.$api.post(`/contract/create`, {
-        ...payload,
-      });
+      const response = await this.$api.post(`/contract/create`,payload);
       if (response && response.data) {
         return response.data;
       } else {

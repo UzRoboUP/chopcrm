@@ -53,11 +53,99 @@ class Pastings {
 
   // UPDATE: /pasting/update/:id/
   async updatePasting({ ...payload }) {
-    console.log('pa', payload);
     try {
-      const response = await this.$api.put(`/pasting/update/${payload.id}/`, {
+      const response = await this.$api.put(
+        `/pasting/update/pasting-time/${payload.id}/`,
+        {
+          ...payload,
+        },
+      );
+      if (response && response.data) {
+        return response.data;
+      } else {
+        throw new Error('The API response did not contain any data.');
+      }
+    } catch (error) {
+      console.log('ERR', error);
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      throw new Error(
+        axiosError.response?.data?.message || 'An unknown error occurred',
+      );
+    }
+  }
+
+  async updatePastingComment({ ...payload }) {
+    // const id = payload.id;
+    delete payload?.id;
+    try {
+      const response = await this.$api.post(`/rate/create/`, {
         ...payload,
       });
+      if (response && response.data) {
+        return response.data;
+      } else {
+        throw new Error('The API response did not contain any data.');
+      }
+    } catch (error) {
+      console.log('ERR', error);
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      throw new Error(
+        axiosError.response?.data?.message || 'An unknown error occurred',
+      );
+    }
+  }
+
+  // UPDATE: /pasting/update/:id/
+  async updatePastingPhoto({ ...payload }) {
+    try {
+      const response = await this.$api.put(
+        `/pasting/update/status/${payload.id}/`,
+        {
+          ...payload,
+        },
+      );
+      if (response && response.data) {
+        return response.data;
+      } else {
+        throw new Error('The API response did not contain any data.');
+      }
+    } catch (error) {
+      console.log('ERR', error);
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      throw new Error(
+        axiosError.response?.data?.message || 'An unknown error occurred',
+      );
+    }
+  }
+
+  async updateArchivedPasting({ ...payload }) {
+    try {
+      const response = await this.$api.put(
+        `/pasting/update/archieve/${payload.id}/`,
+        {
+          ...payload,
+        },
+      );
+      if (response && response.data) {
+        return response.data;
+      } else {
+        throw new Error('The API response did not contain any data.');
+      }
+    } catch (error) {
+      console.log('ERR', error);
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      throw new Error(
+        axiosError.response?.data?.message || 'An unknown error occurred',
+      );
+    }
+  }
+
+  async updateArchivedPastingAll(payload: {
+    is_archived: boolean;
+    ids: string[];
+  }) {
+    try {
+      const response = await this.$api.patch(`/pasting/bulk-update/`, payload);
       if (response && response.data) {
         return response.data;
       } else {

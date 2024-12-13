@@ -12,7 +12,8 @@ export type PageNameType =
   | 'lead'
   | 'stock'
   | 'company'
-  | 'employee';
+  | 'employee'
+  | 'stock-employee';
 
 export type ContentCardProps = {
   item: { id: string };
@@ -79,7 +80,7 @@ function StockEmployeesCard({ item, pagename, onEdit }: ContentCardProps) {
           <span className="card__menu--text ml-10">Изменить профиль</span>
         </p>
       ),
-      className: 'mb-4',
+      className: 'mb-4 d-none',
     },
     {
       key: '4',

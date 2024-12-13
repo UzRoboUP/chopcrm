@@ -49,12 +49,12 @@ class Profile {
   async logout() {}
 
   async updateProfile(formData: FormData): Promise<LoginResponse> {
+    console.log(formData,'FormData');
+
     try {
-      const { data } = await this.$api.put<LoginResponse>(
+      const { data } = await this.$api.patch<LoginResponse>(
         `/staff/update/${formData.get('id')}`,
-        {
-          ...formData,
-        },
+        formData,
       );
       return data;
     } catch (error) {
@@ -66,6 +66,8 @@ class Profile {
   }
 
   async updateStaff({ ...payload }): Promise<LoginResponse> {
+    console.log(payload);
+    
     try {
       const { data } = await this.$api.patch<LoginResponse>(
         `/staff/update/${payload.id}`,
@@ -124,7 +126,6 @@ class Profile {
 
   // Post: /staff/
   async createStaff(data: StaffType) {
-
     try {
       return (await this.$api.post(`/${data.status}/create/`, data)).data;
     } catch (error) {

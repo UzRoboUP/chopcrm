@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useQueryClient } from '@tanstack/react-query';
-import { Dropdown, DropdownProps, MenuProps, message, Popconfirm } from 'antd';
+import { Dropdown, DropdownProps, MenuProps } from 'antd';
 import { useState } from 'react';
-import { useDriverDelete } from '../driver/useDriverDelete';
 import DriverCreateButton from '../../ui/DriverCreateButton';
 import { useParams } from 'react-router-dom';
 
@@ -15,22 +13,10 @@ export type ContentCardProps = {
 
 function StockDriverCard({ item, pagename }: ContentCardProps) {
   const params = useParams();
-  const queryClient = useQueryClient();
 
   const [isOpenMenu, setOpenMenu] = useState(false);
-  const [popconfirmOpen, setPopconfirmOpen] = useState(false);
 
-  const { deleteDriver, isLoadingDelete } = useDriverDelete();
 
-  const handleDelete = () => {
-    deleteDriver(item.id, {
-      onSuccess: (data) => {
-        queryClient.setQueryData(['trackDelete'], data);
-        queryClient.invalidateQueries({ queryKey: ['drivers'] });
-        message.success('Driver deleted successfully');
-      },
-    });
-  };
 
   const itemsMenu: MenuProps['items'] = [
     {
@@ -46,43 +32,6 @@ function StockDriverCard({ item, pagename }: ContentCardProps) {
         </a>
       ),
       className: 'mb-4',
-    },
-
-    {
-      key: '4',
-      label: (
-        <Popconfirm
-          placement="top"
-          title="Вы уверены, что хотите удалить этот элемент?"
-          description="Удалить элемент"
-          okText={'Yes'}
-          cancelText="No"
-          open={popconfirmOpen}
-          onConfirm={handleDelete}
-          okButtonProps={{
-            loading: isLoadingDelete,
-            disabled: isLoadingDelete,
-          }}
-          cancelButtonProps={{
-            disabled: isLoadingDelete,
-          }}
-          onCancel={() => setPopconfirmOpen(false)}
-        >
-          <p
-            onClick={() => setPopconfirmOpen(true)}
-            className="d-flex align-center card__menu--label card__menu--label-delete"
-          >
-            <img src="/img/card/menu/delete.svg" alt="" />
-            <span
-              className="card__menu--text ml-10"
-              style={{ color: '#FF2D55' }}
-            >
-              Удалить из списка
-            </span>
-          </p>
-        </Popconfirm>
-      ),
-      className: 'card__menu--label-delete',
     },
   ];
 

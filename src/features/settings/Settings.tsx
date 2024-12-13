@@ -28,10 +28,9 @@ function Settings() {
   const { userData } = useUser();
   const { updateProfile, isLoading } = useUpdateSetting();
   const [imageUrl, setImageUrl] = useState<string>();
-  const [imageFile, setImageFile] = useState({});
+  const [imageFile, setImageFile] = useState();
 
   const handleChange: UploadProps['onChange'] = (info) => {
-    console.log(info.file.originFileObj);
     setImageFile(info.file?.originFileObj);
     getBase64(info.file.originFileObj as FileType, (url) => {
       setImageUrl(url);
@@ -47,12 +46,14 @@ function Settings() {
     staff_status: '',
   });
 
-  console.log('imageFile', imageFile);
-
   const submit = () => {
+
     const formData = new FormData();
     formData.append('staff_status', profile.staff_status);
-    formData.append('image', imageFile);
+    if (imageFile) {
+      formData.append('image', imageFile);
+    }
+
     formData.append('first_name', profile.first_name);
     formData.append('last_name', profile.last_name);
     formData.append('surname', profile.surname);
@@ -61,10 +62,9 @@ function Settings() {
     updateProfile(formData);
   };
 
-  console.log('userData', userData);
-
   useEffect(() => {
     setProfile(userData);
+    setImageUrl(userData?.image)
   }, []);
 
   return (
@@ -83,7 +83,7 @@ function Settings() {
                 onChange={handleChange}
               >
                 {imageUrl ? (
-                  <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
+                  <img src={imageUrl} alt="avatar" style={{ width: '160px',height:"160px",objectFit:"cover" }} />
                 ) : (
                   <img src="/img/upload.svg" alt="" />
                 )}
@@ -155,7 +155,7 @@ function Settings() {
                     className="setting__form-input"
                     type="text"
                     placeholder="Введите фамилия"
-                    defaultValue={profile.last_name}
+                    value={profile.last_name}
                     onChange={({ target: { value: last_name } }) =>
                       setProfile((prev) => ({ ...prev, last_name }))
                     }
@@ -167,7 +167,7 @@ function Settings() {
                     className="setting__form-input"
                     type="text"
                     placeholder="Введите имя"
-                    defaultValue={profile.first_name}
+                    value={profile.first_name}
                     onChange={({ target: { value: first_name } }) =>
                       setProfile((prev) => ({ ...prev, first_name }))
                     }
@@ -179,7 +179,7 @@ function Settings() {
                     className="setting__form-input"
                     type="text"
                     placeholder="Введите отчество"
-                    defaultValue={profile.surname}
+                    value={profile.surname}
                     onChange={({ target: { value: surname } }) =>
                       setProfile((prev) => ({ ...prev, surname }))
                     }
@@ -201,7 +201,7 @@ function Settings() {
                   className="setting__form-input ml-10"
                   type="phone"
                   placeholder="+998()"
-                  defaultValue={profile.phone_number}
+                  value={profile.phone_number}
                   onChange={({ target: { value: phone_number } }) =>
                     setProfile((prev) => ({ ...prev, phone_number }))
                   }

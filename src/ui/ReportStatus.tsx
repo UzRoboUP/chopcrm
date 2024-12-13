@@ -25,7 +25,7 @@ export default function ReportStatus({
         text="Не уведомлено"
         count={reportsCount?.[0]?.non_notified}
         color="#C17272"
-        param='not-notified'
+        param='not_notified'
          paramStatus='status_foto_report'
       />
       <StatusCard

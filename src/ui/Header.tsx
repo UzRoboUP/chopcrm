@@ -115,6 +115,7 @@ function Header() {
                 <div className="header__profile">
                   <p>
                     <img
+                    style={{borderRadius:"10px"}}
                       src={userData?.image || '/img/header/empty-avatar.svg'}
                       alt="Profile Picture"
                     />

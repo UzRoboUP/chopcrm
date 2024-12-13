@@ -187,7 +187,7 @@ function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <span>Тип машины</span>
               </div>
               <div className="card__item--value">
-                {item?.car_data.car_model}
+                {item?.car_data?.car_model}
               </div>
             </div>
             <div className="card__item">
@@ -195,7 +195,7 @@ function TrackContentCard({ item, pagename, onEdit }: ContentCardProps) {
                 <img src="/img/card/rating.svg" alt="" />
                 <span>Рейтинг</span>
               </div>
-              <div className="card__item--value">{item?.rate || '-'}</div>
+              <div className="card__item--value">{item?.rate.toFixed(1) || '-'}</div>
             </div>
             <div className="card__item">
               <div className="card__item--label">

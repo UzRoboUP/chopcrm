@@ -34,14 +34,10 @@ export const STOCK_STATUS__TYPE = {
 } as const;
 
 export const REPORT_PHOTO_STATUS = {
-  pending: {
-    // todo should be removed
-    color: '#FF9500',
-    value: 'В ожидании',
-  },
+
   photo_report_rejected: {
     color: '#FF2800',
-    value: 'Откланен',
+    value: 'Отклонен фотоотчет',
   },
   confirmed: {
     color: '#30B0C7',
@@ -51,18 +47,14 @@ export const REPORT_PHOTO_STATUS = {
     color: '#FF9500',
     value: 'Уведомлено',
   },
-  'not-notified': {
+  not_notified: {
     color: '#C17272',
     value: 'Не уведомлено',
   },
   photo_report_sent: {
     color: '#007AFF',
     value: 'фото отчет отправлен',
-  },
-  call: {
-    color: '#30B0C7',
-    value: 'Позвонить',
-  },
+  }
 } as const;
 
 export const PASTING_STATUS = {
@@ -70,21 +62,21 @@ export const PASTING_STATUS = {
     color: '#FF9500',
     value: 'В ожидании',
   },
-  rejected: {
+  photo_report_rejected: {
     color: '#FF2800',
-    value: 'Не подтверждено',
+    value: 'Отклонен фотоотчет',
   },
-  'non-assigned': {
-    color: '#FF2800',
+  'not_assigned': {
+    color: 'rgb(193, 114, 114)',
     value: 'Не назначено',
   },
   confirmed: {
     color: '#30B0C7',
     value: 'Подтвержден',
   },
-  notified: {
-    color: '#30B0C7',
-    value: 'Уведомлен',
+  photo_report_sent: {
+    color: '#007AFF',
+    value: 'Отправлен фотоотчет ',
   },
   'not-notified': {
     color: '#30B0C7',
@@ -108,6 +100,18 @@ export const CLIENT_COMPANY_STATUS = {
   completed: {
     color: '#FF2800',
     value: 'Отклоненные',
+  },
+} as const;
+
+export const CLIENT_STATUS = {
+
+  not_processed: {
+    color: '#FF0000',
+    value: 'Не обработано',
+  },
+  processed: {
+    color: '#30B0C7',
+    value: 'Обработано',
   },
 } as const;
 

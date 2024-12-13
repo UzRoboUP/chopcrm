@@ -10,11 +10,13 @@ export function useCompanies() {
     isPending: isLoading,
     data,
     isError,
+    isFetching:isFetchingCompany
   } = useQuery({
-    queryKey: ['companies',company_status],
+    queryKey: ['companies', company_status],
     queryFn: () => Company.getCompany(url),
     retry: 1,
   });
+  const companies = data ? data?.client_company_list?.results : [];
 
-  return { isLoading, data, error: isError };
+  return { companies,isFetchingCompany, isLoading, data, error: isError };
 }

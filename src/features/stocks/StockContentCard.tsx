@@ -9,6 +9,8 @@ import { useStockDelete } from '../tracks/useStockDelete';
 import { useUpdateStockStatus } from './useUpdateStockStatus';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import AcceptStockModal from './AcceptStockModal';
+import { useStockTaskContext } from '../../context/StockTaskContext';
+import dayjs from 'dayjs';
 
 export type PageNameType = 'track' | 'report' | 'lead' | 'stock';
 
@@ -18,6 +20,8 @@ export type ContentCardProps = {
 };
 
 function StockContentCard({ item, onEdit }: ContentCardProps) {
+  console.log(item.beginning_time);
+  
   const queryClient = useQueryClient();
   const [searchParams] = useSearchParams();
   const company_id = searchParams.get('company_id');
@@ -27,6 +31,7 @@ function StockContentCard({ item, onEdit }: ContentCardProps) {
   const [isOpenCommentModal, setOpenCommentModal] = useState(false);
   const { updateStockSatus, isLoadingUpdateStatus } = useUpdateStockStatus();
   const { deleteStock, isLoadingDelete } = useStockDelete();
+  const { setStockTaskText } = useStockTaskContext();
   const navigate = useNavigate();
   const handleConfirm = (stock_task_status: string) => {
     updateStockSatus(
@@ -99,13 +104,18 @@ function StockContentCard({ item, onEdit }: ContentCardProps) {
       {
         key: '11',
         label: (
-          <Link
-            to={`/stock/${item?.name}/${company_id}/employees/${item.id}`}
+          <p
+            onClick={() => {
+              setStockTaskText(item?.name);
+              navigate(
+                `/stock/${item?.name}/${company_id}/employees/${item.id}`,
+              );
+            }}
             className="d-flex align-center"
           >
             <img src="/img/card/menu/car.svg" alt="" />
             <span className="card__menu--text ml-10">Водители </span>
-          </Link>
+          </p>
         ),
         className: 'mb-4',
         style: {
@@ -220,7 +230,11 @@ function StockContentCard({ item, onEdit }: ContentCardProps) {
                 <span>Кл. машин</span>
               </div>
               <div className="card__item--value">
-                {/* {item?.contract_data.driver_data?.car_data_get.car_model} */}
+                {Array.isArray(item?.tarif_list) ?
+                  item?.tarif_list?.reduce(
+                    (el, sum) => el + sum.number_of_car,
+                    0,
+                  ):0}
               </div>
             </div>
             <div className="card__item">
@@ -229,7 +243,9 @@ function StockContentCard({ item, onEdit }: ContentCardProps) {
                 <span>Дата акции</span>
               </div>
               <div className="card__item--value">
-                {convertTimestamp(item.beginning_time)}
+                {
+                dayjs(new Date(item.beginning_time)).format("YYYY.MM.DD HH:mm")
+                }
               </div>
             </div>
             <div className="card__item">
@@ -237,9 +253,7 @@ function StockContentCard({ item, onEdit }: ContentCardProps) {
                 <img src="/img/card/rating.svg" alt="" />
                 <span>Компания</span>
               </div>
-              <div className="card__item--value">
-                {item?.contract_data?.company_data?.name}
-              </div>
+              <div className="card__item--value">{item?.company?.name}</div>
             </div>
 
             <div className="card__item">

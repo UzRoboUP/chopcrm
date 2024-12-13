@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { DatePicker, TimePicker, TimePickerProps } from 'antd';
+import { DatePicker, TimePickerProps } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useState } from 'react';
@@ -10,6 +10,7 @@ import PastingContentCard from './PastingContentCard';
 import { usePastings } from './usePastings';
 import { useUpdatePasting } from './useUpdatePasting';
 import PostingStatus from '../../ui/PostingStatus';
+import { useArchivedUpdatePastingAll } from './useArchivedUpdatePastingAll';
 
 function Pasting() {
   const [isOpenModal, setOpenModal] = useState(false);
@@ -18,32 +19,32 @@ function Pasting() {
   const [currentData, setCurrentData] = useState({});
   const { data: pastings, isLoading } = usePastings();
   const { updatePasting, isLoadingUpdate } = useUpdatePasting();
-console.log(pastings);
+  const { updateArchivedPastingAll, isLoadingArchivedPastingUpdateAll } =
+    useArchivedUpdatePastingAll();
 
-  const [timeDate, setTimeDate] = useState({
-    time: '',
-    date: '',
-  });
-
-  dayjs.extend(customParseFormat);
-
-  const onChangeTime: TimePickerProps['onChange'] = (time, timeString) => {
-    console.log(time, timeString);
+  const updatePastingArchiveAll = () => {
+    const ids = pastings?.pastings?.results.filter(
+      (item: { status_pasting: string }) => item.status_pasting == 'confirmed',
+    );
+    updateArchivedPastingAll({
+      ids: ids.map((el: { id: string }) => el?.id),
+      is_archived: true,
+    });
   };
 
+  const [timeDate, setTimeDate] = useState();
+  dayjs.extend(customParseFormat);
+
   const onChangeDate: TimePickerProps['onChange'] = (date, dateString) => {
-    console.log(date, dateString);
+    setTimeDate(date?.$d);
+    console.log(dateString);
   };
 
   const handleConfirm = () => {
-    const combinedDateTime = `${timeDate.date}T${timeDate.time}:00Z`;
-    const dateObject = new Date(combinedDateTime);
     updatePasting(
       {
         id: currentData?.id,
-        contract: currentData?.contract,
-        status_pasting: currentData?.status_pasting,
-        pasting_time: dateObject.toISOString(),
+        pasting_time: timeDate as unknown as string,
       },
       {
         onSuccess() {
@@ -57,7 +58,13 @@ console.log(pastings);
   return (
     <div className="content">
       <div className="content__header">
-        <ContentHeader pagename="Обклейка" hasHistory={true} />
+        <ContentHeader
+          hasArchived={true}
+          pagename="Обклейка"
+          hasHistory={true}
+          updatePastingArchiveAll={updatePastingArchiveAll}
+          isLoadingArchivedPastingUpdateAll={isLoadingArchivedPastingUpdateAll}
+        />
       </div>
       <div className="content__report content__report__container">
         <PostingStatus reportsCount={pastings?.number_report_status} />
@@ -66,22 +73,24 @@ console.log(pastings);
         <div className="content__cards">
           <div className="content__row">
             {pastings?.pastings.results?.length > 0 ? (
-              (pastings?.pastings?.results || []).map((item: { id: string }) => (
-                <PastingContentCard
-                  key={item.id}
-                  item={item}
-                  pagename="pasting"
-                  onOpenModal={() => {
-                    setCurrentData(item);
-                    setOpenModal(true);
-                  }}
-                  onEdit={() => {
-                    setCurrentDataId('');
-                    setOpenEditModal(true);
-                    setTimeout(() => setCurrentDataId(item.id), 0);
-                  }}
-                />
-              ))
+              (pastings?.pastings?.results || []).map(
+                (item: { id: string }) => (
+                  <PastingContentCard
+                    key={item.id}
+                    item={item}
+                    pagename="pasting"
+                    onOpenModal={() => {
+                      setCurrentData(item);
+                      setOpenModal(true);
+                    }}
+                    onEdit={() => {
+                      setCurrentDataId('');
+                      setOpenEditModal(true);
+                      setTimeout(() => setCurrentDataId(item.id), 0);
+                    }}
+                  />
+                ),
+              )
             ) : (
               <EmptyCard text="tracks" />
             )}
@@ -97,14 +106,18 @@ console.log(pastings);
         }}
       >
         <div className="d-flex justify-center mt-20 mb-20">
-          <DatePicker onChange={onChangeDate} />
-          <TimePicker
+          <DatePicker
+            showTime
+            onChange={onChangeDate}
+            defaultValue={dayjs(new Date())}
+          />
+          {/* <TimePicker
             className="ml-20"
-            defaultValue={dayjs('12:08', 'HH:mm')}
+            // defaultValue={dayjs('12:08', 'HH:mm')}
             format={'HH:mm'}
             showNow
             onChange={onChangeTime}
-          />
+          /> */}
         </div>
         <div className="d-flex justify-center">
           <button
@@ -112,14 +125,14 @@ console.log(pastings);
             onClick={() => setOpenModal(false)}
             disabled={isLoadingUpdate}
           >
-            Отклонить
+            Отменить
           </button>
           <button
             disabled={isLoadingUpdate}
             className="btn btn-confirm"
             onClick={handleConfirm}
           >
-            Подтвердить
+            Добавить
           </button>
         </div>
       </Modal>

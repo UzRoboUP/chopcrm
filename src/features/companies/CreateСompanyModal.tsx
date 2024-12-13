@@ -42,7 +42,7 @@ function CreateСompanyModal({
   const { createCompany, isLoading } = useCreateCompany();
   const { createLogo, isLoadingLogo } = useCreateCompanyLogo();
   const { filteredRate, rates } = useRateContext();
-  const { clientsList } = useClients(isOpenModal);
+  const { clientsList } = useClients();
 
   console.log(companyData);
 

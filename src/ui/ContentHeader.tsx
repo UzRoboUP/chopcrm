@@ -28,6 +28,10 @@ import ExportButton from './ExportButton';
 import { STOCK_STATUS__TYPE } from '../utils/constants';
 import { useStockDriversContext } from '../context/StockDriverContext';
 import { useCreateStockDrivers } from '../features/stocks/useCreateStockDrivers';
+import { useCompanyCarService } from '../features/car/useCompanyCarService';
+import { useEffect } from 'react';
+import { useCompanyDriverContext } from '../context/CompanyDriverContext';
+import { useCreateContract } from '../features/contract/useCreateContract';
 // import { useEffect } from 'react';
 export default function ContentHeader({
   pagename,
@@ -41,9 +45,14 @@ export default function ContentHeader({
   taskText = '',
   hasHistory = false,
   hasStock = false,
+  carRate = false,
   hasAddStockDriverButton = false,
+  hasAddCompanyDriverButton = false,
   hasTasksBackLink = false,
+  hasArchived = false,
+  isLoadingArchivedPastingUpdateAll = false,
   openModal,
+  updatePastingArchiveAll,
 }: {
   pagename: string;
   hasBrand?: boolean;
@@ -57,8 +66,13 @@ export default function ContentHeader({
   hasHistory?: boolean;
   hasStock?: boolean;
   hasAddStockDriverButton?: boolean;
+  hasAddCompanyDriverButton?: boolean;
   hasTasksBackLink?: boolean;
+  carRate?: boolean;
+  hasArchived?: boolean;
+  isLoadingArchivedPastingUpdateAll?: boolean;
   openModal?: () => void;
+  updatePastingArchiveAll?: () => void;
 }) {
   const navigate = useNavigate();
   const param = useParams();
@@ -70,7 +84,10 @@ export default function ContentHeader({
   const { model } = useModel(params.get('car_brand'));
   const { data } = useCompanies();
   const { stockDrivers, clearStockDriver } = useStockDriversContext();
+  const { companyDrivers, clearCompanyDriver } = useCompanyDriverContext();
   const { createStockDriver, isLoadingContract } = useCreateStockDrivers();
+  const { createContract, isLoadingContractDriver } = useCreateContract();
+  const { car_data } = useCompanyCarService(carRate);
   const onChange = (data: {
     id: string;
     name: string;
@@ -105,6 +122,24 @@ export default function ContentHeader({
       },
     });
   };
+  const createCompanyDriverHandler = () => {
+    createContract(companyDrivers, {
+      onSuccess: () => {
+        message.success(
+          `${companyDrivers.length} водителям отправлено успешно`,
+        );
+        clearCompanyDriver();
+        queryClient.invalidateQueries('drivers');
+      },
+    });
+  };
+
+  useEffect(() => {
+    if (pagename == 'Обклейка') {
+      params.set('is_archived', 'false');
+      setSearchParams(params);
+    }
+  }, [pagename]);
 
   return (
     <div className="content__header__content d-flex align-center justify-between ">
@@ -119,6 +154,70 @@ export default function ContentHeader({
         />
         <span className="content__header__title">{pagename}</span>
         <div className="content__header__filter">
+          {hasArchived && (
+            <>
+              <FormBox title="Архив">
+                <Dropdown
+                  trigger={['click']}
+                  dropdownRender={() => (
+                    <HeaderRadioGroup
+                      defaultValue={
+                        searchParams.get('is_archived')
+                          ? searchParams.get('is_archived')
+                          : 'false'
+                      }
+                      menu={[
+                        { id: '1', name: 'true', label: 'Архивировано' },
+                        { id: '2', name: 'false', label: 'Нет архива' },
+                      ]}
+                      name="name"
+                      onChange={onChange}
+                      searchParam="is_archived"
+                    />
+                  )}
+                >
+                  <a onClick={(e) => e.preventDefault()}>
+                    <Space>
+                      {searchParams.get('is_archived')
+                        ? searchParams.get('is_archived') == 'true'
+                          ? 'Архивировано'
+                          : 'Нет архива'
+                        : 'Выберите'}
+                      <DownOutlined />
+                    </Space>
+                  </a>
+                </Dropdown>
+              </FormBox>
+            </>
+          )}
+          {carRate && (
+            <>
+              <FormBox title="Тарифы машин">
+                <Dropdown
+                  trigger={['click']}
+                  dropdownRender={() => (
+                    <HeaderRadioGroup
+                      defaultValue={searchParams.get('tarif')}
+                      menu={car_data?.tarif_list}
+                      name="tarif_name"
+                      onChange={onChange}
+                      searchParam="tarif"
+                    />
+                  )}
+                >
+                  <a onClick={(e) => e.preventDefault()}>
+                    <Space>
+                      {searchParams.get('tarif')
+                        ? searchParams.get('tarif')
+                        : 'Выберите'}
+                      <DownOutlined />
+                    </Space>
+                  </a>
+                </Dropdown>
+              </FormBox>
+            </>
+          )}
+
           {hasDate && (
             <DatePicker
               form="YYYY-MM-DD"
@@ -256,8 +355,6 @@ export default function ContentHeader({
             </FormBox>
           )}
 
-        
-
           {hasTasksBackLink && (
             <>
               <Link
@@ -279,9 +376,32 @@ export default function ContentHeader({
             style={{
               backgroundColor: stockDrivers.length > 0 ? '#30B0C7' : '#7F8788',
             }}
-            className="card__footer--btn"
+            className="card__footer--btn ml-10"
           >
             {isLoadingContract ? (
+              <>
+                <Spin size="small" /> Отправить всем
+              </>
+            ) : (
+              'Отправить всем'
+            )}
+          </button>
+        )}
+        {hasAddCompanyDriverButton && (
+          <button
+            onClick={createCompanyDriverHandler}
+            disabled={
+              companyDrivers.length > 0 || isLoadingContractDriver
+                ? false
+                : true
+            }
+            style={{
+              backgroundColor:
+                companyDrivers.length > 0 ? '#30B0C7' : '#7F8788',
+            }}
+            className="card__footer--btn ml-10"
+          >
+            {isLoadingContractDriver ? (
               <>
                 <Spin size="small" /> Отправить всем
               </>
@@ -299,8 +419,16 @@ export default function ContentHeader({
         </button>
       )}
       {hasHistory && (
-        <button className="header__add__btn history__btn" onClick={openModal}>
-          <img src={history} alt="" />
+        <button
+          disabled={isLoadingArchivedPastingUpdateAll}
+          className="header__add__btn history__btn"
+          onClick={updatePastingArchiveAll}
+        >
+          {isLoadingArchivedPastingUpdateAll ? (
+            <Spin size="small" />
+          ) : (
+            <img src={history} alt="" />
+          )}
           <span>Архив оклеек</span>
         </button>
       )}

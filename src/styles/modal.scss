@@ -57,3 +57,34 @@
   color: #000000;
 
 }
+
+.pasting-modal-header{
+font-size: 16px;
+font-weight: 600;
+line-height: 10px;
+text-align: center;
+text-decoration-skip-ink: none;
+color: #000;
+}
+.pasting-modal-header span{
+  width: 33.3%;
+}
+.pasting-modal-row{
+  width: 80%;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  margin-top: 58px;
+  gap: 20px;
+}
+.pasting-modal-col{
+  width: 150px;
+  height: 120px;
+  margin: 2px;
+}
+.pasting-modal-col img{
+  width: 100%;
+  max-height: 100%;
+  // object-fit: cover;
+}

@@ -6,7 +6,8 @@ export function useUpdatePasting() {
   const queryClient = useQueryClient();
 
   const { mutate: updatePasting, isPending: isLoadingUpdate } = useMutation({
-    mutationFn: ({ ...payload }) => Pasting.updatePasting({ ...payload }),
+    mutationFn: (data: { id: string; pasting_time: string }) =>
+      Pasting.updatePasting(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['pastings'] });
       message.success('Pasting updated successfully');

@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useDriverDelete } from '../driver/useDriverDelete';
 import DriverCreateButton from '../../ui/DriverCreateButton';
 import { useParams } from 'react-router-dom';
+import CompanyDriverCreateButton from '../../ui/CompanyDriverCreateButton';
 
 export type PageNameType = 'track' | 'report' | 'lead' | 'stock';
 
@@ -14,7 +15,7 @@ export type ContentCardProps = {
 };
 
 function CompanyDriverCard({ item, pagename }: ContentCardProps) {
-  const params = useParams()
+  const params = useParams();
   const queryClient = useQueryClient();
 
   const [isOpenMenu, setOpenMenu] = useState(false);
@@ -167,7 +168,10 @@ function CompanyDriverCard({ item, pagename }: ContentCardProps) {
               </div>
             </div>
             <div className="card__footer">
-              <DriverCreateButton driverId={item?.id}  companyId={params?.id}/>
+              <CompanyDriverCreateButton
+                driverId={item?.id}
+                companyId={params?.id}
+              />
             </div>
           </div>
         </div>
